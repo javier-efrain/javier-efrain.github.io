@@ -4,9 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Estudio del Libro de Jonás</title>
-    
-    <!-- Estilos externos -->
-    <link rel="stylesheet" href="/assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
@@ -14,23 +12,281 @@
 
     <h1>📖 ESTUDIO DEL LIBRO DE JONÁS</h1>
 
-    <!-- PARTE 1: CONTEXTO -->
+    <!-- ========================================================= -->
+    <!--  PARTE 1: CONTEXTO                                         -->
+    <!-- ========================================================= -->
     <h2>🌍 PARTE 1: EL ESCENARIO (CONTEXTO)</h2>
+
     <h3>📍 Sección A: Contextos y Conexiones</h3>
-    <p><strong>📍 Lugar:</strong> Jope... </p>
-    <!-- ... resto del texto ... -->
+
+    <p><strong>📍 Lugar:</strong> Jope (actual Jaffa, Israel), Mar Mediterráneo, Nínive (actual Irak), y Tarsis (posiblemente Tartessos, en España).</p>
+    <p><strong>📅 Fecha:</strong> Aproximadamente <strong>760 a.C.</strong>, durante el reinado de Jeroboam II en Israel (2 Reyes 14:25).</p>
+
+    <hr style="border:0;height:1px;background:rgba(255,255,255,0.05);margin:20px 0;">
+
+    <h4>Contexto Histórico / Político</h4>
+    <p>Asiria era el imperio más temido del antiguo Oriente Próximo. Su brutalidad era legendaria: desollaban vivos a sus enemigos, empalaban a los líderes rebeldes y deportaban poblaciones enteras.</p>
 
     <!-- MAPA -->
     <div class="recurso-visual">
         <canvas id="mapCanvas" width="1600" height="1000"></canvas>
-        <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> ...</div>
+        <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los puntos para más información.</div>
     </div>
 
-    <!-- ... más contenido ... -->
+    <p>Israel, bajo Jeroboam II (reinado: 793-753 a.C.), vivía una época de paz y expansión territorial. Sin embargo, los profetas contemporáneos —Oseas y Amós— denunciaban la idolatría y la injusticia social.</p>
+
+    <!-- LÍNEA DE TIEMPO -->
+    <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
+        <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">📅 Contexto histórico de Jonás</h4>
+        <div id="timeline" style="position:relative;padding:10px 0;">
+            <div style="position:relative;width:100%;height:4px;background:rgba(255,255,255,0.08);border-radius:4px;margin:20px 0;">
+                <div id="timelineProgress" style="position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#e8b84b,#c9a87c);border-radius:4px;width:20%;transition:width 0.3s ease;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:-10px;flex-wrap:wrap;gap:4px;">
+                <div class="timeline-event" data-index="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
+                    <div style="width:14px;height:14px;border-radius:50%;background:#e8b84b;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
+                    <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">800 a.C.</div>
+                    <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Imperio Asirio</div>
+                </div>
+                <div class="timeline-event" data-index="1" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
+                    <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
+                    <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">760 a.C.</div>
+                    <div style="color:#8899b0;font-size:0.5rem;text-align:center;">⭐ Jonás</div>
+                </div>
+                <div class="timeline-event" data-index="2" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
+                    <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
+                    <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">722 a.C.</div>
+                    <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Caída Samaria</div>
+                </div>
+                <div class="timeline-event" data-index="3" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
+                    <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
+                    <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">701 a.C.</div>
+                    <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Senaquerib</div>
+                </div>
+                <div class="timeline-event" data-index="4" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
+                    <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
+                    <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">612 a.C.</div>
+                    <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Caída Nínive</div>
+                </div>
+            </div>
+            <div id="timelineInfo" style="margin-top:16px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.04);min-height:50px;">
+                <div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">🏛️ Apogeo del Imperio Asirio</div>
+                <div style="color:#b8c7e0;font-size:0.85rem;">Asiria se convierte en la superpotencia del Cercano Oriente.</div>
+            </div>
+        </div>
+        <div class="caption">📅 <strong>Línea de tiempo:</strong> toca cada evento para explorar el contexto histórico.</div>
+    </div>
+
+    <!-- IMAGEN NÍNIVE -->
+    <div class="recurso-visual">
+        <img src="assets/img/ninive.jpg" alt="Nínive" />
+        <div class="caption">🌅 <strong>Nínive</strong>, la capital asiria, una de las ciudades más grandes y temidas del mundo antiguo.</div>
+    </div>
+
+    <h4>Contexto Cultural / Teológico</h4>
+    <p>Un profeta judío no debía contaminarse con gentiles. Jonás huye <strong>no por miedo, sino porque sabía que Dios era misericordioso</strong> (Jonás 4:2) y no quería que sus enemigos fueran perdonados.</p>
+
+    <h4>Conexiones Literarias (AT y NT)</h4>
+    <p><strong>AT:</strong> Jonás es mencionado en 2 Reyes 14:25. Su salmo (cap. 2) tiene ecos de los Salmos 18, 42 y 88.</p>
+    <p><strong>NT:</strong> Jesús usa a Jonás como señal de su muerte y resurrección (Mateo 12:38-41).</p>
+
+    <div class="mentor-box">
+        <h3>💡 Dato del Mentor</h3>
+        <p><strong>1. Dato central:</strong> Nínive tenía más de 120.000 habitantes y murallas de 12 km de perímetro.</p>
+        <p><strong>2. Dato curioso:</strong> El puerto de Jope era el mismo desde el que Salomón trajo madera para el Templo.</p>
+    </div>
+
+    <!-- ========================================================= -->
+    <!--  PARTE 2: EXÉGESIS                                         -->
+    <!-- ========================================================= -->
+    <h2>📖 PARTE 2: EXÉGESIS (TÉRMINOS CLAVE EN HEBREO)</h2>
+
+    <!-- QUIASMO (visual) -->
+    <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
+        <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">🏛️ Estructura quiástica de Jonás</h4>
+        <div class="quiasmo-grid">
+            <div class="quiasmo-item"><span class="letra">A</span><div class="contenido"><div class="label">Huida y Tormenta</div><div class="detalle">Jonás huye · Dios envía tormenta</div></div></div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item"><span class="letra">B</span><div class="contenido"><div class="label">Oración desde el abismo</div><div class="detalle">Jonás ora · El pez lo vomita</div></div></div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item centro"><span class="letra">C</span><div class="contenido"><div class="label">⭐ Nínive se arrepiente</div><div class="detalle">El centro del libro · Dios perdona a los enemigos</div></div></div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item"><span class="letra">B'</span><div class="contenido"><div class="label">Enojo y deseo de muerte</div><div class="detalle">Jonás se enoja · Dios lo confronta</div></div></div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item"><span class="letra">A'</span><div class="contenido"><div class="label">Lección de la planta</div><div class="detalle">Planta · Gusano · Viento · Dios revela su compasión</div></div></div>
+        </div>
+        <div class="caption">💡 <strong>El centro del libro no es el pez</strong>, sino el arrepentimiento de los enemigos de Israel.</div>
+    </div>
+
+    <h3>1. Título: "La orden divina"</h3>
+    <p><strong>Cita:</strong> Jonás 1:1-2</p>
+    <div class="cita"><strong>Versículo:</strong> "Vino palabra de Jehová a Jonás... Levántate, ve a Nínive..."</div>
+    <p><strong>Término hebreo:</strong> <em>Qum</em> (קוּם) — "Levántate y actúa ahora".</p>
+    <p><strong>Verdad exegética:</strong> La palabra de Dios no es sugerencia, es comisión que exige obediencia inmediata.</p>
+    <div class="error-block"><strong>❌ Error común:</strong> Reducirlo a "viajar". En realidad es "obedecer ahora".</div>
+
+    <h3>2. Título: "El descenso espiritual"</h3>
+    <p><strong>Cita:</strong> Jonás 1:3, 1:5, 2:1</p>
+    <div class="cita"><strong>Versículo:</strong> "Y Jonás descendió a Jope... descendió al barco... descendió a la bodega."</div>
+    <p><strong>Término hebreo:</strong> <em>Yarad</em> (יָרַד) — "Descender, bajar".</p>
+    <p><strong>Verdad exegética:</strong> Huir de Dios no es horizontal, es vertical. Cada paso de desobediencia nos hunde.</p>
+    <div class="error-block"><strong>❌ Error común:</strong> Ver solo geografía. El autor sagrado ve una caída moral.</div>
+
+    <!-- IMAGEN BARCO Y PEZ -->
+    <div class="recurso-visual">
+        <img src="assets/img/barco-pez.jpg" alt="Barco y pez" />
+        <div class="caption">🌊 <strong>Jonás es arrojado al mar</strong> y engullido por un gran pez en medio de la tormenta.</div>
+    </div>
+
+    <h3>3. Título: "El arrepentimiento genuino"</h3>
+    <p><strong>Cita:</strong> Jonás 3:5-10</p>
+    <div class="cita"><strong>Versículo:</strong> "Los hombres de Nínive creyeron a Dios... se convirtieron de su mal camino."</div>
+    <p><strong>Término hebreo:</strong> <em>Shuv</em> (שׁוּב) — "Volverse, retornar".</p>
+    <p><strong>Verdad exegética:</strong> El arrepentimiento no es sentimiento, es acción: dejar el pecado y volverse a Dios.</p>
+    <div class="error-block"><strong>❌ Error común:</strong> Confundir con "tristeza". En hebreo implica dirección, no emoción.</div>
+
+    <h3>4. Título: "La compasión de Dios"</h3>
+    <p><strong>Cita:</strong> Jonás 4:2, 4:11</p>
+    <div class="cita"><strong>Versículo:</strong> "¿No he de tener piedad de Nínive...?"</div>
+    <p><strong>Término hebreo:</strong> <em>Jesed</em> (חֶסֶד) y <em>Jus</em> (חוּס) — "Misericordia, compasión".</p>
+    <p><strong>Verdad exegética:</strong> La misericordia de Dios no tiene fronteras. Él se apiada de quien él quiere.</p>
+    <div class="error-block"><strong>❌ Error común:</strong> Pensar que Dios aprueba el pecado. La compasión no es complicidad.</div>
+
+    <div class="mentor-box">
+        <h3>💡 Dato del Mentor</h3>
+        <p><strong>1. Dato lingüístico:</strong> El pez no es "ballena" en hebreo, es <em>dag gadol</em> (pez grande).</p>
+        <p><strong>2. Dato literario:</strong> El salmo de Jonás (cap. 2) es una de las piezas poéticas más bellas del AT.</p>
+    </div>
+
+    <!-- TARJETAS HEBREO -->
+    <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
+        <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">📖 Palabras clave en hebreo</h4>
+        <div class="hebreo-grid">
+            <div class="hebreo-card">
+                <div class="header"><span class="hebreo">קוּם</span><span class="translit">qum</span></div>
+                <div class="titulo">La orden divina</div>
+                <div class="vista-previa">"Levántate y ve a Nínive"</div>
+                <div class="detalle"><div class="contenido"><strong>Significado:</strong> Ponerse en pie y actuar ahora.<br><br><strong>Verdad exegética:</strong> La palabra de Dios no es sugerencia, es comisión que exige obediencia inmediata.<br><br><div class="error-block" style="margin:8px 0 0 0;font-size:0.8rem;"><strong>❌ Error común:</strong> Reducirlo a "viajar". En realidad es "obedecer ahora".</div></div></div>
+                <div class="toggle">▼ tocar para desplegar</div>
+            </div>
+            <div class="hebreo-card">
+                <div class="header"><span class="hebreo">יָרַד</span><span class="translit">yarad</span></div>
+                <div class="titulo">El descenso espiritual</div>
+                <div class="vista-previa">"Jonás descendió a Jope"</div>
+                <div class="detalle"><div class="contenido"><strong>Significado:</strong> Descender, bajar. Movimiento físico que refleja caída espiritual.<br><br><strong>Verdad exegética:</strong> Huir de Dios no es horizontal, es vertical. Cada paso de desobediencia nos hunde.<br><br><div class="error-block" style="margin:8px 0 0 0;font-size:0.8rem;"><strong>❌ Error común:</strong> Ver solo geografía. El autor sagrado ve una caída moral.</div></div></div>
+                <div class="toggle">▼ tocar para desplegar</div>
+            </div>
+            <div class="hebreo-card">
+                <div class="header"><span class="hebreo">שׁוּב</span><span class="translit">shuv</span></div>
+                <div class="titulo">El arrepentimiento genuino</div>
+                <div class="vista-previa">"Se convirtieron de su mal camino"</div>
+                <div class="detalle"><div class="contenido"><strong>Significado:</strong> Volverse, retornar. Giro de 180 grados.<br><br><strong>Verdad exegética:</strong> El arrepentimiento no es sentimiento, es acción.<br><br><div class="error-block" style="margin:8px 0 0 0;font-size:0.8rem;"><strong>❌ Error común:</strong> Confundir con "tristeza". En hebreo implica dirección, no emoción.</div></div></div>
+                <div class="toggle">▼ tocar para desplegar</div>
+            </div>
+            <div class="hebreo-card">
+                <div class="header"><span class="hebreo">חֶסֶד</span><span class="translit">jesed</span></div>
+                <div class="titulo">La compasión de Dios</div>
+                <div class="vista-previa">"¿No he de tener piedad...?"</div>
+                <div class="detalle"><div class="contenido"><strong>Significado:</strong> Amor incondicional, misericordia pactada.<br><br><strong>Verdad exegética:</strong> La misericordia de Dios no tiene fronteras.<br><br><div class="error-block" style="margin:8px 0 0 0;font-size:0.8rem;"><strong>❌ Error común:</strong> Pensar que Dios aprueba el pecado. La compasión no es complicidad.</div></div></div>
+                <div class="toggle">▼ tocar para desplegar</div>
+            </div>
+        </div>
+        <div class="caption">📖 <strong>Toca cada tarjeta</strong> para ver el análisis completo de la palabra hebrea.</div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!--  PARTE 3: APLICACIÓN                                       -->
+    <!-- ========================================================= -->
+    <h2>🛤️ PARTE 3: EL ATERRIZAJE (VIDA Y APLICACIÓN)</h2>
+
+    <h3>Verdad Teológica Central</h3>
+    <p><strong>Dios es soberano para salvar a quien él quiere, y su misericordia rompe todas nuestras fronteras.</strong></p>
+
+    <h3>Punto de Tensión</h3>
+    <p>¿Estamos dispuestos a alegrarnos por la salvación de aquellos que consideramos "enemigos"?</p>
+
+    <h3>Devocional</h3>
+    <p>La historia de Jonás no termina con un "felices para siempre". Termina con un profeta enojado, deshidratado y deseando la muerte, mientras Dios le enseña con una planta, un gusano y un viento. El libro es sobre <strong>el corazón de Dios</strong>, que ama a los que no merecen ser amados.</p>
+
+    <!-- IMAGEN PLANTA Y GUSANO -->
+    <div class="recurso-visual">
+        <img src="assets/img/planta-gusano.jpg" alt="Planta y gusano" />
+        <div class="caption">🌿 <strong>Jonás bajo la planta de ricino</strong>, aprendiendo la lección de la compasión divina.</div>
+    </div>
+
+    <p>Y aquí está el gancho: ese Dios es el mismo que, siglos después, enviaría a su Hijo a morir por sus enemigos (Romanos 5:8). La pregunta no es "¿por qué Dios perdona a ellos?", sino "¿por qué Dios me perdona a mí?".</p>
+
+    <h3>Examen del Corazón (5 preguntas)</h3>
+    <ol>
+        <li><strong>¿A quiénes consideras "tus ninivitas"?</strong> (Personas que te parecen indignas del amor de Dios)</li>
+        <li><strong>¿Huyes de Dios disfrazando tu desobediencia con "razones lógicas"?</strong></li>
+        <li><strong>¿Te alegras más por tus bendiciones que por la salvación de otros?</strong></li>
+        <li><strong>¿Has "dormido espiritualmente" mientras otros claman a Dios?</strong></li>
+        <li><strong>¿Qué "plantas" (consuelos temporales) valoras más que el carácter eterno de Dios?</strong></li>
+    </ol>
+
+    <!-- DIAGRAMA DE ANILLOS -->
+    <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
+        <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">🎯 El corazón del mensaje: aplicación</h4>
+        <div class="anillos-container">
+            <div class="anillo-item centro">
+                <span class="icono">❤️</span>
+                <div class="info"><div class="label">El corazón de Dios: Misericordia</div><div class="detalle">"¿No he de tener piedad de Nínive?" (Jonás 4:11)</div></div>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="anillo-preguntas"><div class="inner"><div class="q"><span class="num">❓</span> <strong>¿Crees que Dios ama a tus enemigos tanto como te ama a ti?</strong></div></div></div>
+            <div class="conector-linea"></div>
+            <div class="anillo-item">
+                <span class="icono">🏛️</span>
+                <div class="info"><div class="label">Nínive (enemigos) → Salvación</div><div class="detalle">Dios perdona a los asirios</div></div>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="anillo-preguntas"><div class="inner"><div class="q"><span class="num">❓</span> <strong>¿A quiénes consideras "tus ninivitas"?</strong></div></div></div>
+            <div class="conector-linea"></div>
+            <div class="anillo-item">
+                <span class="icono">📖</span>
+                <div class="info"><div class="label">Jonás (profeta) → Confrontación</div><div class="detalle">Dios confronta el nacionalismo religioso</div></div>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="anillo-preguntas"><div class="inner"><div class="q"><span class="num">❓</span> <strong>¿Usas tu teología para justificar tu falta de amor?</strong></div></div></div>
+            <div class="conector-linea"></div>
+            <div class="anillo-item">
+                <span class="icono">🔍</span>
+                <div class="info"><div class="label">Nosotros → Examen del corazón</div><div class="detalle">El libro nos interpela</div></div>
+                <span class="toggle">▼</span>
+            </div>
+            <div class="anillo-preguntas"><div class="inner">
+                <div class="q"><span class="num">❓</span> <strong>¿Qué "planta" valoras más que el carácter eterno de Dios?</strong></div>
+                <div class="q"><span class="num">❓</span> <strong>¿Estás dispuesto a alegrarte por la salvación de tus enemigos?</strong></div>
+            </div></div>
+        </div>
+        <div class="caption">🎯 <strong>Toca cada anillo</strong> para desplegar las preguntas de examen personal.</div>
+    </div>
+
+    <h3>Pasos Prácticos (5 acciones para la semana)</h3>
+    <ol>
+        <li><strong>Identifica:</strong> Escribe el nombre de alguien que te cueste amar y ora por su salvación.</li>
+        <li><strong>Lee:</strong> Vuelve a leer Jonás 4 y subraya cada acción de Dios.</li>
+        <li><strong>Ayuda:</strong> Haz un acto concreto de bondad hacia alguien que no te cae bien.</li>
+        <li><strong>Escucha:</strong> Pregunta a un amigo: "¿En qué áreas soy como Jonás?"</li>
+        <li><strong>Comparte:</strong> Cuenta esta historia a alguien no creyente, enfocándote en el Dios que persigue a los que huyen.</li>
+    </ol>
+
+    <h3>Oración Final</h3>
+    <p>Padre soberano, que gobiernas el viento, el mar y el corazón de los reyes, perdóname por las veces que he huido de tu voz porque no quería que tu misericordia alcanzara a quienes yo consideraba indignos. Gracias porque tu amor es más grande que mi rencor. Dame un corazón como el tuyo. En el nombre de Jesús, amén.</p>
+
+    <div class="mentor-box">
+        <h3>💡 Dato del Mentor</h3>
+        <p><strong>1. Dato botánico:</strong> La planta de Jonás (<em>qiqayon</em>) es probablemente ricino, que crece hasta 3 metros en pocos días.</p>
+        <p><strong>2. Dato meteorológico:</strong> El viento solano (4:8) es el <em>sharav</em>, que puede elevar la temperatura hasta 50°C.</p>
+    </div>
+
+    <hr style="border:0;height:2px;background:rgba(232,184,75,0.2);margin:40px 0 20px 0;">
+    <p style="text-align:center;color:#5a6a80;font-size:0.8rem;">📖 <strong>Fin del estudio</strong> · Comparte este estudio con alguien que necesite escuchar que la misericordia de Dios es más grande que su pecado o que su rencor.</p>
 
 </div>
 
 <!-- JavaScript externo -->
-<script src="/assets/js/main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
