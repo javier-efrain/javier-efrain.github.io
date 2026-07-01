@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Línea de Tiempo - Contexto de Jonás</title>
+    <style>
+        /* ===== RESET Y BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            background: #0b0f1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 16px;
+        }
+
+        .timeline-wrapper {
+            max-width: 1100px;
+            width: 100%;
+            background: linear-gradient(145deg, #121a2a, #1a2538);
+            border-radius: 24px;
+            padding: 28px 24px 24px 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .timeline-title {
+            color: #e8d5b0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        .timeline-title span {
+            color: #c9a87c;
+        }
+
+        /* ===== CONTENEDOR DEL SLIDER ===== */
+        .slider-container {
+            position: relative;
+            padding: 20px 0 30px 0;
+        }
+
+        /* ===== LÍNEA HORIZONTAL ===== */
+        .timeline-line {
+            position: relative;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+            margin: 30px 0;
+        }
+
+        .timeline-line .progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #e8b84b, #c9a87c);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 20px rgba(232, 184, 75, 0.3);
+        }
+
+        /* ===== MARCAS DE EVENTOS ===== */
+        .events {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 4px;
+            margin-top: -8px;
+        }
+
+        .event-marker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+            touch-action: manipulation;
+            flex: 1;
+            min-width: 0;
+            padding: 0 2px;
+        }
+
+        .event-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            background: #1a2538;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+
+        .event-marker.active .event-dot {
+            background: #e8b84b;
+            border-color: #e8b84b;
+            box-shadow: 0 0 24px rgba(232, 184, 75, 0.5);
+            transform: scale(1.15);
+        }
+
+        .event-marker.past .event-dot {
+            background: #e8b84b;
+            border-color: #e8b84b;
+            opacity: 0.7;
+        }
+
+        .event-label {
+            color: #b8c7e0;
+            font-size: 0.7rem;
+            font-weight: 500;
+            text-align: center;
+            margin-top: 8px;
+            letter-spacing: 0.2px;
+            transition: color 0.3s ease;
+            word-break: break-word;
+            max-width: 90px;
+            line-height: 1.2;
+        }
+
+        .event-marker.active .event-label {
+            color: #f0e8d8;
+        }
+
+        .event-year {
+            color: #8899b0;
+            font-size: 0.6rem;
+            font-weight: 400;
+            text-align: center;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+
+        .event-marker.active .event-year {
+            color: #c9a87c;
+        }
+
+        /* ===== CONTROLES DEL SLIDER (input range) ===== */
+        .slider-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+            padding: 0 8px;
+        }
+
+        .slider-controls input[type="range"] {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            outline: none;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .slider-controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #e8b84b;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(232, 184, 75, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.2s;
+        }
+
+        .slider-controls input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(232, 184, 75, 0.6);
+        }
+
+        .slider-controls input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #e8b84b;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .slider-controls input[type="range"]::-ms-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #e8b84b;
+            cursor: pointer;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .slider-controls .year-display {
+            color: #e8d5b0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            min-width: 70px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.5px;
+        }
+
+        .slider-controls .year-display span {
+            color: #8899b0;
+            font-weight: 400;
+            font-size: 0.8rem;
+        }
+
+        /* ===== PANEL DE INFORMACIÓN DEL EVENTO ===== */
+        .event-panel {
+            margin-top: 20px;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            min-height: 70px;
+            transition: all 0.3s ease;
+        }
+
+        .event-panel .event-title {
+            color: #e8d5b0;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .event-panel .event-description {
+            color: #b8c7e0;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.85;
+        }
+
+        .event-panel .event-description small {
+            color: #8899b0;
+            font-size: 0.85rem;
+        }
+
+        .event-panel .event-empty {
+            color: #5a6a80;
+            font-style: italic;
+            text-align: center;
+            padding: 12px 0;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .timeline-wrapper {
+                padding: 20px 16px 18px 16px;
+                border-radius: 16px;
+            }
+            .timeline-title {
+                font-size: 1rem;
+            }
+            .event-label {
+                font-size: 0.6rem;
+                max-width: 60px;
+            }
+            .event-year {
+                font-size: 0.5rem;
+            }
+            .event-dot {
+                width: 14px;
+                height: 14px;
+                border-width: 2px;
+            }
+            .slider-controls .year-display {
+                font-size: 0.95rem;
+                min-width: 60px;
+            }
+            .event-panel {
+                padding: 14px 16px;
+                min-height: 60px;
+            }
+            .event-panel .event-title {
+                font-size: 0.95rem;
+            }
+            .event-panel .event-description {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .timeline-wrapper {
+                padding: 14px 10px 14px 10px;
+            }
+            .event-label {
+                font-size: 0.5rem;
+                max-width: 45px;
+                margin-top: 4px;
+            }
+            .event-year {
+                font-size: 0.45rem;
+            }
+            .event-dot {
+                width: 12px;
+                height: 12px;
+            }
+            .slider-controls {
+                gap: 10px;
+                padding: 0 4px;
+            }
+            .slider-controls .year-display {
+                font-size: 0.85rem;
+                min-width: 50px;
+            }
+            .event-panel {
+                padding: 10px 12px;
+                min-height: 50px;
+            }
+            .event-panel .event-title {
+                font-size: 0.85rem;
+            }
+            .event-panel .event-description {
+                font-size: 0.75rem;
+            }
+            .timeline-line {
+                margin: 20px 0;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .event-label {
+                font-size: 0.45rem;
+                max-width: 35px;
+            }
+            .event-year {
+                font-size: 0.4rem;
+            }
+            .event-dot {
+                width: 10px;
+                height: 10px;
+                border-width: 1.5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="timeline-wrapper">
+    <div class="timeline-title">📅 <span>Contexto histórico</span> · Jonás</div>
+
+    <div class="slider-container">
+        <!-- Línea con progreso -->
+        <div class="timeline-line">
+            <div class="progress" id="progressBar"></div>
+        </div>
+
+        <!-- Marcas de eventos -->
+        <div class="events" id="eventsContainer">
+            <!-- Los eventos se generan con JavaScript -->
+        </div>
+
+        <!-- Controles del slider -->
+        <div class="slider-controls">
+            <input type="range" id="timelineSlider" min="0" max="4" value="0" step="1">
+            <div class="year-display" id="yearDisplay">- <span>a.C.</span></div>
+        </div>
+
+        <!-- Panel de información -->
+        <div class="event-panel" id="eventPanel">
+            <div class="event-empty">🖱️ Desliza o toca los puntos para explorar</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ================================================================
+    // 1. DATOS DE LOS EVENTOS (en orden cronológico)
+    // ================================================================
+    const events = [
+        {
+            year: '800 a.C.',
+            label: 'Imperio Asirio',
+            title: '🏛️ Apogeo del Imperio Asirio',
+            description: 'Asiria se convierte en la superpotencia del Cercano Oriente. Su brutalidad y expansionismo la convierten en la mayor amenaza para Israel y Judá. Los relieves asirios documentan ejecuciones masivas y deportaciones de pueblos enteros.'
+        },
+        {
+            year: '760 a.C.',
+            label: '⭐ Jonás profetiza',
+            title: '📖 Jonás es llamado por Dios',
+            description: 'Dios envía a Jonás a predicar a Nínive, la capital asiria. Jonás huye hacia Tarsis, desatando una tormenta, siendo engullido por un gran pez, y finalmente obedece. Nínive se arrepiente y Dios la perdona.'
+        },
+        {
+            year: '722 a.C.',
+            label: '⚔️ Caída de Samaria',
+            title: '⚔️ Asiria conquista Israel (Samaria)',
+            description: 'El reino del Norte (Israel) cae ante los asirios. La ciudad de Samaria es destruida y la población es deportada a Asiria. Las 10 tribus del norte desaparecen de la historia como identidad nacional.'
+        },
+        {
+            year: '701 a.C.',
+            label: '🛡️ Senaquerib',
+            title: '🛡️ Senaquerib asedia Jerusalén',
+            description: 'El rey asirio Senaquerib sitia Jerusalén (Judá). El rey Ezequías ora a Dios, y el ángel del Señor mata a 185.000 soldados asirios en una noche (2 Reyes 19, Isaías 37). Jerusalén se salva milagrosamente.'
+        },
+        {
+            year: '612 a.C.',
+            label: '🔥 Caída de Nínive',
+            title: '🔥 Nínive es destruida',
+            description: 'Una coalición de babilonios, medos y escitas destruye Nínive. La ciudad que Jonás predicó queda en ruinas. El profeta Nahúm anuncia su caída como juicio de Dios por su crueldad e idolatría.'
+        }
+    ];
+
+    // ================================================================
+    // 2. REFERENCIAS DOM
+    // ================================================================
+    const slider = document.getElementById('timelineSlider');
+    const progressBar = document.getElementById('progressBar');
+    const yearDisplay = document.getElementById('yearDisplay');
+    const eventsContainer = document.getElementById('eventsContainer');
+    const eventPanel = document.getElementById('eventPanel');
+
+    // ================================================================
+    // 3. RENDERIZAR MARCAS DE EVENTOS
+    // ================================================================
+    function renderEventMarkers() {
+        eventsContainer.innerHTML = '';
+        events.forEach((event, index) => {
+            const marker = document.createElement('div');
+            marker.className = 'event-marker';
+            if (index === 0) marker.classList.add('active');
+            marker.dataset.index = index;
+
+            // Dot
+            const dot = document.createElement('div');
+            dot.className = 'event-dot';
+            marker.appendChild(dot);
+
+            // Label
+            const label = document.createElement('div');
+            label.className = 'event-label';
+            label.textContent = event.label;
+            marker.appendChild(label);
+
+            // Year
+            const year = document.createElement('div');
+            year.className = 'event-year';
+            year.textContent = event.year;
+            marker.appendChild(year);
+
+            // Click event
+            marker.addEventListener('click', () => {
+                slider.value = index;
+                updateTimeline(index);
+            });
+
+            // Touch support
+            marker.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                slider.value = index;
+                updateTimeline(index);
+            });
+
+            eventsContainer.appendChild(marker);
+        });
+    }
+
+    // ================================================================
+    // 4. ACTUALIZAR TIMELINE
+    // ================================================================
+    function updateTimeline(index) {
+        const total = events.length - 1;
+        const progress = (index / total) * 100;
+        progressBar.style.width = progress + '%';
+
+        // Actualizar año display
+        yearDisplay.innerHTML = `${events[index].year}`;
+
+        // Actualizar panel
+        const event = events[index];
+        eventPanel.innerHTML = `
+            <div class="event-title">${event.title}</div>
+            <div class="event-description">${event.description}</div>
+        `;
+
+        // Actualizar marcas activas/pasadas
+        const markers = document.querySelectorAll('.event-marker');
+        markers.forEach((marker, i) => {
+            marker.classList.remove('active', 'past');
+            if (i === index) {
+                marker.classList.add('active');
+            } else if (i < index) {
+                marker.classList.add('past');
+            }
+        });
+    }
+
+    // ================================================================
+    // 5. EVENTO DEL SLIDER
+    // ================================================================
+    slider.addEventListener('input', function() {
+        const index = parseInt(this.value);
+        updateTimeline(index);
+    });
+
+    // ================================================================
+    // 6. INICIALIZAR
+    // ================================================================
+    renderEventMarkers();
+    // Por defecto, mostrar el primer evento (índice 0)
+    updateTimeline(0);
+
+    // ================================================================
+    // 7. REDIMENSIONAR (por si acaso)
+    // ================================================================
+    window.addEventListener('resize', () => {
+        // No hace falta hacer nada, es responsive puro CSS
+    });
+
+    console.log('📅 Línea de tiempo de Jonás cargada correctamente');
+</script>
+
+</body>
+</html>
