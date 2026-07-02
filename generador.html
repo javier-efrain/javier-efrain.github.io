@@ -5,7 +5,629 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generador de Estudios Bíblicos</title>
     <style>
-        /* ===== Estilos del generador ===== */
+        /* ===== ESTILOS DEL GENERADOR ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #0b0f1a;
+            color: #e8d5b0;
+            padding: 20px;
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #121a2a;
+            padding: 40px 32px;
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        h1 { font-size: 2.4rem; font-weight: 700; color: #e8b84b; text-align: center; margin-bottom: 8px; }
+        h2 { font-size: 1.5rem; font-weight: 600; color: #e8d5b0; margin-top: 40px; margin-bottom: 16px; border-bottom: 2px solid rgba(232, 184, 75, 0.15); padding-bottom: 8px; }
+        h3 { font-size: 1.2rem; font-weight: 600; color: #d4c09a; margin-top: 28px; margin-bottom: 12px; }
+        label { display: block; margin-bottom: 6px; font-weight: 500; color: #c9a87c; }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: #e8d5b0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #e8b84b;
+            background: rgba(255, 255, 255, 0.06);
+        }
+        textarea { min-height: 80px; resize: vertical; }
+        .campo-grupo { margin-bottom: 20px; }
+        .campo-grupo .sub-campo { padding-left: 20px; border-left: 2px solid rgba(232, 184, 75, 0.1); margin-top: 10px; }
+        .checkbox-grupo {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px 24px;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+        }
+        .checkbox-grupo label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            color: #b8c7e0;
+            cursor: pointer;
+        }
+        .checkbox-grupo input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #e8b84b;
+            cursor: pointer;
+        }
+        .btn-generar {
+            background: #e8b84b;
+            color: #0b0f1a;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 16px;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn-generar:hover { background: #f0c85a; transform: scale(1.01); box-shadow: 0 0 30px rgba(232, 184, 75, 0.2); }
+        .btn-generar:active { transform: scale(0.98); }
+        .mensaje-exito {
+            display: none;
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            color: #8bc34a;
+            text-align: center;
+        }
+        .mensaje-exito.visible { display: block; }
+        .descargar-btn {
+            display: none;
+            background: #4caf7a;
+            color: #fff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 8px auto;
+            width: 100%;
+            max-width: 400px;
+        }
+        .descargar-btn:hover { background: #5cbf8a; transform: scale(1.02); }
+        .descargar-btn.visible { display: block; }
+        .info-ayuda { color: #5a6a80; font-size: 0.85rem; margin-top: -10px; margin-bottom: 16px; font-style: italic; }
+        hr { border: 0; height: 1px; background: rgba(255, 255, 255, 0.05); margin: 24px 0; }
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.3rem; }
+            .checkbox-grupo { flex-direction: column; gap: 8px; }
+            .campo-grupo .sub-campo { padding-left: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📖 Generador de Estudios Bíblicos</h1>
+    <p style="text-align: center; color: #8899b0; margin-bottom: 24px;">
+        Completa los campos y genera un <strong>index.html</strong> listo para subir a GitHub.
+    </p>
+
+    <hr />
+
+    <!-- ========================================================= -->
+    <!--  FORMULARIO                                               -->
+    <!-- ========================================================= -->
+    <form id="generadorForm">
+
+        <!-- ===== DATOS GENERALES ===== -->
+        <h2>📌 1. Datos Generales</h2>
+        <div class="campo-grupo">
+            <label for="tituloLibro">Título del libro</label>
+            <input type="text" id="tituloLibro" value="Estudio del Libro de Jonás" />
+        </div>
+        <div class="campo-grupo">
+            <label for="subtema">Subtema (ej: La huida y la tormenta)</label>
+            <input type="text" id="subtema" value="La huida y la tormenta" />
+        </div>
+        <div class="campo-grupo">
+            <label for="versiculos">Versículos (ej: Jonás 1:1-16)</label>
+            <input type="text" id="versiculos" value="Jonás 1:1-16" />
+        </div>
+
+        <hr />
+
+        <!-- ===== PARTE 1: CONTEXTO ===== -->
+        <h2>🌍 2. Contexto (Parte 1)</h2>
+        <div class="campo-grupo">
+            <label for="lugar">📍 Lugar</label>
+            <input type="text" id="lugar" value="Jope, Mar Mediterráneo, Nínive, Tarsis" />
+        </div>
+        <div class="campo-grupo">
+            <label for="fecha">📅 Fecha (aproximada)</label>
+            <input type="text" id="fecha" value="760 a.C." />
+        </div>
+        <div class="campo-grupo">
+            <label for="contextoHistorico">Contexto Histórico/Político</label>
+            <textarea id="contextoHistorico" rows="4">Asiria era el imperio más temido del antiguo Oriente Próximo. Su brutalidad era legendaria: desollaban vivos a sus enemigos, empalaban a los líderes rebeldes y deportaban poblaciones enteras.</textarea>
+        </div>
+        <div class="campo-grupo">
+            <label for="contextoCultural">Contexto Cultural/Teológico</label>
+            <textarea id="contextoCultural" rows="4">Un profeta judío no debía contaminarse con gentiles. Jonás huye no por miedo, sino porque sabía que Dios era misericordioso (Jonás 4:2) y no quería que sus enemigos fueran perdonados.</textarea>
+        </div>
+        <div class="campo-grupo">
+            <label for="conexionesAT">Conexiones con el Antiguo Testamento</label>
+            <textarea id="conexionesAT" rows="3">Jonás es mencionado en 2 Reyes 14:25. Su salmo (cap. 2) tiene ecos de los Salmos 18, 42 y 88.</textarea>
+        </div>
+        <div class="campo-grupo">
+            <label for="conexionesNT">Conexiones con el Nuevo Testamento</label>
+            <textarea id="conexionesNT" rows="3">Jesús usa a Jonás como señal de su muerte y resurrección (Mateo 12:38-41).</textarea>
+        </div>
+        <div class="campo-grupo">
+            <label for="imagenContexto">Imagen de contexto (nombre del archivo en /assets/img/)</label>
+            <input type="text" id="imagenContexto" value="ninive.jpg" />
+            <div class="info-ayuda">Ej: ninive.jpg (la imagen debe estar en la carpeta /assets/img/)</div>
+        </div>
+
+        <!-- ===== DATO DEL MENTOR 1 ===== -->
+        <div class="campo-grupo">
+            <h3>💡 Dato del Mentor (Parte 1)</h3>
+            <div class="sub-campo">
+                <label for="mentor1a">Dato central 1</label>
+                <textarea id="mentor1a" rows="2">Nínive tenía más de 120.000 habitantes y murallas de 12 km de perímetro.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="mentor1b">Dato curioso 2</label>
+                <textarea id="mentor1b" rows="2">El puerto de Jope era el mismo desde el que Salomón trajo madera para el Templo.</textarea>
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- ===== PARTE 2: EXÉGESIS ===== -->
+        <h2>📖 3. Exégesis (Parte 2)</h2>
+        <p style="color: #8899b0; margin-bottom: 16px;">Completa hasta 4 términos hebreos. Deja vacíos los que no uses.</p>
+
+        <!-- TÉRMINO 1 -->
+        <div class="campo-grupo">
+            <h3>Término 1</h3>
+            <div class="sub-campo">
+                <label for="exe1_titulo">Título descriptivo</label>
+                <input type="text" id="exe1_titulo" value="La orden divina" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_cita">Cita bíblica</label>
+                <input type="text" id="exe1_cita" value="Jonás 1:1-2" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_versiculo">Versículo textual</label>
+                <textarea id="exe1_versiculo" rows="2">"Vino palabra de Jehová a Jonás... Levántate, ve a Nínive..."</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_hebreo">Término en hebreo (ej: qum)</label>
+                <input type="text" id="exe1_hebreo" value="qum" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_translit">Transliteración (ej: קוּם)</label>
+                <input type="text" id="exe1_translit" value="קוּם" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_analisis">Análisis del significado original</label>
+                <textarea id="exe1_analisis" rows="3">En hebreo, *qum* no significa solo "levántate" físicamente, sino "ponte en pie y actúa ahora". Es un imperativo que implica urgencia.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_verdad">Verdad exegética</label>
+                <textarea id="exe1_verdad" rows="2">La palabra de Dios no es sugerencia, es comisión que exige obediencia inmediata.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_error">❌ Error de interpretación</label>
+                <textarea id="exe1_error" rows="2">Reducirlo a "viajar". En realidad es "obedecer ahora".</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe1_imagen">Imagen asociada (nombre del archivo en /assets/img/)</label>
+                <input type="text" id="exe1_imagen" value="" />
+                <div class="info-ayuda">Opcional. Deja vacío si no hay imagen para este término.</div>
+            </div>
+        </div>
+
+        <!-- TÉRMINO 2 -->
+        <div class="campo-grupo">
+            <h3>Término 2</h3>
+            <div class="sub-campo">
+                <label for="exe2_titulo">Título descriptivo</label>
+                <input type="text" id="exe2_titulo" value="El descenso espiritual" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_cita">Cita bíblica</label>
+                <input type="text" id="exe2_cita" value="Jonás 1:3, 1:5, 2:1" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_versiculo">Versículo textual</label>
+                <textarea id="exe2_versiculo" rows="2">"Y Jonás descendió a Jope... descendió al barco... descendió a la bodega."</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_hebreo">Término en hebreo</label>
+                <input type="text" id="exe2_hebreo" value="yarad" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_translit">Transliteración</label>
+                <input type="text" id="exe2_translit" value="יָרַד" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_analisis">Análisis del significado original</label>
+                <textarea id="exe2_analisis" rows="3">*Yarad* significa "descender, bajar". Jonás *desciende* a Jope, *desciende* al barco, *desciende* a la bodega, y finalmente *desciende* al abismo.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_verdad">Verdad exegética</label>
+                <textarea id="exe2_verdad" rows="2">Huir de Dios no es horizontal, es vertical. Cada paso de desobediencia nos hunde.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_error">❌ Error de interpretación</label>
+                <textarea id="exe2_error" rows="2">Ver solo geografía. El autor sagrado ve una caída moral.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe2_imagen">Imagen asociada</label>
+                <input type="text" id="exe2_imagen" value="barco-pez.jpg" />
+                <div class="info-ayuda">Opcional. Deja vacío si no hay imagen.</div>
+            </div>
+        </div>
+
+        <!-- TÉRMINO 3 -->
+        <div class="campo-grupo">
+            <h3>Término 3</h3>
+            <div class="sub-campo">
+                <label for="exe3_titulo">Título descriptivo</label>
+                <input type="text" id="exe3_titulo" value="El arrepentimiento genuino" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_cita">Cita bíblica</label>
+                <input type="text" id="exe3_cita" value="Jonás 3:5-10" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_versiculo">Versículo textual</label>
+                <textarea id="exe3_versiculo" rows="2">"Los hombres de Nínive creyeron a Dios... se convirtieron de su mal camino."</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_hebreo">Término en hebreo</label>
+                <input type="text" id="exe3_hebreo" value="shuv" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_translit">Transliteración</label>
+                <input type="text" id="exe3_translit" value="שׁוּב" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_analisis">Análisis del significado original</label>
+                <textarea id="exe3_analisis" rows="3">*Shuv* significa "volverse, retornar". Implica un giro de 180 grados: dejar el mal y volverse a Dios.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_verdad">Verdad exegética</label>
+                <textarea id="exe3_verdad" rows="2">El arrepentimiento no es sentimiento, es acción: dejar el pecado y volverse a Dios.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_error">❌ Error de interpretación</label>
+                <textarea id="exe3_error" rows="2">Confundir con "tristeza". En hebreo implica dirección, no emoción.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe3_imagen">Imagen asociada</label>
+                <input type="text" id="exe3_imagen" value="" />
+                <div class="info-ayuda">Opcional. Deja vacío si no hay imagen.</div>
+            </div>
+        </div>
+
+        <!-- TÉRMINO 4 -->
+        <div class="campo-grupo">
+            <h3>Término 4</h3>
+            <div class="sub-campo">
+                <label for="exe4_titulo">Título descriptivo</label>
+                <input type="text" id="exe4_titulo" value="La compasión de Dios" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_cita">Cita bíblica</label>
+                <input type="text" id="exe4_cita" value="Jonás 4:2, 4:11" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_versiculo">Versículo textual</label>
+                <textarea id="exe4_versiculo" rows="2">"¿No he de tener piedad de Nínive...?"</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_hebreo">Término en hebreo</label>
+                <input type="text" id="exe4_hebreo" value="jesed / jus" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_translit">Transliteración</label>
+                <input type="text" id="exe4_translit" value="חֶסֶד / חוּס" />
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_analisis">Análisis del significado original</label>
+                <textarea id="exe4_analisis" rows="3">*Jesed* es el amor incondicional, la misericordia pactada. *Jus* significa "tener compasión, apiadarse".</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_verdad">Verdad exegética</label>
+                <textarea id="exe4_verdad" rows="2">La misericordia de Dios no tiene fronteras. Él se apiada de quien él quiere.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_error">❌ Error de interpretación</label>
+                <textarea id="exe4_error" rows="2">Pensar que Dios aprueba el pecado. La compasión no es complicidad.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="exe4_imagen">Imagen asociada</label>
+                <input type="text" id="exe4_imagen" value="" />
+                <div class="info-ayuda">Opcional. Deja vacío si no hay imagen.</div>
+            </div>
+        </div>
+
+        <!-- ===== DATO DEL MENTOR 2 ===== -->
+        <div class="campo-grupo">
+            <h3>💡 Dato del Mentor (Parte 2)</h3>
+            <div class="sub-campo">
+                <label for="mentor2a">Dato central 1</label>
+                <textarea id="mentor2a" rows="2">El pez no es "ballena" en hebreo, es *dag gadol* (pez grande).</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="mentor2b">Dato curioso 2</label>
+                <textarea id="mentor2b" rows="2">El salmo de Jonás (cap. 2) es una de las piezas poéticas más bellas del AT.</textarea>
+            </div>
+        </div>
+
+        <!-- ===== QUIASMO ===== -->
+        <div class="campo-grupo">
+            <h3>🏛️ Estructura quiástica (quiasmo)</h3>
+            <div class="checkbox-grupo">
+                <label><input type="checkbox" id="incluirQuiasmo" checked /> Incluir quiasmo visual</label>
+            </div>
+        </div>
+
+        <hr />
+
+        <!-- ===== PARTE 3: APLICACIÓN ===== -->
+        <h2>🛤️ 4. Aplicación (Parte 3)</h2>
+
+        <div class="campo-grupo">
+            <label for="verdadTeologica">Verdad Teológica Central</label>
+            <textarea id="verdadTeologica" rows="2">Dios es soberano para salvar a quien él quiere, y su misericordia rompe todas nuestras fronteras.</textarea>
+        </div>
+
+        <div class="campo-grupo">
+            <label for="puntoTension">Punto de Tensión</label>
+            <textarea id="puntoTension" rows="2">¿Estamos dispuestos a alegrarnos por la salvación de aquellos que consideramos "enemigos"?</textarea>
+        </div>
+
+        <div class="campo-grupo">
+            <label for="devocional">Devocional (2-3 párrafos)</label>
+            <textarea id="devocional" rows="4">La historia de Jonás no termina con un "felices para siempre". Termina con un profeta enojado, deshidratado y deseando la muerte, mientras Dios le enseña con una planta, un gusano y un viento. El libro es sobre el corazón de Dios, que ama a los que no merecen ser amados.</textarea>
+        </div>
+
+        <div class="campo-grupo">
+            <label for="imagenAplicacion">Imagen de aplicación (nombre del archivo en /assets/img/)</label>
+            <input type="text" id="imagenAplicacion" value="planta-gusano.jpg" />
+            <div class="info-ayuda">Ej: planta-gusano.jpg</div>
+        </div>
+
+        <div class="campo-grupo">
+            <h3>Examen del Corazón (5 preguntas)</h3>
+            <div class="sub-campo">
+                <label for="pregunta1">Pregunta 1</label>
+                <input type="text" id="pregunta1" value="¿A quiénes consideras 'tus ninivitas'?" />
+            </div>
+            <div class="sub-campo">
+                <label for="pregunta2">Pregunta 2</label>
+                <input type="text" id="pregunta2" value="¿Huyes de Dios disfrazando tu desobediencia con 'razones lógicas'?" />
+            </div>
+            <div class="sub-campo">
+                <label for="pregunta3">Pregunta 3</label>
+                <input type="text" id="pregunta3" value="¿Te alegras más por tus bendiciones que por la salvación de otros?" />
+            </div>
+            <div class="sub-campo">
+                <label for="pregunta4">Pregunta 4</label>
+                <input type="text" id="pregunta4" value="¿Has 'dormido espiritualmente' mientras otros claman a Dios?" />
+            </div>
+            <div class="sub-campo">
+                <label for="pregunta5">Pregunta 5</label>
+                <input type="text" id="pregunta5" value="¿Qué 'plantas' (consuelos temporales) valoras más que el carácter eterno de Dios?" />
+            </div>
+        </div>
+
+        <div class="campo-grupo">
+            <h3>Pasos Prácticos (5 acciones)</h3>
+            <div class="sub-campo">
+                <label for="paso1">Paso 1</label>
+                <input type="text" id="paso1" value="Escribe el nombre de alguien que te cueste amar y ora por su salvación." />
+            </div>
+            <div class="sub-campo">
+                <label for="paso2">Paso 2</label>
+                <input type="text" id="paso2" value="Vuelve a leer Jonás 4 y subraya cada acción de Dios." />
+            </div>
+            <div class="sub-campo">
+                <label for="paso3">Paso 3</label>
+                <input type="text" id="paso3" value="Haz un acto concreto de bondad hacia alguien que no te cae bien." />
+            </div>
+            <div class="sub-campo">
+                <label for="paso4">Paso 4</label>
+                <input type="text" id="paso4" value="Pregunta a un amigo: '¿En qué áreas soy como Jonás?'" />
+            </div>
+            <div class="sub-campo">
+                <label for="paso5">Paso 5</label>
+                <input type="text" id="paso5" value="Comparte esta historia a alguien no creyente, enfocándote en el Dios que persigue a los que huyen." />
+            </div>
+        </div>
+
+        <div class="campo-grupo">
+            <label for="oracion">Oración Final</label>
+            <textarea id="oracion" rows="6">Padre soberano, que gobiernas el viento, el mar y el corazón de los reyes, perdóname por las veces que he huido de tu voz porque no quería que tu misericordia alcanzara a quienes yo consideraba indignos. Gracias porque tu amor es más grande que mi rencor. Dame un corazón como el tuyo. En el nombre de Jesús, amén.</textarea>
+        </div>
+
+        <!-- ===== DATO DEL MENTOR 3 ===== -->
+        <div class="campo-grupo">
+            <h3>💡 Dato del Mentor (Parte 3)</h3>
+            <div class="sub-campo">
+                <label for="mentor3a">Dato central 1</label>
+                <textarea id="mentor3a" rows="2">La planta de Jonás (*qiqayon*) es probablemente ricino, que crece hasta 3 metros en pocos días.</textarea>
+            </div>
+            <div class="sub-campo">
+                <label for="mentor3b">Dato curioso 2</label>
+                <textarea id="mentor3b" rows="2">El viento solano (4:8) es el *sharav*, que puede elevar la temperatura hasta 50°C.</textarea>
+            </div>
+        </div>
+
+        <!-- ===== RECURSOS VISUALES ===== -->
+        <hr />
+        <h2>🎨 5. Recursos Visuales</h2>
+        <div class="checkbox-grupo">
+            <label><input type="checkbox" id="incluirMapa" checked /> Mapa interactivo (Leaflet - mapa real)</label>
+            <label><input type="checkbox" id="incluirTimeline" checked /> Línea de tiempo</label>
+            <label><input type="checkbox" id="incluirQuiasmo" checked /> Estructura quiástica</label>
+            <label><input type="checkbox" id="incluirExegesisCards" checked /> Tarjetas de exégesis (apilables)</label>
+            <label><input type="checkbox" id="incluirPreguntasAccordion" checked /> Preguntas en acordeón</label>
+        </div>
+        <div class="info-ayuda">Estos recursos se generan automáticamente con el código integrado en el HTML.</div>
+
+        <hr />
+
+        <!-- ===== BOTONES ===== -->
+        <button type="button" class="btn-generar" id="btnGenerar">🚀 Generar index.html</button>
+
+        <div id="mensajeExito" class="mensaje-exito">
+            ✅ ¡Estudio generado correctamente! Haz clic en el botón de abajo para descargarlo.
+        </div>
+
+        <button type="button" class="descargar-btn" id="btnDescargar">⬇️ Descargar index.html</button>
+
+    </form>
+
+</div>
+
+<script>
+    // ================================================================
+    //  GENERADOR DE ESTUDIOS BÍBLICOS (VERSIÓN CORREGIDA)
+    // ================================================================
+
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const btnGenerar = document.getElementById('btnGenerar');
+        const btnDescargar = document.getElementById('btnDescargar');
+        const mensajeExito = document.getElementById('mensajeExito');
+
+        let htmlGenerado = '';
+
+        // ================================================================
+        //  FUNCIÓN PARA OBTENER VALORES DEL FORMULARIO
+        // ================================================================
+        function getVal(id) {
+            const el = document.getElementById(id);
+            if (!el) {
+                console.warn('Elemento con ID "' + id + '" no encontrado');
+                return '';
+            }
+            return el.value;
+        }
+
+        function getCheck(id) {
+            const el = document.getElementById(id);
+            if (!el) {
+                console.warn('Elemento con ID "' + id + '" no encontrado');
+                return false;
+            }
+            return el.checked;
+        }
+
+        // ================================================================
+        //  FUNCIÓN PARA GENERAR EL HTML (CON CSS Y JS INCRUSTADO)
+        // ================================================================
+        function generarHTML() {
+
+            // --- Datos generales ---
+            const tituloLibro = getVal('tituloLibro');
+            const subtema = getVal('subtema');
+            const versiculos = getVal('versiculos');
+
+            // --- Contexto ---
+            const lugar = getVal('lugar');
+            const fecha = getVal('fecha');
+            const contextoHistorico = getVal('contextoHistorico');
+            const contextoCultural = getVal('contextoCultural');
+            const conexionesAT = getVal('conexionesAT');
+            const conexionesNT = getVal('conexionesNT');
+            const imagenContexto = getVal('imagenContexto');
+            const mentor1a = getVal('mentor1a');
+            const mentor1b = getVal('mentor1b');
+
+            // --- Exégesis (4 términos) ---
+            const exe = [];
+            for (let i = 1; i <= 4; i++) {
+                const titulo = getVal('exe' + i + '_titulo');
+                if (!titulo.trim()) continue;
+                exe.push({
+                    titulo: titulo,
+                    cita: getVal('exe' + i + '_cita'),
+                    versiculo: getVal('exe' + i + '_versiculo'),
+                    hebreo: getVal('exe' + i + '_hebreo'),
+                    translit: getVal('exe' + i + '_translit'),
+                    analisis: getVal('exe' + i + '_analisis'),
+                    verdad: getVal('exe' + i + '_verdad'),
+                    error: getVal('exe' + i + '_error'),
+                    imagen: getVal('exe' + i + '_imagen'),
+                });
+            }
+
+            const mentor2a = getVal('mentor2a');
+            const mentor2b = getVal('mentor2b');
+
+            // --- Aplicación ---
+            const verdadTeologica = getVal('verdadTeologica');
+            const puntoTension = getVal('puntoTension');
+            const devocional = getVal('devocional');
+            const imagenAplicacion = getVal('imagenAplicacion');
+            const preguntas = [
+                getVal('pregunta1'),
+                getVal('pregunta2'),
+                getVal('pregunta3'),
+                getVal('pregunta4'),
+                getVal('pregunta5'),
+            ];
+            const pasos = [
+                getVal('paso1'),
+                getVal('paso2'),
+                getVal('paso3'),
+                getVal('paso4'),
+                getVal('paso5'),
+            ];
+            const oracion = getVal('oracion');
+            const mentor3a = getVal('mentor3a');
+            const mentor3b = getVal('mentor3b');
+
+            // --- Recursos visuales (checkboxes) ---
+            const incluirMapa = getCheck('incluirMapa');
+            const incluirTimeline = getCheck('incluirTimeline');
+            const incluirQuiasmo = getCheck('incluirQuiasmo');
+            const incluirExegesisCards = getCheck('incluirExegesisCards');
+            const incluirPreguntasAccordion = getCheck('incluirPreguntasAccordion');
+
+            // ================================================================
+            //  CSS INCRUSTADO (con estilos para el mapa Leaflet)
+            // ================================================================
+            const cssEstudio = `
         * {
             margin: 0;
             padding: 0;
@@ -30,717 +652,744 @@
             border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        h1 {
-            font-size: 2.4rem;
-            font-weight: 700;
-            color: #e8b84b;
-            text-align: center;
-            margin-bottom: 8px;
-        }
+        h1 { font-size: 2.4rem; font-weight: 700; color: #e8b84b; text-align: center; margin-bottom: 8px; }
+        h2 { font-size: 1.8rem; font-weight: 600; color: #e8d5b0; margin-top: 48px; margin-bottom: 16px; border-bottom: 2px solid rgba(232, 184, 75, 0.15); padding-bottom: 8px; }
+        h3 { font-size: 1.3rem; font-weight: 600; color: #d4c09a; margin-top: 32px; margin-bottom: 12px; }
+        h4 { font-size: 1.1rem; font-weight: 600; color: #c9a87c; margin-top: 24px; margin-bottom: 8px; }
 
-        h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #e8d5b0;
-            margin-top: 40px;
-            margin-bottom: 16px;
-            border-bottom: 2px solid rgba(232, 184, 75, 0.15);
-            padding-bottom: 8px;
-        }
+        p { margin-bottom: 16px; color: #d0d7e8; }
+        strong { color: #f0e8d8; }
+        em { color: #c9a87c; font-style: italic; }
 
-        h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #d4c09a;
-            margin-top: 28px;
-            margin-bottom: 12px;
+        .cita {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #e8b84b;
+            padding: 16px 22px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #d0d7e8;
         }
+        .cita strong { color: #e8b84b; }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: 500;
-            color: #c9a87c;
-        }
+        ul, ol { margin: 12px 0 20px 24px; color: #d0d7e8; }
+        li { margin-bottom: 8px; }
 
-        input[type="text"],
-        input[type="number"],
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px 14px;
-            margin-bottom: 16px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 10px;
-            color: #e8d5b0;
+        .error-block {
+            background: rgba(214, 79, 79, 0.06);
+            border-left: 3px solid #d64f4f;
+            padding: 12px 18px;
+            margin: 12px 0 20px 0;
+            border-radius: 0 8px 8px 0;
+            color: #e8b8b8;
             font-size: 0.95rem;
-            font-family: inherit;
-            transition: border-color 0.3s;
+        }
+        .error-block strong { color: #d64f4f; }
+
+        .mentor-box {
+            background: rgba(232, 184, 75, 0.05);
+            border: 1px solid rgba(232, 184, 75, 0.12);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin: 32px 0 16px 0;
+        }
+        .mentor-box h3 { margin-top: 0; color: #e8b84b; font-size: 1.2rem; }
+        .mentor-box strong { color: #e8d5b0; }
+
+        .recurso-visual {
+            margin: 32px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: #0e1625;
+        }
+        .recurso-visual img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .recurso-visual .caption {
+            padding: 12px 18px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #8899b0;
+            font-size: 0.9rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        input:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: #e8b84b;
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .campo-grupo {
-            margin-bottom: 20px;
-        }
-
-        .campo-grupo .sub-campo {
-            padding-left: 20px;
-            border-left: 2px solid rgba(232, 184, 75, 0.1);
-            margin-top: 10px;
-        }
-
-        .checkbox-grupo {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px 24px;
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.02);
+        #map {
+            width: 100%;
+            height: 500px;
+            background: #0e1625;
             border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
         }
 
-        .checkbox-grupo label {
+        /* ===== QUIASMO ===== */
+        .quiasmo-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 0;
+        }
+        .quiasmo-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 400;
-            color: #b8c7e0;
-            cursor: pointer;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            border-left: 3px solid rgba(232, 184, 75, 0.2);
+            transition: background 0.3s;
+        }
+        .quiasmo-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .quiasmo-item .letra {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #e8b84b;
+            min-width: 44px;
+        }
+        .quiasmo-item .contenido {
+            flex: 1;
+        }
+        .quiasmo-item .contenido .label {
+            color: #e8d5b0;
+            font-weight: 600;
+        }
+        .quiasmo-item .contenido .detalle {
+            color: #8899b0;
+            font-size: 0.85rem;
+        }
+        .quiasmo-item.centro {
+            background: rgba(232, 184, 75, 0.06);
+            border-left-color: #e8b84b;
+            box-shadow: 0 0 30px rgba(232, 184, 75, 0.02);
+        }
+        .quiasmo-item.centro .letra {
+            color: #f0d080;
+        }
+        .quiasmo-item.centro .contenido .label {
+            color: #f0d080;
+        }
+        .quiasmo-flecha {
+            text-align: center;
+            color: #5a6a80;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            padding: 2px 0;
         }
 
-        .checkbox-grupo input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #e8b84b;
-            cursor: pointer;
+        /* ===== TARJETAS DE EXÉGESIS (apilables) ===== */
+        .exegesis-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 20px 0;
         }
-
-        .btn-generar {
-            background: #e8b84b;
-            color: #0b0f1a;
-            border: none;
-            padding: 16px 32px;
+        .exegesis-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .exegesis-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(232, 184, 75, 0.15);
+        }
+        .exegesis-card.activa {
+            background: rgba(232, 184, 75, 0.06);
+            border-color: #e8b84b;
+            box-shadow: 0 0 20px rgba(232, 184, 75, 0.05);
+        }
+        .exegesis-card .header-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .exegesis-card .header-card .numero {
             font-size: 1.2rem;
             font-weight: 700;
+            color: #e8b84b;
+            min-width: 32px;
+        }
+        .exegesis-card .header-card .titulo-card {
+            color: #e8d5b0;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        .exegesis-card .header-card .toggle-icon {
+            margin-left: auto;
+            color: #5a6a80;
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+        .exegesis-card.activa .header-card .toggle-icon {
+            color: #c9a87c;
+            transform: rotate(180deg);
+        }
+        .exegesis-card .contenido-card {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+        .exegesis-card.activa .contenido-card {
+            max-height: 800px;
+            opacity: 1;
+            margin-top: 12px;
+        }
+        .exegesis-card .contenido-card .inner {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 12px;
+            color: #b8c7e0;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .exegesis-card .contenido-card .inner strong {
+            color: #e8d5b0;
+        }
+        .exegesis-card .contenido-card .inner .cita-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-left: 3px solid #e8b84b;
+            padding: 10px 16px;
+            margin: 8px 0 12px 0;
+            font-style: italic;
+            color: #d0d7e8;
+        }
+        .exegesis-card .contenido-card .inner .error-card {
+            background: rgba(214, 79, 79, 0.06);
+            border-left: 3px solid #d64f4f;
+            padding: 10px 16px;
+            margin: 8px 0 12px 0;
+            border-radius: 0 8px 8px 0;
+            color: #e8b8b8;
+            font-size: 0.9rem;
+        }
+        .exegesis-card .contenido-card .inner .error-card strong {
+            color: #d64f4f;
+        }
+        .exegesis-card .contenido-card .inner .imagen-card {
+            margin: 12px 0;
+        }
+        .exegesis-card .contenido-card .inner .imagen-card img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* ===== ACORDEÓN DE PREGUNTAS (con emojis) ===== */
+        .preguntas-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 16px 0 24px 0;
+        }
+        .pregunta-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+        .pregunta-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(232, 184, 75, 0.12);
+        }
+        .pregunta-item.activa {
+            background: rgba(232, 184, 75, 0.04);
+            border-color: #e8b84b;
+        }
+        .pregunta-item .header-pregunta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .pregunta-item .header-pregunta .num-pregunta {
+            color: #e8b84b;
+            font-weight: 700;
+            font-size: 0.9rem;
+            min-width: 28px;
+        }
+        .pregunta-item .header-pregunta .texto-pregunta {
+            color: #e8d5b0;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .pregunta-item .header-pregunta .toggle-pregunta {
+            margin-left: auto;
+            color: #5a6a80;
+            font-size: 0.7rem;
+            transition: transform 0.3s;
+        }
+        .pregunta-item.activa .header-pregunta .toggle-pregunta {
+            color: #c9a87c;
+            transform: rotate(180deg);
+        }
+        .pregunta-item .detalle-pregunta {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
+            opacity: 0;
+            margin-top: 0;
+        }
+        .pregunta-item.activa .detalle-pregunta {
+            max-height: 200px;
+            opacity: 1;
+            margin-top: 8px;
+        }
+        .pregunta-item .detalle-pregunta .inner-pregunta {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 10px;
+            color: #b8c7e0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .pregunta-item .detalle-pregunta .inner-pregunta strong {
+            color: #e8d5b0;
+        }
+
+        /* ===== DIAGRAMA DE ANILLOS ===== */
+        .anillos-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 0;
+        }
+        .anillo-item {
+            width: 100%;
+            max-width: 620px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 2px solid rgba(255, 255, 255, 0.04);
             border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 16px;
-            width: 100%;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            user-select: none;
         }
-
-        .btn-generar:hover {
-            background: #f0c85a;
-            transform: scale(1.01);
-            box-shadow: 0 0 30px rgba(232, 184, 75, 0.2);
+        .anillo-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(232, 184, 75, 0.15);
         }
-
-        .btn-generar:active {
-            transform: scale(0.98);
+        .anillo-item.centro {
+            background: rgba(232, 184, 75, 0.05);
+            border-color: rgba(232, 184, 75, 0.12);
         }
-
-        .mensaje-exito {
-            display: none;
-            background: rgba(76, 175, 80, 0.1);
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 12px;
-            padding: 16px 20px;
-            margin: 16px 0;
-            color: #8bc34a;
+        .anillo-item.centro .label {
+            color: #f0d080;
+        }
+        .anillo-item .icono {
+            font-size: 1.5rem;
+            min-width: 40px;
             text-align: center;
         }
-
-        .mensaje-exito.visible {
-            display: block;
+        .anillo-item .info {
+            flex: 1;
         }
-
-        .descargar-btn {
-            display: none;
-            background: #4caf7a;
-            color: #fff;
-            border: none;
-            padding: 14px 24px;
-            font-size: 1rem;
+        .anillo-item .info .label {
+            color: #e8d5b0;
             font-weight: 600;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin: 8px auto;
-            width: 100%;
-            max-width: 400px;
+            font-size: 0.95rem;
         }
-
-        .descargar-btn:hover {
-            background: #5cbf8a;
-            transform: scale(1.02);
+        .anillo-item .info .detalle {
+            color: #8899b0;
+            font-size: 0.8rem;
+            opacity: 0.7;
         }
-
-        .descargar-btn.visible {
-            display: block;
-        }
-
-        .info-ayuda {
+        .anillo-item .toggle {
             color: #5a6a80;
-            font-size: 0.85rem;
-            margin-top: -10px;
-            margin-bottom: 16px;
-            font-style: italic;
+            font-size: 0.7rem;
+            transition: transform 0.3s;
         }
-
-        hr {
-            border: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.05);
-            margin: 24px 0;
+        .anillo-item.activo .toggle {
+            color: #c9a87c;
+            transform: rotate(180deg);
+        }
+        .anillo-preguntas {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease;
+            opacity: 0;
+            width: 100%;
+            max-width: 600px;
+        }
+        .anillo-item.activo + .anillo-preguntas {
+            max-height: 300px;
+            opacity: 1;
+            margin-top: 4px;
+        }
+        .anillo-preguntas .inner {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            padding: 14px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .anillo-preguntas .inner .q {
+            color: #b8c7e0;
+            font-size: 0.85rem;
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+        .anillo-preguntas .inner .q:last-child {
+            border-bottom: none;
+        }
+        .anillo-preguntas .inner .q .num {
+            color: #e8b84b;
+            font-weight: 700;
+            margin-right: 8px;
+        }
+        .anillo-preguntas .inner .q strong {
+            color: #e8d5b0;
+        }
+        .conector-linea {
+            width: 2px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.04);
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 24px 16px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            h2 {
-                font-size: 1.3rem;
-            }
-            .checkbox-grupo {
-                flex-direction: column;
-                gap: 8px;
-            }
-            .campo-grupo .sub-campo {
-                padding-left: 10px;
-            }
+            .container { padding: 24px 16px; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            h3 { font-size: 1.1rem; }
+            .exegesis-card { padding: 14px 16px; }
+            .pregunta-item { padding: 10px 14px; }
+            #map { height: 380px; }
         }
-    </style>
-</head>
-<body>
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 16px 12px; }
+            h1 { font-size: 1.4rem; }
+            h2 { font-size: 1.2rem; }
+            .quiasmo-item { padding: 8px 12px; flex-wrap: wrap; }
+            .quiasmo-item .letra { min-width: 32px; font-size: 1.2rem; }
+            .anillo-item { padding: 10px 12px; flex-wrap: wrap; }
+            .anillo-item .icono { min-width: 30px; font-size: 1.2rem; }
+            .cita { padding: 12px 16px; font-size: 0.9rem; }
+            .mentor-box { padding: 14px 16px; }
+            .exegesis-card .header-card .titulo-card { font-size: 0.85rem; }
+            .pregunta-item .header-pregunta .texto-pregunta { font-size: 0.8rem; }
+            #map { height: 280px; }
+        }
+        `;
 
-    <div class="container">
-
-        <h1>📖 Generador de Estudios Bíblicos</h1>
-        <p style="text-align: center; color: #8899b0; margin-bottom: 24px;">
-            Completa los campos y genera un <strong>index.html</strong> listo para subir a GitHub.
-        </p>
-
-        <hr />
-
-        <!-- ========================================================= -->
-        <!--  FORMULARIO                                               -->
-        <!-- ========================================================= -->
-        <form id="generadorForm">
-
-            <!-- ===== DATOS GENERALES ===== -->
-            <h2>📌 1. Datos Generales</h2>
-
-            <div class="campo-grupo">
-                <label for="tituloLibro">Título del libro</label>
-                <input type="text" id="tituloLibro" value="Estudio del Libro de Jonás" />
-            </div>
-
-            <div class="campo-grupo">
-                <label for="subtema">Subtema (ej: La huida y la tormenta)</label>
-                <input type="text" id="subtema" value="La huida y la tormenta" />
-            </div>
-
-            <div class="campo-grupo">
-                <label for="versiculos">Versículos (ej: Jonás 1:1-16)</label>
-                <input type="text" id="versiculos" value="Jonás 1:1-16" />
-            </div>
-
-            <hr />
-
-            <!-- ===== PARTE 1: CONTEXTO ===== -->
-            <h2>🌍 2. Contexto (Parte 1)</h2>
-
-            <div class="campo-grupo">
-                <label for="lugar">📍 Lugar</label>
-                <input type="text" id="lugar" value="Jope, Mar Mediterráneo, Nínive, Tarsis" />
-            </div>
-
-            <div class="campo-grupo">
-                <label for="fecha">📅 Fecha (aproximada)</label>
-                <input type="text" id="fecha" value="760 a.C." />
-            </div>
-
-            <div class="campo-grupo">
-                <label for="contextoHistorico">Contexto Histórico/Político</label>
-                <textarea id="contextoHistorico" rows="4">Asiria era el imperio más temido del antiguo Oriente Próximo. Su brutalidad era legendaria: desollaban vivos a sus enemigos, empalaban a los líderes rebeldes y deportaban poblaciones enteras.</textarea>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="contextoCultural">Contexto Cultural/Teológico</label>
-                <textarea id="contextoCultural" rows="4">Un profeta judío no debía contaminarse con gentiles. Jonás huye no por miedo, sino porque sabía que Dios era misericordioso (Jonás 4:2) y no quería que sus enemigos fueran perdonados.</textarea>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="conexionesAT">Conexiones con el Antiguo Testamento</label>
-                <textarea id="conexionesAT" rows="3">Jonás es mencionado en 2 Reyes 14:25. Su salmo (cap. 2) tiene ecos de los Salmos 18, 42 y 88.</textarea>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="conexionesNT">Conexiones con el Nuevo Testamento</label>
-                <textarea id="conexionesNT" rows="3">Jesús usa a Jonás como señal de su muerte y resurrección (Mateo 12:38-41).</textarea>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="imagenContexto">Imagen de contexto (nombre del archivo en /assets/img/)</label>
-                <input type="text" id="imagenContexto" value="ninive.jpg" />
-                <div class="info-ayuda">Ej: ninive.jpg (la imagen debe estar en la carpeta /assets/img/)</div>
-            </div>
-
-            <!-- ===== DATO DEL MENTOR 1 ===== -->
-            <div class="campo-grupo">
-                <h3>💡 Dato del Mentor (Parte 1)</h3>
-                <div class="sub-campo">
-                    <label for="mentor1a">Dato central 1</label>
-                    <textarea id="mentor1a" rows="2">Nínive tenía más de 120.000 habitantes y murallas de 12 km de perímetro.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="mentor1b">Dato curioso 2</label>
-                    <textarea id="mentor1b" rows="2">El puerto de Jope era el mismo desde el que Salomón trajo madera para el Templo.</textarea>
-                </div>
-            </div>
-
-            <hr />
-
-            <!-- ===== PARTE 2: EXÉGESIS ===== -->
-            <h2>📖 3. Exégesis (Parte 2)</h2>
-            <p style="color: #8899b0; margin-bottom: 16px;">Completa hasta 4 términos hebreos. Deja vacíos los que no uses.</p>
-
-            <!-- TÉRMINO 1 -->
-            <div class="campo-grupo">
-                <h3>Término 1</h3>
-                <div class="sub-campo">
-                    <label for="exe1_titulo">Título descriptivo</label>
-                    <input type="text" id="exe1_titulo" value="La orden divina" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_cita">Cita bíblica</label>
-                    <input type="text" id="exe1_cita" value="Jonás 1:1-2" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_versiculo">Versículo textual</label>
-                    <textarea id="exe1_versiculo" rows="2">"Vino palabra de Jehová a Jonás... Levántate, ve a Nínive..."</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_hebreo">Término en hebreo (ej: qum)</label>
-                    <input type="text" id="exe1_hebreo" value="qum" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_translit">Transliteración (ej: קוּם)</label>
-                    <input type="text" id="exe1_translit" value="קוּם" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_analisis">Análisis del significado original</label>
-                    <textarea id="exe1_analisis" rows="3">En hebreo, *qum* no significa solo "levántate" físicamente, sino "ponte en pie y actúa ahora". Es un imperativo que implica urgencia.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_verdad">Verdad exegética</label>
-                    <textarea id="exe1_verdad" rows="2">La palabra de Dios no es sugerencia, es comisión que exige obediencia inmediata.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_error">❌ Error de interpretación</label>
-                    <textarea id="exe1_error" rows="2">Reducirlo a "viajar". En realidad es "obedecer ahora".</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe1_imagen">Imagen asociada (nombre del archivo en /assets/img/)</label>
-                    <input type="text" id="exe1_imagen" value="" />
-                    <div class="info-ayuda">Opcional. Deja vacío si no hay imagen para este término.</div>
-                </div>
-            </div>
-
-            <!-- TÉRMINO 2 -->
-            <div class="campo-grupo">
-                <h3>Término 2</h3>
-                <div class="sub-campo">
-                    <label for="exe2_titulo">Título descriptivo</label>
-                    <input type="text" id="exe2_titulo" value="El descenso espiritual" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_cita">Cita bíblica</label>
-                    <input type="text" id="exe2_cita" value="Jonás 1:3, 1:5, 2:1" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_versiculo">Versículo textual</label>
-                    <textarea id="exe2_versiculo" rows="2">"Y Jonás descendió a Jope... descendió al barco... descendió a la bodega."</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_hebreo">Término en hebreo</label>
-                    <input type="text" id="exe2_hebreo" value="yarad" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_translit">Transliteración</label>
-                    <input type="text" id="exe2_translit" value="יָרַד" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_analisis">Análisis del significado original</label>
-                    <textarea id="exe2_analisis" rows="3">*Yarad* significa "descender, bajar". Jonás *desciende* a Jope, *desciende* al barco, *desciende* a la bodega, y finalmente *desciende* al abismo.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_verdad">Verdad exegética</label>
-                    <textarea id="exe2_verdad" rows="2">Huir de Dios no es horizontal, es vertical. Cada paso de desobediencia nos hunde.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_error">❌ Error de interpretación</label>
-                    <textarea id="exe2_error" rows="2">Ver solo geografía. El autor sagrado ve una caída moral.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe2_imagen">Imagen asociada</label>
-                    <input type="text" id="exe2_imagen" value="barco-pez.jpg" />
-                    <div class="info-ayuda">Opcional. Deja vacío si no hay imagen.</div>
-                </div>
-            </div>
-
-            <!-- TÉRMINO 3 -->
-            <div class="campo-grupo">
-                <h3>Término 3</h3>
-                <div class="sub-campo">
-                    <label for="exe3_titulo">Título descriptivo</label>
-                    <input type="text" id="exe3_titulo" value="El arrepentimiento genuino" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_cita">Cita bíblica</label>
-                    <input type="text" id="exe3_cita" value="Jonás 3:5-10" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_versiculo">Versículo textual</label>
-                    <textarea id="exe3_versiculo" rows="2">"Los hombres de Nínive creyeron a Dios... se convirtieron de su mal camino."</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_hebreo">Término en hebreo</label>
-                    <input type="text" id="exe3_hebreo" value="shuv" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_translit">Transliteración</label>
-                    <input type="text" id="exe3_translit" value="שׁוּב" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_analisis">Análisis del significado original</label>
-                    <textarea id="exe3_analisis" rows="3">*Shuv* significa "volverse, retornar". Implica un giro de 180 grados: dejar el mal y volverse a Dios.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_verdad">Verdad exegética</label>
-                    <textarea id="exe3_verdad" rows="2">El arrepentimiento no es sentimiento, es acción: dejar el pecado y volverse a Dios.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_error">❌ Error de interpretación</label>
-                    <textarea id="exe3_error" rows="2">Confundir con "tristeza". En hebreo implica dirección, no emoción.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe3_imagen">Imagen asociada</label>
-                    <input type="text" id="exe3_imagen" value="" />
-                    <div class="info-ayuda">Opcional. Deja vacío si no hay imagen.</div>
-                </div>
-            </div>
-
-            <!-- TÉRMINO 4 -->
-            <div class="campo-grupo">
-                <h3>Término 4</h3>
-                <div class="sub-campo">
-                    <label for="exe4_titulo">Título descriptivo</label>
-                    <input type="text" id="exe4_titulo" value="La compasión de Dios" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_cita">Cita bíblica</label>
-                    <input type="text" id="exe4_cita" value="Jonás 4:2, 4:11" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_versiculo">Versículo textual</label>
-                    <textarea id="exe4_versiculo" rows="2">"¿No he de tener piedad de Nínive...?"</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_hebreo">Término en hebreo</label>
-                    <input type="text" id="exe4_hebreo" value="jesed / jus" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_translit">Transliteración</label>
-                    <input type="text" id="exe4_translit" value="חֶסֶד / חוּס" />
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_analisis">Análisis del significado original</label>
-                    <textarea id="exe4_analisis" rows="3">*Jesed* es el amor incondicional, la misericordia pactada. *Jus* significa "tener compasión, apiadarse".</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_verdad">Verdad exegética</label>
-                    <textarea id="exe4_verdad" rows="2">La misericordia de Dios no tiene fronteras. Él se apiada de quien él quiere.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_error">❌ Error de interpretación</label>
-                    <textarea id="exe4_error" rows="2">Pensar que Dios aprueba el pecado. La compasión no es complicidad.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="exe4_imagen">Imagen asociada</label>
-                    <input type="text" id="exe4_imagen" value="" />
-                    <div class="info-ayuda">Opcional. Deja vacío si no hay imagen.</div>
-                </div>
-            </div>
-
-            <!-- ===== DATO DEL MENTOR 2 ===== -->
-            <div class="campo-grupo">
-                <h3>💡 Dato del Mentor (Parte 2)</h3>
-                <div class="sub-campo">
-                    <label for="mentor2a">Dato central 1</label>
-                    <textarea id="mentor2a" rows="2">El pez no es "ballena" en hebreo, es *dag gadol* (pez grande).</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="mentor2b">Dato curioso 2</label>
-                    <textarea id="mentor2b" rows="2">El salmo de Jonás (cap. 2) es una de las piezas poéticas más bellas del AT.</textarea>
-                </div>
-            </div>
-
-            <!-- ===== QUIASMO (estructura) ===== -->
-            <div class="campo-grupo">
-                <h3>🏛️ Estructura quiástica (quiasmo)</h3>
-                <div class="checkbox-grupo">
-                    <label><input type="checkbox" id="incluirQuiasmo" checked /> Incluir quiasmo visual</label>
-                </div>
-                <div class="info-ayuda">Si lo activas, se mostrará el diagrama de la estructura quiástica de Jonás.</div>
-            </div>
-
-            <hr />
-
-            <!-- ===== PARTE 3: APLICACIÓN ===== -->
-            <h2>🛤️ 4. Aplicación (Parte 3)</h2>
-
-            <div class="campo-grupo">
-                <label for="verdadTeologica">Verdad Teológica Central</label>
-                <textarea id="verdadTeologica" rows="2">Dios es soberano para salvar a quien él quiere, y su misericordia rompe todas nuestras fronteras.</textarea>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="puntoTension">Punto de Tensión</label>
-                <textarea id="puntoTension" rows="2">¿Estamos dispuestos a alegrarnos por la salvación de aquellos que consideramos "enemigos"?</textarea>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="devocional">Devocional (2-3 párrafos)</label>
-                <textarea id="devocional" rows="4">La historia de Jonás no termina con un "felices para siempre". Termina con un profeta enojado, deshidratado y deseando la muerte, mientras Dios le enseña con una planta, un gusano y un viento. El libro es sobre el corazón de Dios, que ama a los que no merecen ser amados.</textarea>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="imagenAplicacion">Imagen de aplicación (nombre del archivo en /assets/img/)</label>
-                <input type="text" id="imagenAplicacion" value="planta-gusano.jpg" />
-                <div class="info-ayuda">Ej: planta-gusano.jpg</div>
-            </div>
-
-            <div class="campo-grupo">
-                <h3>Examen del Corazón (5 preguntas)</h3>
-                <div class="sub-campo">
-                    <label for="pregunta1">Pregunta 1</label>
-                    <input type="text" id="pregunta1" value="¿A quiénes consideras 'tus ninivitas'?" />
-                </div>
-                <div class="sub-campo">
-                    <label for="pregunta2">Pregunta 2</label>
-                    <input type="text" id="pregunta2" value="¿Huyes de Dios disfrazando tu desobediencia con 'razones lógicas'?" />
-                </div>
-                <div class="sub-campo">
-                    <label for="pregunta3">Pregunta 3</label>
-                    <input type="text" id="pregunta3" value="¿Te alegras más por tus bendiciones que por la salvación de otros?" />
-                </div>
-                <div class="sub-campo">
-                    <label for="pregunta4">Pregunta 4</label>
-                    <input type="text" id="pregunta4" value="¿Has 'dormido espiritualmente' mientras otros claman a Dios?" />
-                </div>
-                <div class="sub-campo">
-                    <label for="pregunta5">Pregunta 5</label>
-                    <input type="text" id="pregunta5" value="¿Qué 'plantas' (consuelos temporales) valoras más que el carácter eterno de Dios?" />
-                </div>
-            </div>
-
-            <div class="campo-grupo">
-                <h3>Pasos Prácticos (5 acciones)</h3>
-                <div class="sub-campo">
-                    <label for="paso1">Paso 1</label>
-                    <input type="text" id="paso1" value="Escribe el nombre de alguien que te cueste amar y ora por su salvación." />
-                </div>
-                <div class="sub-campo">
-                    <label for="paso2">Paso 2</label>
-                    <input type="text" id="paso2" value="Vuelve a leer Jonás 4 y subraya cada acción de Dios." />
-                </div>
-                <div class="sub-campo">
-                    <label for="paso3">Paso 3</label>
-                    <input type="text" id="paso3" value="Haz un acto concreto de bondad hacia alguien que no te cae bien." />
-                </div>
-                <div class="sub-campo">
-                    <label for="paso4">Paso 4</label>
-                    <input type="text" id="paso4" value="Pregunta a un amigo: '¿En qué áreas soy como Jonás?'" />
-                </div>
-                <div class="sub-campo">
-                    <label for="paso5">Paso 5</label>
-                    <input type="text" id="paso5" value="Comparte esta historia a alguien no creyente, enfocándote en el Dios que persigue a los que huyen." />
-                </div>
-            </div>
-
-            <div class="campo-grupo">
-                <label for="oracion">Oración Final</label>
-                <textarea id="oracion" rows="6">Padre soberano, que gobiernas el viento, el mar y el corazón de los reyes, perdóname por las veces que he huido de tu voz porque no quería que tu misericordia alcanzara a quienes yo consideraba indignos. Gracias porque tu amor es más grande que mi rencor. Dame un corazón como el tuyo. En el nombre de Jesús, amén.</textarea>
-            </div>
-
-            <!-- ===== DATO DEL MENTOR 3 ===== -->
-            <div class="campo-grupo">
-                <h3>💡 Dato del Mentor (Parte 3)</h3>
-                <div class="sub-campo">
-                    <label for="mentor3a">Dato central 1</label>
-                    <textarea id="mentor3a" rows="2">La planta de Jonás (*qiqayon*) es probablemente ricino, que crece hasta 3 metros en pocos días.</textarea>
-                </div>
-                <div class="sub-campo">
-                    <label for="mentor3b">Dato curioso 2</label>
-                    <textarea id="mentor3b" rows="2">El viento solano (4:8) es el *sharav*, que puede elevar la temperatura hasta 50°C.</textarea>
-                </div>
-            </div>
-
-            <!-- ===== RECURSOS VISUALES (Checkboxes) ===== -->
-            <hr />
-            <h2>🎨 5. Recursos Visuales (actívalos según necesites)</h2>
-            <div class="checkbox-grupo">
-                <label><input type="checkbox" id="incluirMapa" checked /> Mapa interactivo (Canvas)</label>
-                <label><input type="checkbox" id="incluirTimeline" checked /> Línea de tiempo</label>
-                <label><input type="checkbox" id="incluirTarjetas" checked /> Tarjetas hebreo (acordeón)</label>
-                <label><input type="checkbox" id="incluirDiagrama" checked /> Diagrama de aplicación (anillos)</label>
-            </div>
-            <div class="info-ayuda">Estos recursos se generan automáticamente con el código que ya tienes en tu repositorio.</div>
-
-            <hr />
-
-            <!-- ===== BOTONES ===== -->
-            <button type="button" class="btn-generar" id="btnGenerar">🚀 Generar index.html</button>
-
-            <div id="mensajeExito" class="mensaje-exito">
-                ✅ ¡Estudio generado correctamente! Haz clic en el botón de abajo para descargarlo.
-            </div>
-
-            <button type="button" class="descargar-btn" id="btnDescargar">⬇️ Descargar index.html</button>
-
-        </form>
-
-    </div>
-
-    <script>
-        // ================================================================
-        //  GENERADOR DE ESTUDIOS BÍBLICOS
-        // ================================================================
-
+            // ================================================================
+            //  JAVASCRIPT INCRUSTADO (con Leaflet)
+            // ================================================================
+            const jsEstudio = `
         document.addEventListener('DOMContentLoaded', function() {
+            const mapContainer = document.getElementById('map');
+            if (!mapContainer) return;
 
-            const btnGenerar = document.getElementById('btnGenerar');
-            const btnDescargar = document.getElementById('btnDescargar');
-            const mensajeExito = document.getElementById('mensajeExito');
+            const map = L.map('map', {
+                center: [35.0, 28.0],
+                zoom: 5,
+                zoomControl: true,
+                fadeAnimation: true,
+                attributionControl: true,
+                scrollWheelZoom: true,
+                touchZoom: true,
+            });
 
-            let htmlGenerado = '';
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 19,
+                minZoom: 3,
+            }).addTo(map);
 
-            // ================================================================
-            //  FUNCIÓN PARA OBTENER VALORES DEL FORMULARIO
-            // ================================================================
-            function getVal(id) {
-                const el = document.getElementById(id);
-                return el ? el.value : '';
-            }
+            const coords = {
+                israel:  [32.0, 35.0],
+                jope:    [32.05, 34.75],
+                ninive:  [36.36, 43.15],
+                tarsis:  [36.0, -5.5],
+            };
 
-            function getCheck(id) {
-                const el = document.getElementById(id);
-                return el ? el.checked : false;
-            }
+            const createIcon = (color, emoji) => {
+                return L.divIcon({
+                    className: 'custom-div-icon',
+                    html: \`<div style="
+                        background-color: \${color};
+                        color: white;
+                        font-size: 20px;
+                        width: 44px;
+                        height: 44px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 50%;
+                        border: 3px solid rgba(255,255,255,0.6);
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+                        font-weight: bold;
+                        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+                    ">\${emoji}</div>`,
+                    iconSize: [44, 44],
+                    iconAnchor: [22, 44],
+                    popupAnchor: [0, -44],
+                });
+            };
 
-            // ================================================================
-            //  FUNCIÓN PARA GENERAR EL HTML
-            // ================================================================
-            function generarHTML() {
+            const iconIsrael = createIcon('#4caf7a', '✡️');
+            L.marker(coords.israel, { icon: iconIsrael })
+                .addTo(map)
+                .bindPopup(\`
+                    <b>🇮🇱 Israel</b><br>
+                    Reino del Norte (760 a.C.)<br>
+                    <small>Jeroboam II · Oseas y Amós profetizaban aquí</small>
+                \`);
 
-                // --- Datos generales ---
-                const tituloLibro = getVal('tituloLibro');
-                const subtema = getVal('subtema');
-                const versiculos = getVal('versiculos');
+            const iconJope = createIcon('#4d8fc5', '⛵');
+            L.marker(coords.jope, { icon: iconJope })
+                .addTo(map)
+                .bindPopup(\`
+                    <b>📍 Jope (Jaffa)</b><br>
+                    Puerto desde donde Jonás huyó<br>
+                    <small>Mismo puerto que usó Salomón (2 Crónicas 2:16)</small>
+                \`);
 
-                // --- Contexto ---
-                const lugar = getVal('lugar');
-                const fecha = getVal('fecha');
-                const contextoHistorico = getVal('contextoHistorico');
-                const contextoCultural = getVal('contextoCultural');
-                const conexionesAT = getVal('conexionesAT');
-                const conexionesNT = getVal('conexionesNT');
-                const imagenContexto = getVal('imagenContexto');
-                const mentor1a = getVal('mentor1a');
-                const mentor1b = getVal('mentor1b');
+            const iconNinive = createIcon('#e8b84b', '🏛️');
+            L.marker(coords.ninive, { icon: iconNinive })
+                .addTo(map)
+                .bindPopup(\`
+                    <b>🏛️ Nínive</b><br>
+                    Capital de Asiria · 120.000 hab.<br>
+                    <small>Dios envió a Jonás a predicar aquí</small>
+                \`);
 
-                // --- Exégesis (4 términos) ---
-                const exe = [];
-                for (let i = 1; i <= 4; i++) {
-                    const titulo = getVal('exe' + i + '_titulo');
-                    // Si el título está vacío, saltamos este término
-                    if (!titulo.trim()) continue;
-                    exe.push({
-                        titulo: titulo,
-                        cita: getVal('exe' + i + '_cita'),
-                        versiculo: getVal('exe' + i + '_versiculo'),
-                        hebreo: getVal('exe' + i + '_hebreo'),
-                        translit: getVal('exe' + i + '_translit'),
-                        analisis: getVal('exe' + i + '_analisis'),
-                        verdad: getVal('exe' + i + '_verdad'),
-                        error: getVal('exe' + i + '_error'),
-                        imagen: getVal('exe' + i + '_imagen'),
-                    });
+            const iconTarsis = createIcon('#d64f4f', '🌊');
+            L.marker(coords.tarsis, { icon: iconTarsis })
+                .addTo(map)
+                .bindPopup(\`
+                    <b>🌊 Tarsis</b><br>
+                    Extremo occidental (España)<br>
+                    <small>Jonás huyó 3.500 km en dirección contraria</small>
+                \`);
+
+            const rutaDios = [coords.israel, coords.jope, coords.ninive];
+            L.polyline(rutaDios, {
+                color: '#e8b84b',
+                weight: 5,
+                opacity: 0.9,
+                smoothFactor: 1,
+            }).addTo(map).bindPopup('🟡 Ruta de Dios: Israel → Jope → Nínive');
+
+            const rutaHuida = [coords.israel, coords.jope, coords.tarsis];
+            L.polyline(rutaHuida, {
+                color: '#d64f4f',
+                weight: 4,
+                opacity: 0.8,
+                smoothFactor: 1,
+                dashArray: '12, 12',
+            }).addTo(map).bindPopup('🔴 Huida de Jonás: Israel → Jope → Tarsis');
+
+            const bounds = L.latLngBounds([coords.tarsis, coords.ninive, coords.israel, coords.jope]);
+            map.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
+
+            L.control.zoom({ position: 'bottomright' }).addTo(map);
+            L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
+
+            window.addEventListener('resize', () => { map.invalidateSize(); });
+            console.log('🗺️ Mapa de Jonás cargado correctamente');
+        });
+
+        // ===== LÍNEA DE TIEMPO =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const events = [
+                { year: '800 a.C.', label: 'Imperio Asirio', title: '🏛️ Apogeo del Imperio Asirio', desc: 'Asiria se convierte en la superpotencia del Cercano Oriente.' },
+                { year: '760 a.C.', label: '⭐ Jonás', title: '📖 Jonás es llamado por Dios', desc: 'Dios envía a Jonás a predicar a Nínive.' },
+                { year: '722 a.C.', label: 'Caída Samaria', title: '⚔️ Asiria conquista Israel', desc: 'El reino del Norte cae ante los asirios.' },
+                { year: '701 a.C.', label: 'Senaquerib', title: '🛡️ Senaquerib asedia Jerusalén', desc: 'El ángel del Señor salva a Jerusalén.' },
+                { year: '612 a.C.', label: 'Caída Nínive', title: '🔥 Nínive es destruida', desc: 'Una coalición destruye Nínive.' }
+            ];
+
+            const infoDiv = document.getElementById('timelineInfo');
+            const progress = document.getElementById('timelineProgress');
+            const eventsEls = document.querySelectorAll('.timeline-event');
+
+            function updateTimeline(index) {
+                const ev = events[index];
+                if (infoDiv) {
+                    infoDiv.innerHTML = \`<div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">\${ev.title}</div>
+                                        <div style="color:#b8c7e0;font-size:0.85rem;">\${ev.desc}</div>\`;
                 }
+                if (progress) {
+                    progress.style.width = ((index / (events.length - 1)) * 100) + '%';
+                }
+                eventsEls.forEach((el, i) => {
+                    const dot = el.querySelector('div');
+                    if (dot) {
+                        dot.style.background = (i <= index) ? '#e8b84b' : '#1a2538';
+                        dot.style.borderColor = (i <= index) ? '#e8b84b' : 'rgba(255,255,255,0.15)';
+                        dot.style.boxShadow = (i === index) ? '0 0 20px rgba(232,184,75,0.4)' : 'none';
+                    }
+                });
+            }
 
-                const mentor2a = getVal('mentor2a');
-                const mentor2b = getVal('mentor2b');
+            eventsEls.forEach((el, idx) => {
+                el.addEventListener('click', () => updateTimeline(idx));
+                el.addEventListener('touchend', (e) => { e.preventDefault(); updateTimeline(idx); });
+            });
 
-                // --- Aplicación ---
-                const verdadTeologica = getVal('verdadTeologica');
-                const puntoTension = getVal('puntoTension');
-                const devocional = getVal('devocional');
-                const imagenAplicacion = getVal('imagenAplicacion');
-                const preguntas = [
-                    getVal('pregunta1'),
-                    getVal('pregunta2'),
-                    getVal('pregunta3'),
-                    getVal('pregunta4'),
-                    getVal('pregunta5'),
-                ];
-                const pasos = [
-                    getVal('paso1'),
-                    getVal('paso2'),
-                    getVal('paso3'),
-                    getVal('paso4'),
-                    getVal('paso5'),
-                ];
-                const oracion = getVal('oracion');
-                const mentor3a = getVal('mentor3a');
-                const mentor3b = getVal('mentor3b');
+            if (eventsEls.length > 0) updateTimeline(0);
+        });
 
-                // --- Recursos visuales (checkboxes) ---
-                const incluirMapa = getCheck('incluirMapa');
-                const incluirTimeline = getCheck('incluirTimeline');
-                const incluirQuiasmo = getCheck('incluirQuiasmo');
-                const incluirTarjetas = getCheck('incluirTarjetas');
-                const incluirDiagrama = getCheck('incluirDiagrama');
+        // ===== TARJETAS DE EXÉGESIS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.exegesis-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    cards.forEach(c => c !== this && c.classList.remove('activa'));
+                    this.classList.toggle('activa');
+                });
+                card.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    cards.forEach(c => c !== this && c.classList.remove('activa'));
+                    this.classList.toggle('activa');
+                });
+            });
+            if (cards.length > 0) cards[0].classList.add('activa');
+        });
 
-                // ================================================================
-                //  PLANTILLA HTML
-                // ================================================================
+        // ===== ACORDEÓN DE PREGUNTAS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const preguntas = document.querySelectorAll('.pregunta-item');
+            preguntas.forEach(item => {
+                item.addEventListener('click', function() {
+                    this.classList.toggle('activa');
+                });
+                item.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    this.classList.toggle('activa');
+                });
+            });
+            if (preguntas.length > 0) preguntas[0].classList.add('activa');
+        });
 
-                let html = `<!DOCTYPE html>
+        // ===== DIAGRAMA DE ANILLOS =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const anillos = document.querySelectorAll('.anillo-item');
+            anillos.forEach(item => {
+                item.addEventListener('click', function() {
+                    anillos.forEach(a => a !== this && a.classList.remove('activo'));
+                    this.classList.toggle('activo');
+                });
+                item.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    anillos.forEach(a => a !== this && a.classList.remove('activo'));
+                    this.classList.toggle('activo');
+                });
+            });
+            if (anillos.length > 0) anillos[0].classList.add('activo');
+        });
+        `;
+
+            // ================================================================
+            //  GENERAR CONTENIDO DE EXÉGESIS (tarjetas apilables)
+            // ================================================================
+            let exegesisHTML = '';
+            if (incluirExegesisCards) {
+                exegesisHTML = `
+            <div class="exegesis-stack">
+                ${exe.map((item, index) => `
+                <div class="exegesis-card">
+                    <div class="header-card">
+                        <span class="numero">${index+1}</span>
+                        <span class="titulo-card">${item.titulo}</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="contenido-card">
+                        <div class="inner">
+                            <p><strong>Cita:</strong> ${item.cita}</p>
+                            <div class="cita-card">${item.versiculo}</div>
+                            ${item.imagen.trim() ? `
+                            <div class="imagen-card">
+                                <img src="assets/img/${item.imagen}" alt="${item.titulo}" />
+                            </div>
+                            ` : ''}
+                            <p><strong>Término hebreo:</strong> <em>${item.hebreo}</em> (${item.translit})</p>
+                            <p><strong>Análisis:</strong> ${item.analisis}</p>
+                            <p><strong>Verdad exegética:</strong> ${item.verdad}</p>
+                            <div class="error-card"><strong>❌ Error común:</strong> ${item.error}</div>
+                        </div>
+                    </div>
+                </div>
+                `).join('')}
+            </div>
+            `;
+            } else {
+                exegesisHTML = exe.map((item, index) => `
+                <h3>${index+1}. Título: "${item.titulo}"</h3>
+                <p><strong>Cita:</strong> ${item.cita}</p>
+                <div class="cita"><strong>Versículo:</strong> ${item.versiculo}</div>
+                ${item.imagen.trim() ? `
+                <div class="recurso-visual">
+                    <img src="assets/img/${item.imagen}" alt="${item.titulo}" />
+                    <div class="caption">📖 <strong>Imagen asociada</strong> a "${item.titulo}".</div>
+                </div>
+                ` : ''}
+                <p><strong>Término hebreo:</strong> <em>${item.hebreo}</em> (${item.translit})</p>
+                <p><strong>Análisis:</strong> ${item.analisis}</p>
+                <p><strong>Verdad exegética:</strong> ${item.verdad}</p>
+                <div class="error-block"><strong>❌ Error común:</strong> ${item.error}</div>
+                `).join('');
+            }
+
+            // ================================================================
+            //  GENERAR CONTENIDO DE PREGUNTAS (acordeón con emojis)
+            // ================================================================
+            const emojisPreguntas = ['🤔', '🧐', '😯', '😥', '💭'];
+            let preguntasHTML = '';
+            if (incluirPreguntasAccordion) {
+                preguntasHTML = `
+            <div class="preguntas-stack">
+                ${preguntas.map((p, i) => `
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">${emojisPreguntas[i]}</span>
+                        <span class="texto-pregunta">${p}</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <p><strong>💡 Reflexiona:</strong> Esta pregunta te invita a mirar tu corazón y ver si hay alguna área donde necesites arrepentirte o cambiar de perspectiva.</p>
+                        </div>
+                    </div>
+                </div>
+                `).join('')}
+            </div>
+            `;
+            } else {
+                preguntasHTML = `
+            <ol>
+                ${preguntas.map((p, i) => `<li><strong>${emojisPreguntas[i]} ${p}</strong></li>`).join('')}
+            </ol>
+            `;
+            }
+
+            // ================================================================
+            //  ARMAR EL HTML FINAL
+            // ================================================================
+            let html = `<!DOCTYPE html>
         <html lang="es">
         <head>
             <meta charset="UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0" />
             <title>${tituloLibro} - ${subtema}</title>
-            <link rel="stylesheet" href="assets/css/style.css" />
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+            <style>${cssEstudio}</style>
         </head>
         <body>
 
@@ -765,10 +1414,10 @@
             <p>${contextoHistorico}</p>
 
             ${incluirMapa ? `
-            <!-- MAPA -->
+            <!-- MAPA CON LEAFLET -->
             <div class="recurso-visual">
-                <canvas id="mapCanvas" width="1600" height="1000"></canvas>
-                <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los puntos para más información.</div>
+                <div id="map"></div>
+                <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>
             </div>
             ` : ''}
 
@@ -863,46 +1512,13 @@
             </div>
             ` : ''}
 
-            ${exe.map((item, index) => `
-            <h3>${index+1}. Título: "${item.titulo}"</h3>
-            <p><strong>Cita:</strong> ${item.cita}</p>
-            <div class="cita"><strong>Versículo:</strong> ${item.versiculo}</div>
-            ${item.imagen.trim() ? `
-            <div class="recurso-visual">
-                <img src="assets/img/${item.imagen}" alt="${item.titulo}" />
-                <div class="caption">📖 <strong>Imagen asociada</strong> a "${item.titulo}".</div>
-            </div>
-            ` : ''}
-            <p><strong>Término hebreo:</strong> <em>${item.hebreo}</em> (${item.translit})</p>
-            <p><strong>Análisis:</strong> ${item.analisis}</p>
-            <p><strong>Verdad exegética:</strong> ${item.verdad}</p>
-            <div class="error-block"><strong>❌ Error común:</strong> ${item.error}</div>
-            `).join('')}
+            ${exegesisHTML}
 
             ${mentor2a.trim() || mentor2b.trim() ? `
             <div class="mentor-box">
                 <h3>💡 Dato del Mentor</h3>
                 ${mentor2a.trim() ? `<p><strong>1. Dato central:</strong> ${mentor2a}</p>` : ''}
                 ${mentor2b.trim() ? `<p><strong>2. Dato curioso:</strong> ${mentor2b}</p>` : ''}
-            </div>
-            ` : ''}
-
-            ${incluirTarjetas ? `
-            <!-- TARJETAS HEBREO -->
-            <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
-                <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">📖 Palabras clave en hebreo</h4>
-                <div class="hebreo-grid">
-                    ${exe.map((item, index) => `
-                    <div class="hebreo-card">
-                        <div class="header"><span class="hebreo">${item.translit}</span><span class="translit">${item.hebreo}</span></div>
-                        <div class="titulo">${item.titulo}</div>
-                        <div class="vista-previa">"${item.versiculo.substring(0, 40)}..."</div>
-                        <div class="detalle"><div class="contenido"><strong>Significado:</strong> ${item.analisis}<br><br><strong>Verdad exegética:</strong> ${item.verdad}<br><br><div class="error-block" style="margin:8px 0 0 0;font-size:0.8rem;"><strong>❌ Error común:</strong> ${item.error}</div></div></div>
-                        <div class="toggle">▼ tocar para desplegar</div>
-                    </div>
-                    `).join('')}
-                </div>
-                <div class="caption">📖 <strong>Toca cada tarjeta</strong> para ver el análisis completo de la palabra hebrea.</div>
             </div>
             ` : ''}
 
@@ -929,14 +1545,10 @@
             ` : ''}
 
             <h3>Examen del Corazón (5 preguntas)</h3>
-            <ol>
-                ${preguntas.map(p => `<li><strong>${p}</strong></li>`).join('')}
-            </ol>
+            ${preguntasHTML}
 
-            ${incluirDiagrama ? `
-            <!-- DIAGRAMA DE ANILLOS -->
+            <!-- ===== DIAGRAMA DE ANILLOS ===== -->
             <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
-                <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">🎯 El corazón del mensaje: aplicación</h4>
                 <div class="anillos-container">
                     <div class="anillo-item centro">
                         <span class="icono">❤️</span>
@@ -971,7 +1583,6 @@
                 </div>
                 <div class="caption">🎯 <strong>Toca cada anillo</strong> para desplegar las preguntas de examen personal.</div>
             </div>
-            ` : ''}
 
             <h3>Pasos Prácticos (5 acciones para la semana)</h3>
             <ol>
@@ -994,52 +1605,50 @@
 
         </div>
 
-        <!-- JavaScript externo -->
-        <script src="assets/js/main.js">
-        <\/script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>
+        <script>${jsEstudio}<\/script>
         </body>
         </html>`;
 
-                return html;
-            }
+            return html;
+        }
 
-            // ================================================================
-            //  EVENTO: GENERAR
-            // ================================================================
-            btnGenerar.addEventListener('click', function() {
+        // ================================================================
+        //  EVENTO: GENERAR
+        // ================================================================
+        btnGenerar.addEventListener('click', function() {
+            try {
                 htmlGenerado = generarHTML();
-
-                // Mostrar mensaje de éxito
                 mensajeExito.classList.add('visible');
                 btnDescargar.classList.add('visible');
-
-                // Hacer scroll al mensaje
                 mensajeExito.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            });
-
-            // ================================================================
-            //  EVENTO: DESCARGAR
-            // ================================================================
-            btnDescargar.addEventListener('click', function() {
-                if (!htmlGenerado) {
-                    alert('Primero genera el estudio haciendo clic en "Generar index.html"');
-                    return;
-                }
-
-                // Crear blob y descargar
-                const blob = new Blob([htmlGenerado], { type: 'text/html' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'index.html';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            });
-
+            } catch (e) {
+                alert('Error al generar el estudio: ' + e.message);
+                console.error(e);
+            }
         });
-    </script>
+
+        // ================================================================
+        //  EVENTO: DESCARGAR
+        // ================================================================
+        btnDescargar.addEventListener('click', function() {
+            if (!htmlGenerado) {
+                alert('Primero genera el estudio haciendo clic en "Generar index.html"');
+                return;
+            }
+            const blob = new Blob([htmlGenerado], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+    });
+</script>
 
 </body>
 </html>
