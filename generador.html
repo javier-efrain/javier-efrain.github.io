@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generador de Estudios Bíblicos</title>
     <style>
-        /* ===== ESTILOS DEL GENERADOR ===== */
+        /* ===== ESTILOS DEL GENERADOR (simplificados) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
@@ -520,14 +520,20 @@
 
 <script>
     // ================================================================
-    //  GENERADOR DE ESTUDIOS BÍBLICOS (VERSIÓN CORREGIDA)
+    //  GENERADOR DE ESTUDIOS BÍBLICOS (VERSIÓN CORREGIDA Y COMPACTA)
     // ================================================================
 
+    console.log('✅ Script del generador cargado correctamente.');
+
     document.addEventListener('DOMContentLoaded', function() {
+
+        console.log('✅ DOM completamente cargado.');
 
         const btnGenerar = document.getElementById('btnGenerar');
         const btnDescargar = document.getElementById('btnDescargar');
         const mensajeExito = document.getElementById('mensajeExito');
+
+        console.log('🔍 Botones encontrados:', { btnGenerar, btnDescargar, mensajeExito });
 
         let htmlGenerado = '';
 
@@ -537,7 +543,7 @@
         function getVal(id) {
             const el = document.getElementById(id);
             if (!el) {
-                console.warn('Elemento con ID "' + id + '" no encontrado');
+                console.warn('⚠️ Elemento con ID "' + id + '" no encontrado');
                 return '';
             }
             return el.value;
@@ -546,21 +552,24 @@
         function getCheck(id) {
             const el = document.getElementById(id);
             if (!el) {
-                console.warn('Elemento con ID "' + id + '" no encontrado');
+                console.warn('⚠️ Elemento con ID "' + id + '" no encontrado');
                 return false;
             }
             return el.checked;
         }
 
         // ================================================================
-        //  FUNCIÓN PARA GENERAR EL HTML (CON CSS Y JS INCRUSTADO)
+        //  FUNCIÓN PRINCIPAL: GENERAR HTML
         // ================================================================
         function generarHTML() {
+
+            console.log('🔄 Generando estudio...');
 
             // --- Datos generales ---
             const tituloLibro = getVal('tituloLibro');
             const subtema = getVal('subtema');
             const versiculos = getVal('versiculos');
+            console.log('📌 Datos generales:', { tituloLibro, subtema, versiculos });
 
             // --- Contexto ---
             const lugar = getVal('lugar');
@@ -590,6 +599,7 @@
                     imagen: getVal('exe' + i + '_imagen'),
                 });
             }
+            console.log('📖 Términos exegéticos:', exe.length);
 
             const mentor2a = getVal('mentor2a');
             const mentor2b = getVal('mentor2b');
@@ -624,442 +634,96 @@
             const incluirExegesisCards = getCheck('incluirExegesisCards');
             const incluirPreguntasAccordion = getCheck('incluirPreguntasAccordion');
 
+            console.log('🎨 Recursos visuales:', { incluirMapa, incluirTimeline, incluirQuiasmo, incluirExegesisCards, incluirPreguntasAccordion });
+
             // ================================================================
-            //  CSS INCRUSTADO (con estilos para el mapa Leaflet)
+            //  CSS INCRUSTADO (simplificado, sin usar plantillas literales largas)
             // ================================================================
             const cssEstudio = `
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: #0b0f1a;
-            color: #e8d5b0;
-            padding: 20px;
-            line-height: 1.7;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: #121a2a;
-            padding: 40px 32px;
-            border-radius: 28px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, system-ui, sans-serif; background: #0b0f1a; color: #e8d5b0; padding: 20px; line-height: 1.7; }
+        .container { max-width: 1000px; margin: 0 auto; background: #121a2a; padding: 40px 32px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 255, 255, 0.04); }
         h1 { font-size: 2.4rem; font-weight: 700; color: #e8b84b; text-align: center; margin-bottom: 8px; }
         h2 { font-size: 1.8rem; font-weight: 600; color: #e8d5b0; margin-top: 48px; margin-bottom: 16px; border-bottom: 2px solid rgba(232, 184, 75, 0.15); padding-bottom: 8px; }
         h3 { font-size: 1.3rem; font-weight: 600; color: #d4c09a; margin-top: 32px; margin-bottom: 12px; }
         h4 { font-size: 1.1rem; font-weight: 600; color: #c9a87c; margin-top: 24px; margin-bottom: 8px; }
-
         p { margin-bottom: 16px; color: #d0d7e8; }
         strong { color: #f0e8d8; }
         em { color: #c9a87c; font-style: italic; }
-
-        .cita {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid #e8b84b;
-            padding: 16px 22px;
-            margin: 20px 0;
-            border-radius: 0 12px 12px 0;
-            font-style: italic;
-            color: #d0d7e8;
-        }
+        .cita { background: rgba(255, 255, 255, 0.03); border-left: 4px solid #e8b84b; padding: 16px 22px; margin: 20px 0; border-radius: 0 12px 12px 0; font-style: italic; color: #d0d7e8; }
         .cita strong { color: #e8b84b; }
-
         ul, ol { margin: 12px 0 20px 24px; color: #d0d7e8; }
         li { margin-bottom: 8px; }
-
-        .error-block {
-            background: rgba(214, 79, 79, 0.06);
-            border-left: 3px solid #d64f4f;
-            padding: 12px 18px;
-            margin: 12px 0 20px 0;
-            border-radius: 0 8px 8px 0;
-            color: #e8b8b8;
-            font-size: 0.95rem;
-        }
+        .error-block { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 12px 18px; margin: 12px 0 20px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.95rem; }
         .error-block strong { color: #d64f4f; }
-
-        .mentor-box {
-            background: rgba(232, 184, 75, 0.05);
-            border: 1px solid rgba(232, 184, 75, 0.12);
-            border-radius: 16px;
-            padding: 20px 24px;
-            margin: 32px 0 16px 0;
-        }
+        .mentor-box { background: rgba(232, 184, 75, 0.05); border: 1px solid rgba(232, 184, 75, 0.12); border-radius: 16px; padding: 20px 24px; margin: 32px 0 16px 0; }
         .mentor-box h3 { margin-top: 0; color: #e8b84b; font-size: 1.2rem; }
         .mentor-box strong { color: #e8d5b0; }
-
-        .recurso-visual {
-            margin: 32px 0;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            background: #0e1625;
-        }
-        .recurso-visual img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-        .recurso-visual .caption {
-            padding: 12px 18px;
-            background: rgba(0, 0, 0, 0.3);
-            color: #8899b0;
-            font-size: 0.9rem;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        #map {
-            width: 100%;
-            height: 500px;
-            background: #0e1625;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        /* ===== QUIASMO ===== */
-        .quiasmo-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            padding: 10px 0;
-        }
-        .quiasmo-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 10px;
-            border-left: 3px solid rgba(232, 184, 75, 0.2);
-            transition: background 0.3s;
-        }
-        .quiasmo-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .quiasmo-item .letra {
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #e8b84b;
-            min-width: 44px;
-        }
-        .quiasmo-item .contenido {
-            flex: 1;
-        }
-        .quiasmo-item .contenido .label {
-            color: #e8d5b0;
-            font-weight: 600;
-        }
-        .quiasmo-item .contenido .detalle {
-            color: #8899b0;
-            font-size: 0.85rem;
-        }
-        .quiasmo-item.centro {
-            background: rgba(232, 184, 75, 0.06);
-            border-left-color: #e8b84b;
-            box-shadow: 0 0 30px rgba(232, 184, 75, 0.02);
-        }
-        .quiasmo-item.centro .letra {
-            color: #f0d080;
-        }
-        .quiasmo-item.centro .contenido .label {
-            color: #f0d080;
-        }
-        .quiasmo-flecha {
-            text-align: center;
-            color: #5a6a80;
-            font-size: 0.8rem;
-            letter-spacing: 4px;
-            padding: 2px 0;
-        }
-
-        /* ===== TARJETAS DE EXÉGESIS (apilables) ===== */
-        .exegesis-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin: 20px 0;
-        }
-        .exegesis-card {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 16px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-        .exegesis-card:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(232, 184, 75, 0.15);
-        }
-        .exegesis-card.activa {
-            background: rgba(232, 184, 75, 0.06);
-            border-color: #e8b84b;
-            box-shadow: 0 0 20px rgba(232, 184, 75, 0.05);
-        }
-        .exegesis-card .header-card {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .exegesis-card .header-card .numero {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #e8b84b;
-            min-width: 32px;
-        }
-        .exegesis-card .header-card .titulo-card {
-            color: #e8d5b0;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-        .exegesis-card .header-card .toggle-icon {
-            margin-left: auto;
-            color: #5a6a80;
-            font-size: 0.8rem;
-            transition: transform 0.3s;
-        }
-        .exegesis-card.activa .header-card .toggle-icon {
-            color: #c9a87c;
-            transform: rotate(180deg);
-        }
-        .exegesis-card .contenido-card {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease;
-            opacity: 0;
-            margin-top: 0;
-        }
-        .exegesis-card.activa .contenido-card {
-            max-height: 800px;
-            opacity: 1;
-            margin-top: 12px;
-        }
-        .exegesis-card .contenido-card .inner {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 12px;
-            color: #b8c7e0;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-        .exegesis-card .contenido-card .inner strong {
-            color: #e8d5b0;
-        }
-        .exegesis-card .contenido-card .inner .cita-card {
-            background: rgba(255, 255, 255, 0.02);
-            border-left: 3px solid #e8b84b;
-            padding: 10px 16px;
-            margin: 8px 0 12px 0;
-            font-style: italic;
-            color: #d0d7e8;
-        }
-        .exegesis-card .contenido-card .inner .error-card {
-            background: rgba(214, 79, 79, 0.06);
-            border-left: 3px solid #d64f4f;
-            padding: 10px 16px;
-            margin: 8px 0 12px 0;
-            border-radius: 0 8px 8px 0;
-            color: #e8b8b8;
-            font-size: 0.9rem;
-        }
-        .exegesis-card .contenido-card .inner .error-card strong {
-            color: #d64f4f;
-        }
-        .exegesis-card .contenido-card .inner .imagen-card {
-            margin: 12px 0;
-        }
-        .exegesis-card .contenido-card .inner .imagen-card img {
-            width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        /* ===== ACORDEÓN DE PREGUNTAS (con emojis) ===== */
-        .preguntas-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 16px 0 24px 0;
-        }
-        .pregunta-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 12px 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-        .pregunta-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(232, 184, 75, 0.12);
-        }
-        .pregunta-item.activa {
-            background: rgba(232, 184, 75, 0.04);
-            border-color: #e8b84b;
-        }
-        .pregunta-item .header-pregunta {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .pregunta-item .header-pregunta .num-pregunta {
-            color: #e8b84b;
-            font-weight: 700;
-            font-size: 0.9rem;
-            min-width: 28px;
-        }
-        .pregunta-item .header-pregunta .texto-pregunta {
-            color: #e8d5b0;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-        .pregunta-item .header-pregunta .toggle-pregunta {
-            margin-left: auto;
-            color: #5a6a80;
-            font-size: 0.7rem;
-            transition: transform 0.3s;
-        }
-        .pregunta-item.activa .header-pregunta .toggle-pregunta {
-            color: #c9a87c;
-            transform: rotate(180deg);
-        }
-        .pregunta-item .detalle-pregunta {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease;
-            opacity: 0;
-            margin-top: 0;
-        }
-        .pregunta-item.activa .detalle-pregunta {
-            max-height: 200px;
-            opacity: 1;
-            margin-top: 8px;
-        }
-        .pregunta-item .detalle-pregunta .inner-pregunta {
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding-top: 10px;
-            color: #b8c7e0;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-        .pregunta-item .detalle-pregunta .inner-pregunta strong {
-            color: #e8d5b0;
-        }
-
-        /* ===== DIAGRAMA DE ANILLOS ===== */
-        .anillos-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            padding: 10px 0;
-        }
-        .anillo-item {
-            width: 100%;
-            max-width: 620px;
-            padding: 14px 18px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 2px solid rgba(255, 255, 255, 0.04);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            transition: all 0.3s;
-            user-select: none;
-        }
-        .anillo-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(232, 184, 75, 0.15);
-        }
-        .anillo-item.centro {
-            background: rgba(232, 184, 75, 0.05);
-            border-color: rgba(232, 184, 75, 0.12);
-        }
-        .anillo-item.centro .label {
-            color: #f0d080;
-        }
-        .anillo-item .icono {
-            font-size: 1.5rem;
-            min-width: 40px;
-            text-align: center;
-        }
-        .anillo-item .info {
-            flex: 1;
-        }
-        .anillo-item .info .label {
-            color: #e8d5b0;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-        .anillo-item .info .detalle {
-            color: #8899b0;
-            font-size: 0.8rem;
-            opacity: 0.7;
-        }
-        .anillo-item .toggle {
-            color: #5a6a80;
-            font-size: 0.7rem;
-            transition: transform 0.3s;
-        }
-        .anillo-item.activo .toggle {
-            color: #c9a87c;
-            transform: rotate(180deg);
-        }
-        .anillo-preguntas {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease, opacity 0.3s ease;
-            opacity: 0;
-            width: 100%;
-            max-width: 600px;
-        }
-        .anillo-item.activo + .anillo-preguntas {
-            max-height: 300px;
-            opacity: 1;
-            margin-top: 4px;
-        }
-        .anillo-preguntas .inner {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 12px;
-            padding: 14px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-        }
-        .anillo-preguntas .inner .q {
-            color: #b8c7e0;
-            font-size: 0.85rem;
-            padding: 4px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-        .anillo-preguntas .inner .q:last-child {
-            border-bottom: none;
-        }
-        .anillo-preguntas .inner .q .num {
-            color: #e8b84b;
-            font-weight: 700;
-            margin-right: 8px;
-        }
-        .anillo-preguntas .inner .q strong {
-            color: #e8d5b0;
-        }
-        .conector-linea {
-            width: 2px;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.04);
-        }
-
+        .recurso-visual { margin: 32px 0; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.04); background: #0e1625; }
+        .recurso-visual img { width: 100%; height: auto; display: block; }
+        .recurso-visual .caption { padding: 12px 18px; background: rgba(0, 0, 0, 0.3); color: #8899b0; font-size: 0.9rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+        #map { width: 100%; height: 500px; background: #0e1625; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .quiasmo-grid { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; }
+        .quiasmo-item { display: flex; align-items: center; padding: 10px 16px; background: rgba(255, 255, 255, 0.02); border-radius: 10px; border-left: 3px solid rgba(232, 184, 75, 0.2); transition: background 0.3s; }
+        .quiasmo-item:hover { background: rgba(255, 255, 255, 0.04); }
+        .quiasmo-item .letra { font-size: 1.6rem; font-weight: 700; color: #e8b84b; min-width: 44px; }
+        .quiasmo-item .contenido { flex: 1; }
+        .quiasmo-item .contenido .label { color: #e8d5b0; font-weight: 600; }
+        .quiasmo-item .contenido .detalle { color: #8899b0; font-size: 0.85rem; }
+        .quiasmo-item.centro { background: rgba(232, 184, 75, 0.06); border-left-color: #e8b84b; box-shadow: 0 0 30px rgba(232, 184, 75, 0.02); }
+        .quiasmo-item.centro .letra { color: #f0d080; }
+        .quiasmo-item.centro .contenido .label { color: #f0d080; }
+        .quiasmo-flecha { text-align: center; color: #5a6a80; font-size: 0.8rem; letter-spacing: 4px; padding: 2px 0; }
+        .exegesis-stack { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .exegesis-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 16px 20px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+        .exegesis-card:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
+        .exegesis-card.activa { background: rgba(232, 184, 75, 0.06); border-color: #e8b84b; box-shadow: 0 0 20px rgba(232, 184, 75, 0.05); }
+        .exegesis-card .header-card { display: flex; align-items: center; gap: 12px; }
+        .exegesis-card .header-card .numero { font-size: 1.2rem; font-weight: 700; color: #e8b84b; min-width: 32px; }
+        .exegesis-card .header-card .titulo-card { color: #e8d5b0; font-weight: 600; font-size: 1rem; }
+        .exegesis-card .header-card .toggle-icon { margin-left: auto; color: #5a6a80; font-size: 0.8rem; transition: transform 0.3s; }
+        .exegesis-card.activa .header-card .toggle-icon { color: #c9a87c; transform: rotate(180deg); }
+        .exegesis-card .contenido-card { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
+        .exegesis-card.activa .contenido-card { max-height: 800px; opacity: 1; margin-top: 12px; }
+        .exegesis-card .contenido-card .inner { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; color: #b8c7e0; font-size: 0.95rem; line-height: 1.6; }
+        .exegesis-card .contenido-card .inner strong { color: #e8d5b0; }
+        .exegesis-card .contenido-card .inner .cita-card { background: rgba(255, 255, 255, 0.02); border-left: 3px solid #e8b84b; padding: 10px 16px; margin: 8px 0 12px 0; font-style: italic; color: #d0d7e8; }
+        .exegesis-card .contenido-card .inner .error-card { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 10px 16px; margin: 8px 0 12px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.9rem; }
+        .exegesis-card .contenido-card .inner .error-card strong { color: #d64f4f; }
+        .exegesis-card .contenido-card .inner .imagen-card { margin: 12px 0; }
+        .exegesis-card .contenido-card .inner .imagen-card img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .preguntas-stack { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 24px 0; }
+        .pregunta-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+        .pregunta-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.12); }
+        .pregunta-item.activa { background: rgba(232, 184, 75, 0.04); border-color: #e8b84b; }
+        .pregunta-item .header-pregunta { display: flex; align-items: center; gap: 10px; }
+        .pregunta-item .header-pregunta .num-pregunta { color: #e8b84b; font-weight: 700; font-size: 0.9rem; min-width: 28px; }
+        .pregunta-item .header-pregunta .texto-pregunta { color: #e8d5b0; font-weight: 500; font-size: 0.95rem; }
+        .pregunta-item .header-pregunta .toggle-pregunta { margin-left: auto; color: #5a6a80; font-size: 0.7rem; transition: transform 0.3s; }
+        .pregunta-item.activa .header-pregunta .toggle-pregunta { color: #c9a87c; transform: rotate(180deg); }
+        .pregunta-item .detalle-pregunta { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
+        .pregunta-item.activa .detalle-pregunta { max-height: 200px; opacity: 1; margin-top: 8px; }
+        .pregunta-item .detalle-pregunta .inner-pregunta { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 10px; color: #b8c7e0; font-size: 0.9rem; line-height: 1.5; }
+        .pregunta-item .detalle-pregunta .inner-pregunta strong { color: #e8d5b0; }
+        .anillos-container { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; }
+        .anillo-item { width: 100%; max-width: 620px; padding: 14px 18px; background: rgba(255, 255, 255, 0.02); border: 2px solid rgba(255, 255, 255, 0.04); border-radius: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; user-select: none; }
+        .anillo-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
+        .anillo-item.centro { background: rgba(232, 184, 75, 0.05); border-color: rgba(232, 184, 75, 0.12); }
+        .anillo-item.centro .label { color: #f0d080; }
+        .anillo-item .icono { font-size: 1.5rem; min-width: 40px; text-align: center; }
+        .anillo-item .info { flex: 1; }
+        .anillo-item .info .label { color: #e8d5b0; font-weight: 600; font-size: 0.95rem; }
+        .anillo-item .info .detalle { color: #8899b0; font-size: 0.8rem; opacity: 0.7; }
+        .anillo-item .toggle { color: #5a6a80; font-size: 0.7rem; transition: transform 0.3s; }
+        .anillo-item.activo .toggle { color: #c9a87c; transform: rotate(180deg); }
+        .anillo-preguntas { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease; opacity: 0; width: 100%; max-width: 600px; }
+        .anillo-item.activo + .anillo-preguntas { max-height: 300px; opacity: 1; margin-top: 4px; }
+        .anillo-preguntas .inner { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .anillo-preguntas .inner .q { color: #b8c7e0; font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
+        .anillo-preguntas .inner .q:last-child { border-bottom: none; }
+        .anillo-preguntas .inner .q .num { color: #e8b84b; font-weight: 700; margin-right: 8px; }
+        .anillo-preguntas .inner .q strong { color: #e8d5b0; }
+        .conector-linea { width: 2px; height: 12px; background: rgba(255, 255, 255, 0.04); }
         @media (max-width: 768px) {
             .container { padding: 24px 16px; }
             h1 { font-size: 1.8rem; }
@@ -1087,149 +751,45 @@
         `;
 
             // ================================================================
-            //  JAVASCRIPT INCRUSTADO (con Leaflet)
+            //  JAVASCRIPT INCRUSTADO (Leaflet y acordeones)
             // ================================================================
             const jsEstudio = `
         document.addEventListener('DOMContentLoaded', function() {
             const mapContainer = document.getElementById('map');
-            if (!mapContainer) return;
+            if (mapContainer) {
+                const map = L.map('map', { center: [35.0, 28.0], zoom: 5, zoomControl: true, fadeAnimation: true, attributionControl: true, scrollWheelZoom: true, touchZoom: true });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/">CARTO</a>', subdomains: 'abcd', maxZoom: 19, minZoom: 3 }).addTo(map);
+                const coords = { israel: [32.0, 35.0], jope: [32.05, 34.75], ninive: [36.36, 43.15], tarsis: [36.0, -5.5] };
+                const createIcon = (color, emoji) => L.divIcon({ className: 'custom-div-icon', html: '<div style="background-color:' + color + ';color:white;font-size:20px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:3px solid rgba(255,255,255,0.6);box-shadow:0 4px 12px rgba(0,0,0,0.6);font-weight:bold;text-shadow:0 1px 3px rgba(0,0,0,0.5);">' + emoji + '</div>', iconSize: [44, 44], iconAnchor: [22, 44], popupAnchor: [0, -44] });
+                L.marker(coords.israel, { icon: createIcon('#4caf7a', '✡️') }).addTo(map).bindPopup('<b>🇮🇱 Israel</b><br>Reino del Norte (760 a.C.)<br><small>Jeroboam II · Oseas y Amós profetizaban aquí</small>');
+                L.marker(coords.jope, { icon: createIcon('#4d8fc5', '⛵') }).addTo(map).bindPopup('<b>📍 Jope (Jaffa)</b><br>Puerto desde donde Jonás huyó<br><small>Mismo puerto que usó Salomón (2 Crónicas 2:16)</small>');
+                L.marker(coords.ninive, { icon: createIcon('#e8b84b', '🏛️') }).addTo(map).bindPopup('<b>🏛️ Nínive</b><br>Capital de Asiria · 120.000 hab.<br><small>Dios envió a Jonás a predicar aquí</small>');
+                L.marker(coords.tarsis, { icon: createIcon('#d64f4f', '🌊') }).addTo(map).bindPopup('<b>🌊 Tarsis</b><br>Extremo occidental (España)<br><small>Jonás huyó 3.500 km en dirección contraria</small>');
+                L.polyline([coords.israel, coords.jope, coords.ninive], { color: '#e8b84b', weight: 5, opacity: 0.9, smoothFactor: 1 }).addTo(map).bindPopup('🟡 Ruta de Dios: Israel → Jope → Nínive');
+                L.polyline([coords.israel, coords.jope, coords.tarsis], { color: '#d64f4f', weight: 4, opacity: 0.8, smoothFactor: 1, dashArray: '12, 12' }).addTo(map).bindPopup('🔴 Huida de Jonás: Israel → Jope → Tarsis');
+                map.fitBounds(L.latLngBounds([coords.tarsis, coords.ninive, coords.israel, coords.jope]), { padding: [50, 50], maxZoom: 6 });
+                L.control.zoom({ position: 'bottomright' }).addTo(map);
+                L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
+                window.addEventListener('resize', function() { map.invalidateSize(); });
+            }
 
-            const map = L.map('map', {
-                center: [35.0, 28.0],
-                zoom: 5,
-                zoomControl: true,
-                fadeAnimation: true,
-                attributionControl: true,
-                scrollWheelZoom: true,
-                touchZoom: true,
-            });
-
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 19,
-                minZoom: 3,
-            }).addTo(map);
-
-            const coords = {
-                israel:  [32.0, 35.0],
-                jope:    [32.05, 34.75],
-                ninive:  [36.36, 43.15],
-                tarsis:  [36.0, -5.5],
-            };
-
-            const createIcon = (color, emoji) => {
-                return L.divIcon({
-                    className: 'custom-div-icon',
-                    html: \`<div style="
-                        background-color: \${color};
-                        color: white;
-                        font-size: 20px;
-                        width: 44px;
-                        height: 44px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 50%;
-                        border: 3px solid rgba(255,255,255,0.6);
-                        box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-                        font-weight: bold;
-                        text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-                    ">\${emoji}</div>`,
-                    iconSize: [44, 44],
-                    iconAnchor: [22, 44],
-                    popupAnchor: [0, -44],
-                });
-            };
-
-            const iconIsrael = createIcon('#4caf7a', '✡️');
-            L.marker(coords.israel, { icon: iconIsrael })
-                .addTo(map)
-                .bindPopup(\`
-                    <b>🇮🇱 Israel</b><br>
-                    Reino del Norte (760 a.C.)<br>
-                    <small>Jeroboam II · Oseas y Amós profetizaban aquí</small>
-                \`);
-
-            const iconJope = createIcon('#4d8fc5', '⛵');
-            L.marker(coords.jope, { icon: iconJope })
-                .addTo(map)
-                .bindPopup(\`
-                    <b>📍 Jope (Jaffa)</b><br>
-                    Puerto desde donde Jonás huyó<br>
-                    <small>Mismo puerto que usó Salomón (2 Crónicas 2:16)</small>
-                \`);
-
-            const iconNinive = createIcon('#e8b84b', '🏛️');
-            L.marker(coords.ninive, { icon: iconNinive })
-                .addTo(map)
-                .bindPopup(\`
-                    <b>🏛️ Nínive</b><br>
-                    Capital de Asiria · 120.000 hab.<br>
-                    <small>Dios envió a Jonás a predicar aquí</small>
-                \`);
-
-            const iconTarsis = createIcon('#d64f4f', '🌊');
-            L.marker(coords.tarsis, { icon: iconTarsis })
-                .addTo(map)
-                .bindPopup(\`
-                    <b>🌊 Tarsis</b><br>
-                    Extremo occidental (España)<br>
-                    <small>Jonás huyó 3.500 km en dirección contraria</small>
-                \`);
-
-            const rutaDios = [coords.israel, coords.jope, coords.ninive];
-            L.polyline(rutaDios, {
-                color: '#e8b84b',
-                weight: 5,
-                opacity: 0.9,
-                smoothFactor: 1,
-            }).addTo(map).bindPopup('🟡 Ruta de Dios: Israel → Jope → Nínive');
-
-            const rutaHuida = [coords.israel, coords.jope, coords.tarsis];
-            L.polyline(rutaHuida, {
-                color: '#d64f4f',
-                weight: 4,
-                opacity: 0.8,
-                smoothFactor: 1,
-                dashArray: '12, 12',
-            }).addTo(map).bindPopup('🔴 Huida de Jonás: Israel → Jope → Tarsis');
-
-            const bounds = L.latLngBounds([coords.tarsis, coords.ninive, coords.israel, coords.jope]);
-            map.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
-
-            L.control.zoom({ position: 'bottomright' }).addTo(map);
-            L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
-
-            window.addEventListener('resize', () => { map.invalidateSize(); });
-            console.log('🗺️ Mapa de Jonás cargado correctamente');
-        });
-
-        // ===== LÍNEA DE TIEMPO =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const events = [
+            // Línea de tiempo
+            var events = [
                 { year: '800 a.C.', label: 'Imperio Asirio', title: '🏛️ Apogeo del Imperio Asirio', desc: 'Asiria se convierte en la superpotencia del Cercano Oriente.' },
                 { year: '760 a.C.', label: '⭐ Jonás', title: '📖 Jonás es llamado por Dios', desc: 'Dios envía a Jonás a predicar a Nínive.' },
                 { year: '722 a.C.', label: 'Caída Samaria', title: '⚔️ Asiria conquista Israel', desc: 'El reino del Norte cae ante los asirios.' },
                 { year: '701 a.C.', label: 'Senaquerib', title: '🛡️ Senaquerib asedia Jerusalén', desc: 'El ángel del Señor salva a Jerusalén.' },
                 { year: '612 a.C.', label: 'Caída Nínive', title: '🔥 Nínive es destruida', desc: 'Una coalición destruye Nínive.' }
             ];
-
-            const infoDiv = document.getElementById('timelineInfo');
-            const progress = document.getElementById('timelineProgress');
-            const eventsEls = document.querySelectorAll('.timeline-event');
-
+            var infoDiv = document.getElementById('timelineInfo');
+            var progress = document.getElementById('timelineProgress');
+            var eventsEls = document.querySelectorAll('.timeline-event');
             function updateTimeline(index) {
-                const ev = events[index];
-                if (infoDiv) {
-                    infoDiv.innerHTML = \`<div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">\${ev.title}</div>
-                                        <div style="color:#b8c7e0;font-size:0.85rem;">\${ev.desc}</div>\`;
-                }
-                if (progress) {
-                    progress.style.width = ((index / (events.length - 1)) * 100) + '%';
-                }
-                eventsEls.forEach((el, i) => {
-                    const dot = el.querySelector('div');
+                var ev = events[index];
+                if (infoDiv) { infoDiv.innerHTML = '<div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">' + ev.title + '</div><div style="color:#b8c7e0;font-size:0.85rem;">' + ev.desc + '</div>'; }
+                if (progress) { progress.style.width = ((index / (events.length - 1)) * 100) + '%'; }
+                eventsEls.forEach(function(el, i) {
+                    var dot = el.querySelector('div');
                     if (dot) {
                         dot.style.background = (i <= index) ? '#e8b84b' : '#1a2538';
                         dot.style.borderColor = (i <= index) ? '#e8b84b' : 'rgba(255,255,255,0.15)';
@@ -1237,60 +797,47 @@
                     }
                 });
             }
-
-            eventsEls.forEach((el, idx) => {
-                el.addEventListener('click', () => updateTimeline(idx));
-                el.addEventListener('touchend', (e) => { e.preventDefault(); updateTimeline(idx); });
+            eventsEls.forEach(function(el, idx) {
+                el.addEventListener('click', function() { updateTimeline(idx); });
+                el.addEventListener('touchend', function(e) { e.preventDefault(); updateTimeline(idx); });
             });
-
             if (eventsEls.length > 0) updateTimeline(0);
-        });
 
-        // ===== TARJETAS DE EXÉGESIS =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.exegesis-card');
-            cards.forEach(card => {
+            // Tarjetas de exégesis
+            var cards = document.querySelectorAll('.exegesis-card');
+            cards.forEach(function(card) {
                 card.addEventListener('click', function() {
-                    cards.forEach(c => c !== this && c.classList.remove('activa'));
+                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
                     this.classList.toggle('activa');
-                });
+                }.bind(card));
                 card.addEventListener('touchend', function(e) {
                     e.preventDefault();
-                    cards.forEach(c => c !== this && c.classList.remove('activa'));
+                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
                     this.classList.toggle('activa');
-                });
+                }.bind(card));
             });
             if (cards.length > 0) cards[0].classList.add('activa');
-        });
 
-        // ===== ACORDEÓN DE PREGUNTAS =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const preguntas = document.querySelectorAll('.pregunta-item');
-            preguntas.forEach(item => {
-                item.addEventListener('click', function() {
-                    this.classList.toggle('activa');
-                });
-                item.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    this.classList.toggle('activa');
-                });
+            // Preguntas en acordeón
+            var preguntas = document.querySelectorAll('.pregunta-item');
+            preguntas.forEach(function(item) {
+                item.addEventListener('click', function() { this.classList.toggle('activa'); }.bind(item));
+                item.addEventListener('touchend', function(e) { e.preventDefault(); this.classList.toggle('activa'); }.bind(item));
             });
             if (preguntas.length > 0) preguntas[0].classList.add('activa');
-        });
 
-        // ===== DIAGRAMA DE ANILLOS =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const anillos = document.querySelectorAll('.anillo-item');
-            anillos.forEach(item => {
+            // Anillos
+            var anillos = document.querySelectorAll('.anillo-item');
+            anillos.forEach(function(item) {
                 item.addEventListener('click', function() {
-                    anillos.forEach(a => a !== this && a.classList.remove('activo'));
+                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
                     this.classList.toggle('activo');
-                });
+                }.bind(item));
                 item.addEventListener('touchend', function(e) {
                     e.preventDefault();
-                    anillos.forEach(a => a !== this && a.classList.remove('activo'));
+                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
                     this.classList.toggle('activo');
-                });
+                }.bind(item));
             });
             if (anillos.length > 0) anillos[0].classList.add('activo');
         });
@@ -1303,7 +850,8 @@
             if (incluirExegesisCards) {
                 exegesisHTML = `
             <div class="exegesis-stack">
-                ${exe.map((item, index) => `
+                ${exe.map(function(item, index) {
+                    return `
                 <div class="exegesis-card">
                     <div class="header-card">
                         <span class="numero">${index+1}</span>
@@ -1314,11 +862,7 @@
                         <div class="inner">
                             <p><strong>Cita:</strong> ${item.cita}</p>
                             <div class="cita-card">${item.versiculo}</div>
-                            ${item.imagen.trim() ? `
-                            <div class="imagen-card">
-                                <img src="assets/img/${item.imagen}" alt="${item.titulo}" />
-                            </div>
-                            ` : ''}
+                            ${item.imagen.trim() ? '<div class="imagen-card"><img src="assets/img/' + item.imagen + '" alt="' + item.titulo + '" /></div>' : ''}
                             <p><strong>Término hebreo:</strong> <em>${item.hebreo}</em> (${item.translit})</p>
                             <p><strong>Análisis:</strong> ${item.analisis}</p>
                             <p><strong>Verdad exegética:</strong> ${item.verdad}</p>
@@ -1326,36 +870,35 @@
                         </div>
                     </div>
                 </div>
-                `).join('')}
+                `;
+                }).join('')}
             </div>
             `;
             } else {
-                exegesisHTML = exe.map((item, index) => `
+                exegesisHTML = exe.map(function(item, index) {
+                    return `
                 <h3>${index+1}. Título: "${item.titulo}"</h3>
                 <p><strong>Cita:</strong> ${item.cita}</p>
                 <div class="cita"><strong>Versículo:</strong> ${item.versiculo}</div>
-                ${item.imagen.trim() ? `
-                <div class="recurso-visual">
-                    <img src="assets/img/${item.imagen}" alt="${item.titulo}" />
-                    <div class="caption">📖 <strong>Imagen asociada</strong> a "${item.titulo}".</div>
-                </div>
-                ` : ''}
+                ${item.imagen.trim() ? '<div class="recurso-visual"><img src="assets/img/' + item.imagen + '" alt="' + item.titulo + '" /><div class="caption">📖 <strong>Imagen asociada</strong> a "' + item.titulo + '".</div></div>' : ''}
                 <p><strong>Término hebreo:</strong> <em>${item.hebreo}</em> (${item.translit})</p>
                 <p><strong>Análisis:</strong> ${item.analisis}</p>
                 <p><strong>Verdad exegética:</strong> ${item.verdad}</p>
                 <div class="error-block"><strong>❌ Error común:</strong> ${item.error}</div>
-                `).join('');
+                `;
+                }).join('');
             }
 
             // ================================================================
             //  GENERAR CONTENIDO DE PREGUNTAS (acordeón con emojis)
             // ================================================================
-            const emojisPreguntas = ['🤔', '🧐', '😯', '😥', '💭'];
+            var emojisPreguntas = ['🤔', '🧐', '😯', '😥', '💭'];
             let preguntasHTML = '';
             if (incluirPreguntasAccordion) {
                 preguntasHTML = `
             <div class="preguntas-stack">
-                ${preguntas.map((p, i) => `
+                ${preguntas.map(function(p, i) {
+                    return `
                 <div class="pregunta-item">
                     <div class="header-pregunta">
                         <span class="num-pregunta">${emojisPreguntas[i]}</span>
@@ -1364,17 +907,18 @@
                     </div>
                     <div class="detalle-pregunta">
                         <div class="inner-pregunta">
-                            <p><strong>💡 Reflexiona:</strong> Esta pregunta te invita a mirar tu corazón y ver si hay alguna área donde necesites arrepentirte o cambiar de perspectiva.</p>
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
                         </div>
                     </div>
                 </div>
-                `).join('')}
+                `;
+                }).join('')}
             </div>
             `;
             } else {
                 preguntasHTML = `
             <ol>
-                ${preguntas.map((p, i) => `<li><strong>${emojisPreguntas[i]} ${p}</strong></li>`).join('')}
+                ${preguntas.map(function(p, i) { return '<li><strong>' + emojisPreguntas[i] + ' ' + p + '</strong></li>'; }).join('')}
             </ol>
             `;
             }
@@ -1382,234 +926,192 @@
             // ================================================================
             //  ARMAR EL HTML FINAL
             // ================================================================
-            let html = `<!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <title>${tituloLibro} - ${subtema}</title>
-            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-            <style>${cssEstudio}</style>
-        </head>
-        <body>
+            var html = '<!DOCTYPE html>\n';
+            html += '<html lang="es">\n';
+            html += '<head>\n';
+            html += '  <meta charset="UTF-8" />\n';
+            html += '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n';
+            html += '  <title>' + tituloLibro + ' - ' + subtema + '</title>\n';
+            html += '  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />\n';
+            html += '  <style>' + cssEstudio + '</style>\n';
+            html += '</head>\n';
+            html += '<body>\n';
+            html += '<div class="container">\n';
+            html += '  <h1>📖 ' + tituloLibro + '</h1>\n';
+            html += '  <p style="text-align:center;color:#8899b0;margin-bottom:24px;">' + subtema + ' · ' + versiculos + '</p>\n';
 
-        <div class="container">
+            // PARTE 1
+            html += '  <h2>🌍 PARTE 1: EL ESCENARIO (CONTEXTO)</h2>\n';
+            html += '  <h3>📍 Sección A: Contextos y Conexiones</h3>\n';
+            html += '  <p><strong>📍 Lugar:</strong> ' + lugar + '</p>\n';
+            html += '  <p><strong>📅 Fecha:</strong> ' + fecha + '</p>\n';
+            html += '  <hr style="border:0;height:1px;background:rgba(255,255,255,0.05);margin:20px 0;">\n';
+            html += '  <h4>Contexto Histórico / Político</h4>\n';
+            html += '  <p>' + contextoHistorico + '</p>\n';
 
-            <h1>📖 ${tituloLibro}</h1>
-            <p style="text-align:center;color:#8899b0;margin-bottom:24px;">${subtema} · ${versiculos}</p>
+            if (incluirMapa) {
+                html += '  <div class="recurso-visual">\n';
+                html += '    <div id="map"></div>\n';
+                html += '    <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>\n';
+                html += '  </div>\n';
+            }
 
-            <!-- ========================================================= -->
-            <!--  PARTE 1: CONTEXTO                                         -->
-            <!-- ========================================================= -->
-            <h2>🌍 PARTE 1: EL ESCENARIO (CONTEXTO)</h2>
+            if (incluirTimeline) {
+                html += '  <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">\n';
+                html += '    <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">📅 Contexto histórico de Jonás</h4>\n';
+                html += '    <div id="timeline" style="position:relative;padding:10px 0;">\n';
+                html += '      <div style="position:relative;width:100%;height:4px;background:rgba(255,255,255,0.08);border-radius:4px;margin:20px 0;">\n';
+                html += '        <div id="timelineProgress" style="position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#e8b84b,#c9a87c);border-radius:4px;width:20%;transition:width 0.3s ease;"></div>\n';
+                html += '      </div>\n';
+                html += '      <div style="display:flex;justify-content:space-between;margin-top:-10px;flex-wrap:wrap;gap:4px;">\n';
+                html += '        <div class="timeline-event" data-index="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">\n';
+                html += '          <div style="width:14px;height:14px;border-radius:50%;background:#e8b84b;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>\n';
+                html += '          <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">800 a.C.</div>\n';
+                html += '          <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Imperio Asirio</div>\n';
+                html += '        </div>\n';
+                html += '        <div class="timeline-event" data-index="1" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">\n';
+                html += '          <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>\n';
+                html += '          <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">760 a.C.</div>\n';
+                html += '          <div style="color:#8899b0;font-size:0.5rem;text-align:center;">⭐ Jonás</div>\n';
+                html += '        </div>\n';
+                html += '        <div class="timeline-event" data-index="2" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">\n';
+                html += '          <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>\n';
+                html += '          <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">722 a.C.</div>\n';
+                html += '          <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Caída Samaria</div>\n';
+                html += '        </div>\n';
+                html += '        <div class="timeline-event" data-index="3" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">\n';
+                html += '          <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>\n';
+                html += '          <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">701 a.C.</div>\n';
+                html += '          <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Senaquerib</div>\n';
+                html += '        </div>\n';
+                html += '        <div class="timeline-event" data-index="4" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">\n';
+                html += '          <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>\n';
+                html += '          <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">612 a.C.</div>\n';
+                html += '          <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Caída Nínive</div>\n';
+                html += '        </div>\n';
+                html += '      </div>\n';
+                html += '      <div id="timelineInfo" style="margin-top:16px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.04);min-height:50px;">\n';
+                html += '        <div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">🏛️ Apogeo del Imperio Asirio</div>\n';
+                html += '        <div style="color:#b8c7e0;font-size:0.85rem;">Asiria se convierte en la superpotencia del Cercano Oriente.</div>\n';
+                html += '      </div>\n';
+                html += '    </div>\n';
+                html += '    <div class="caption">📅 <strong>Línea de tiempo:</strong> toca cada evento para explorar el contexto histórico.</div>\n';
+                html += '  </div>\n';
+            }
 
-            <h3>📍 Sección A: Contextos y Conexiones</h3>
+            if (imagenContexto.trim()) {
+                html += '  <div class="recurso-visual">\n';
+                html += '    <img src="assets/img/' + imagenContexto + '" alt="Imagen de contexto" />\n';
+                html += '    <div class="caption">🌅 <strong>Imagen ilustrativa</strong> del contexto histórico.</div>\n';
+                html += '  </div>\n';
+            }
 
-            <p><strong>📍 Lugar:</strong> ${lugar}</p>
-            <p><strong>📅 Fecha:</strong> ${fecha}</p>
+            html += '  <h4>Contexto Cultural / Teológico</h4>\n';
+            html += '  <p>' + contextoCultural + '</p>\n';
+            html += '  <h4>Conexiones Literarias (AT y NT)</h4>\n';
+            html += '  <p><strong>AT:</strong> ' + conexionesAT + '</p>\n';
+            html += '  <p><strong>NT:</strong> ' + conexionesNT + '</p>\n';
 
-            <hr style="border:0;height:1px;background:rgba(255,255,255,0.05);margin:20px 0;">
+            if (mentor1a.trim() || mentor1b.trim()) {
+                html += '  <div class="mentor-box">\n';
+                html += '    <h3>💡 Dato del Mentor</h3>\n';
+                if (mentor1a.trim()) { html += '    <p><strong>1. Dato central:</strong> ' + mentor1a + '</p>\n'; }
+                if (mentor1b.trim()) { html += '    <p><strong>2. Dato curioso:</strong> ' + mentor1b + '</p>\n'; }
+                html += '  </div>\n';
+            }
 
-            <h4>Contexto Histórico / Político</h4>
-            <p>${contextoHistorico}</p>
+            // PARTE 2
+            html += '  <h2>📖 PARTE 2: EXÉGESIS (TÉRMINOS CLAVE EN HEBREO)</h2>\n';
 
-            ${incluirMapa ? `
-            <!-- MAPA CON LEAFLET -->
-            <div class="recurso-visual">
-                <div id="map"></div>
-                <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>
-            </div>
-            ` : ''}
+            if (incluirQuiasmo) {
+                html += '  <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">\n';
+                html += '    <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">🏛️ Estructura quiástica de Jonás</h4>\n';
+                html += '    <div class="quiasmo-grid">\n';
+                html += '      <div class="quiasmo-item"><span class="letra">A</span><div class="contenido"><div class="label">Huida y Tormenta</div><div class="detalle">Jonás huye · Dios envía tormenta</div></div></div>\n';
+                html += '      <div class="quiasmo-flecha">⬇</div>\n';
+                html += '      <div class="quiasmo-item"><span class="letra">B</span><div class="contenido"><div class="label">Oración desde el abismo</div><div class="detalle">Jonás ora · El pez lo vomita</div></div></div>\n';
+                html += '      <div class="quiasmo-flecha">⬇</div>\n';
+                html += '      <div class="quiasmo-item centro"><span class="letra">C</span><div class="contenido"><div class="label">⭐ Nínive se arrepiente</div><div class="detalle">El centro del libro · Dios perdona a los enemigos</div></div></div>\n';
+                html += '      <div class="quiasmo-flecha">⬇</div>\n';
+                html += '      <div class="quiasmo-item"><span class="letra">B\'</span><div class="contenido"><div class="label">Enojo y deseo de muerte</div><div class="detalle">Jonás se enoja · Dios lo confronta</div></div></div>\n';
+                html += '      <div class="quiasmo-flecha">⬇</div>\n';
+                html += '      <div class="quiasmo-item"><span class="letra">A\'</span><div class="contenido"><div class="label">Lección de la planta</div><div class="detalle">Planta · Gusano · Viento · Dios revela su compasión</div></div></div>\n';
+                html += '    </div>\n';
+                html += '    <div class="caption">💡 <strong>El centro del libro no es el pez</strong>, sino el arrepentimiento de los enemigos de Israel.</div>\n';
+                html += '  </div>\n';
+            }
 
-            ${incluirTimeline ? `
-            <!-- LÍNEA DE TIEMPO -->
-            <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
-                <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">📅 Contexto histórico de Jonás</h4>
-                <div id="timeline" style="position:relative;padding:10px 0;">
-                    <div style="position:relative;width:100%;height:4px;background:rgba(255,255,255,0.08);border-radius:4px;margin:20px 0;">
-                        <div id="timelineProgress" style="position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#e8b84b,#c9a87c);border-radius:4px;width:20%;transition:width 0.3s ease;"></div>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;margin-top:-10px;flex-wrap:wrap;gap:4px;">
-                        <div class="timeline-event" data-index="0" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
-                            <div style="width:14px;height:14px;border-radius:50%;background:#e8b84b;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
-                            <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">800 a.C.</div>
-                            <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Imperio Asirio</div>
-                        </div>
-                        <div class="timeline-event" data-index="1" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
-                            <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
-                            <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">760 a.C.</div>
-                            <div style="color:#8899b0;font-size:0.5rem;text-align:center;">⭐ Jonás</div>
-                        </div>
-                        <div class="timeline-event" data-index="2" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
-                            <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
-                            <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">722 a.C.</div>
-                            <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Caída Samaria</div>
-                        </div>
-                        <div class="timeline-event" data-index="3" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
-                            <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
-                            <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">701 a.C.</div>
-                            <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Senaquerib</div>
-                        </div>
-                        <div class="timeline-event" data-index="4" style="display:flex;flex-direction:column;align-items:center;cursor:pointer;flex:1;min-width:50px;padding:0 2px;">
-                            <div style="width:14px;height:14px;border-radius:50%;background:#1a2538;border:2px solid rgba(255,255,255,0.15);transition:all 0.3s;"></div>
-                            <div style="color:#b8c7e0;font-size:0.6rem;text-align:center;margin-top:4px;font-weight:600;">612 a.C.</div>
-                            <div style="color:#8899b0;font-size:0.5rem;text-align:center;">Caída Nínive</div>
-                        </div>
-                    </div>
-                    <div id="timelineInfo" style="margin-top:16px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.04);min-height:50px;">
-                        <div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">🏛️ Apogeo del Imperio Asirio</div>
-                        <div style="color:#b8c7e0;font-size:0.85rem;">Asiria se convierte en la superpotencia del Cercano Oriente.</div>
-                    </div>
-                </div>
-                <div class="caption">📅 <strong>Línea de tiempo:</strong> toca cada evento para explorar el contexto histórico.</div>
-            </div>
-            ` : ''}
+            html += exegesisHTML;
 
-            ${imagenContexto.trim() ? `
-            <!-- IMAGEN DE CONTEXTO -->
-            <div class="recurso-visual">
-                <img src="assets/img/${imagenContexto}" alt="Imagen de contexto" />
-                <div class="caption">🌅 <strong>Imagen ilustrativa</strong> del contexto histórico.</div>
-            </div>
-            ` : ''}
+            if (mentor2a.trim() || mentor2b.trim()) {
+                html += '  <div class="mentor-box">\n';
+                html += '    <h3>💡 Dato del Mentor</h3>\n';
+                if (mentor2a.trim()) { html += '    <p><strong>1. Dato central:</strong> ' + mentor2a + '</p>\n'; }
+                if (mentor2b.trim()) { html += '    <p><strong>2. Dato curioso:</strong> ' + mentor2b + '</p>\n'; }
+                html += '  </div>\n';
+            }
 
-            <h4>Contexto Cultural / Teológico</h4>
-            <p>${contextoCultural}</p>
+            // PARTE 3
+            html += '  <h2>🛤️ PARTE 3: EL ATERRIZAJE (VIDA Y APLICACIÓN)</h2>\n';
+            html += '  <h3>Verdad Teológica Central</h3>\n';
+            html += '  <p><strong>' + verdadTeologica + '</strong></p>\n';
+            html += '  <h3>Punto de Tensión</h3>\n';
+            html += '  <p>' + puntoTension + '</p>\n';
+            html += '  <h3>Devocional</h3>\n';
+            html += '  <p>' + devocional + '</p>\n';
 
-            <h4>Conexiones Literarias (AT y NT)</h4>
-            <p><strong>AT:</strong> ${conexionesAT}</p>
-            <p><strong>NT:</strong> ${conexionesNT}</p>
+            if (imagenAplicacion.trim()) {
+                html += '  <div class="recurso-visual">\n';
+                html += '    <img src="assets/img/' + imagenAplicacion + '" alt="Imagen de aplicación" />\n';
+                html += '    <div class="caption">🌿 <strong>Imagen ilustrativa</strong> de la aplicación.</div>\n';
+                html += '  </div>\n';
+            }
 
-            ${mentor1a.trim() || mentor1b.trim() ? `
-            <div class="mentor-box">
-                <h3>💡 Dato del Mentor</h3>
-                ${mentor1a.trim() ? `<p><strong>1. Dato central:</strong> ${mentor1a}</p>` : ''}
-                ${mentor1b.trim() ? `<p><strong>2. Dato curioso:</strong> ${mentor1b}</p>` : ''}
-            </div>
-            ` : ''}
+            html += '  <h3>Examen del Corazón (5 preguntas)</h3>\n';
+            html += preguntasHTML;
 
-            <!-- ========================================================= -->
-            <!--  PARTE 2: EXÉGESIS                                         -->
-            <!-- ========================================================= -->
-            <h2>📖 PARTE 2: EXÉGESIS (TÉRMINOS CLAVE EN HEBREO)</h2>
 
-            ${incluirQuiasmo ? `
-            <!-- QUIASMO -->
-            <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
-                <h4 style="color:#e8b84b;text-align:center;margin-top:0;margin-bottom:16px;">🏛️ Estructura quiástica de Jonás</h4>
-                <div class="quiasmo-grid">
-                    <div class="quiasmo-item"><span class="letra">A</span><div class="contenido"><div class="label">Huida y Tormenta</div><div class="detalle">Jonás huye · Dios envía tormenta</div></div></div>
-                    <div class="quiasmo-flecha">⬇</div>
-                    <div class="quiasmo-item"><span class="letra">B</span><div class="contenido"><div class="label">Oración desde el abismo</div><div class="detalle">Jonás ora · El pez lo vomita</div></div></div>
-                    <div class="quiasmo-flecha">⬇</div>
-                    <div class="quiasmo-item centro"><span class="letra">C</span><div class="contenido"><div class="label">⭐ Nínive se arrepiente</div><div class="detalle">El centro del libro · Dios perdona a los enemigos</div></div></div>
-                    <div class="quiasmo-flecha">⬇</div>
-                    <div class="quiasmo-item"><span class="letra">B'</span><div class="contenido"><div class="label">Enojo y deseo de muerte</div><div class="detalle">Jonás se enoja · Dios lo confronta</div></div></div>
-                    <div class="quiasmo-flecha">⬇</div>
-                    <div class="quiasmo-item"><span class="letra">A'</span><div class="contenido"><div class="label">Lección de la planta</div><div class="detalle">Planta · Gusano · Viento · Dios revela su compasión</div></div></div>
-                </div>
-                <div class="caption">💡 <strong>El centro del libro no es el pez</strong>, sino el arrepentimiento de los enemigos de Israel.</div>
-            </div>
-            ` : ''}
+            // Pasos Prácticos (con acordeón)
+            html += '  <h3>Pasos Prácticos (5 acciones para la semana)</h3>\n';
+            html += '  <div class="preguntas-stack">\n'; // Reutilizamos la misma clase CSS
+            var emojisPasos = ['📝', '📖', '🤝', '🗣️', '🌱'];
+            pasos.forEach(function(p, i) {
+                html += '    <div class="pregunta-item">\n';
+                html += '      <div class="header-pregunta">\n';
+                html += '        <span class="num-pregunta">' + emojisPasos[i] + '</span>\n';
+                html += '        <span class="texto-pregunta">' + p + '</span>\n';
+                html += '        <span class="toggle-pregunta">▼</span>\n';
+                html += '      </div>\n';
+                html += '      <div class="detalle-pregunta">\n';
+                html += '        <div class="inner-pregunta">\n';
+                html += '          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->\n';
+                html += '        </div>\n';
+                html += '      </div>\n';
+                html += '    </div>\n';
+            });
+            html += '  </div>\n';
 
-            ${exegesisHTML}
+            html += '  <h3>Oración Final</h3>\n';
+            html += '  <p>' + oracion + '</p>\n';
 
-            ${mentor2a.trim() || mentor2b.trim() ? `
-            <div class="mentor-box">
-                <h3>💡 Dato del Mentor</h3>
-                ${mentor2a.trim() ? `<p><strong>1. Dato central:</strong> ${mentor2a}</p>` : ''}
-                ${mentor2b.trim() ? `<p><strong>2. Dato curioso:</strong> ${mentor2b}</p>` : ''}
-            </div>
-            ` : ''}
+            if (mentor3a.trim() || mentor3b.trim()) {
+                html += '  <div class="mentor-box">\n';
+                html += '    <h3>💡 Dato del Mentor</h3>\n';
+                if (mentor3a.trim()) { html += '    <p><strong>1. Dato central:</strong> ' + mentor3a + '</p>\n'; }
+                if (mentor3b.trim()) { html += '    <p><strong>2. Dato curioso:</strong> ' + mentor3b + '</p>\n'; }
+                html += '  </div>\n';
+            }
 
-            <!-- ========================================================= -->
-            <!--  PARTE 3: APLICACIÓN                                       -->
-            <!-- ========================================================= -->
-            <h2>🛤️ PARTE 3: EL ATERRIZAJE (VIDA Y APLICACIÓN)</h2>
+            html += '  <hr style="border:0;height:2px;background:rgba(232,184,75,0.2);margin:40px 0 20px 0;">\n';
+            html += '  <p style="text-align:center;color:#5a6a80;font-size:0.8rem;">📖 <strong>Fin del estudio</strong> · Comparte este estudio con alguien que necesite escuchar que la misericordia de Dios es más grande que su pecado o que su rencor.</p>\n';
 
-            <h3>Verdad Teológica Central</h3>
-            <p><strong>${verdadTeologica}</strong></p>
+            html += '</div>\n';
+            html += '<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>\n';
+            html += '<script>' + jsEstudio + '<\/script>\n';
+            html += '</body>\n';
+            html += '</html>';
 
-            <h3>Punto de Tensión</h3>
-            <p>${puntoTension}</p>
-
-            <h3>Devocional</h3>
-            <p>${devocional}</p>
-
-            ${imagenAplicacion.trim() ? `
-            <!-- IMAGEN DE APLICACIÓN -->
-            <div class="recurso-visual">
-                <img src="assets/img/${imagenAplicacion}" alt="Imagen de aplicación" />
-                <div class="caption">🌿 <strong>Imagen ilustrativa</strong> de la aplicación.</div>
-            </div>
-            ` : ''}
-
-            <h3>Examen del Corazón (5 preguntas)</h3>
-            ${preguntasHTML}
-
-            <!-- ===== DIAGRAMA DE ANILLOS ===== -->
-            <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
-                <div class="anillos-container">
-                    <div class="anillo-item centro">
-                        <span class="icono">❤️</span>
-                        <div class="info"><div class="label">El corazón de Dios: Misericordia</div><div class="detalle">"¿No he de tener piedad de Nínive?" (Jonás 4:11)</div></div>
-                        <span class="toggle">▼</span>
-                    </div>
-                    <div class="anillo-preguntas"><div class="inner"><div class="q"><span class="num">❓</span> <strong>${preguntas[0]}</strong></div></div></div>
-                    <div class="conector-linea"></div>
-                    <div class="anillo-item">
-                        <span class="icono">🏛️</span>
-                        <div class="info"><div class="label">Nínive (enemigos) → Salvación</div><div class="detalle">Dios perdona a los asirios</div></div>
-                        <span class="toggle">▼</span>
-                    </div>
-                    <div class="anillo-preguntas"><div class="inner"><div class="q"><span class="num">❓</span> <strong>${preguntas[1]}</strong></div></div></div>
-                    <div class="conector-linea"></div>
-                    <div class="anillo-item">
-                        <span class="icono">📖</span>
-                        <div class="info"><div class="label">Jonás (profeta) → Confrontación</div><div class="detalle">Dios confronta el nacionalismo religioso</div></div>
-                        <span class="toggle">▼</span>
-                    </div>
-                    <div class="anillo-preguntas"><div class="inner"><div class="q"><span class="num">❓</span> <strong>${preguntas[2]}</strong></div></div></div>
-                    <div class="conector-linea"></div>
-                    <div class="anillo-item">
-                        <span class="icono">🔍</span>
-                        <div class="info"><div class="label">Nosotros → Examen del corazón</div><div class="detalle">El libro nos interpela</div></div>
-                        <span class="toggle">▼</span>
-                    </div>
-                    <div class="anillo-preguntas"><div class="inner">
-                        <div class="q"><span class="num">❓</span> <strong>${preguntas[3]}</strong></div>
-                        <div class="q"><span class="num">❓</span> <strong>${preguntas[4]}</strong></div>
-                    </div></div>
-                </div>
-                <div class="caption">🎯 <strong>Toca cada anillo</strong> para desplegar las preguntas de examen personal.</div>
-            </div>
-
-            <h3>Pasos Prácticos (5 acciones para la semana)</h3>
-            <ol>
-                ${pasos.map(p => `<li><strong>${p}</strong></li>`).join('')}
-            </ol>
-
-            <h3>Oración Final</h3>
-            <p>${oracion}</p>
-
-            ${mentor3a.trim() || mentor3b.trim() ? `
-            <div class="mentor-box">
-                <h3>💡 Dato del Mentor</h3>
-                ${mentor3a.trim() ? `<p><strong>1. Dato central:</strong> ${mentor3a}</p>` : ''}
-                ${mentor3b.trim() ? `<p><strong>2. Dato curioso:</strong> ${mentor3b}</p>` : ''}
-            </div>
-            ` : ''}
-
-            <hr style="border:0;height:2px;background:rgba(232,184,75,0.2);margin:40px 0 20px 0;">
-            <p style="text-align:center;color:#5a6a80;font-size:0.8rem;">📖 <strong>Fin del estudio</strong> · Comparte este estudio con alguien que necesite escuchar que la misericordia de Dios es más grande que su pecado o que su rencor.</p>
-
-        </div>
-
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>
-        <script>${jsEstudio}<\/script>
-        </body>
-        </html>`;
-
+            console.log('✅ HTML generado correctamente. Longitud:', html.length);
             return html;
         }
 
@@ -1617,14 +1119,16 @@
         //  EVENTO: GENERAR
         // ================================================================
         btnGenerar.addEventListener('click', function() {
+            console.log('🖱️ Botón "Generar" clickeado.');
             try {
                 htmlGenerado = generarHTML();
                 mensajeExito.classList.add('visible');
                 btnDescargar.classList.add('visible');
                 mensajeExito.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                console.log('✅ Estudio generado correctamente.');
             } catch (e) {
-                alert('Error al generar el estudio: ' + e.message);
-                console.error(e);
+                console.error('❌ Error al generar el estudio:', e);
+                alert('Error al generar el estudio: ' + e.message + '\n\nRevisa la consola del navegador para más detalles.');
             }
         });
 
@@ -1632,19 +1136,26 @@
         //  EVENTO: DESCARGAR
         // ================================================================
         btnDescargar.addEventListener('click', function() {
+            console.log('🖱️ Botón "Descargar" clickeado.');
             if (!htmlGenerado) {
                 alert('Primero genera el estudio haciendo clic en "Generar index.html"');
                 return;
             }
-            const blob = new Blob([htmlGenerado], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'index.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            try {
+                const blob = new Blob([htmlGenerado], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'index.html';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                console.log('✅ Archivo descargado correctamente.');
+            } catch (e) {
+                console.error('❌ Error al descargar:', e);
+                alert('Error al descargar el archivo: ' + e.message);
+            }
         });
 
     });
