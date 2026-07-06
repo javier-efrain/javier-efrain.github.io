@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estudio del Libro de Jonás - La huida y la tormenta</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, system-ui, sans-serif; background: #0b0f1a; color: #e8d5b0; padding: 20px; line-height: 1.7; }
+        .container { max-width: 1000px; margin: 0 auto; background: #121a2a; padding: 40px 32px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 255, 255, 0.04); }
+        h1 { font-size: 2.4rem; font-weight: 700; color: #e8b84b; text-align: center; margin-bottom: 8px; }
+        h2 { font-size: 1.8rem; font-weight: 600; color: #e8d5b0; margin-top: 48px; margin-bottom: 16px; border-bottom: 2px solid rgba(232, 184, 75, 0.15); padding-bottom: 8px; }
+        h3 { font-size: 1.3rem; font-weight: 600; color: #d4c09a; margin-top: 32px; margin-bottom: 12px; }
+        h4 { font-size: 1.1rem; font-weight: 600; color: #c9a87c; margin-top: 24px; margin-bottom: 8px; }
+        p { margin-bottom: 16px; color: #d0d7e8; }
+        strong { color: #f0e8d8; }
+        em { color: #c9a87c; font-style: italic; }
+        .cita { background: rgba(255, 255, 255, 0.03); border-left: 4px solid #e8b84b; padding: 16px 22px; margin: 20px 0; border-radius: 0 12px 12px 0; font-style: italic; color: #d0d7e8; }
+        .cita strong { color: #e8b84b; }
+        ul, ol { margin: 12px 0 20px 24px; color: #d0d7e8; }
+        li { margin-bottom: 8px; }
+        .error-block { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 12px 18px; margin: 12px 0 20px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.95rem; }
+        .error-block strong { color: #d64f4f; }
+        .mentor-box { background: rgba(232, 184, 75, 0.05); border: 1px solid rgba(232, 184, 75, 0.12); border-radius: 16px; padding: 20px 24px; margin: 32px 0 16px 0; }
+        .mentor-box h3 { margin-top: 0; color: #e8b84b; font-size: 1.2rem; }
+        .mentor-box strong { color: #e8d5b0; }
+        .recurso-visual { margin: 32px 0; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.04); background: #0e1625; }
+        .recurso-visual img { width: 100%; height: auto; display: block; }
+        .recurso-visual .caption { padding: 12px 18px; background: rgba(0, 0, 0, 0.3); color: #8899b0; font-size: 0.9rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+        #map { width: 100%; height: 500px; background: #0e1625; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .quiasmo-grid { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; }
+        .quiasmo-item { display: flex; align-items: center; padding: 10px 16px; background: rgba(255, 255, 255, 0.02); border-radius: 10px; border-left: 3px solid rgba(232, 184, 75, 0.2); transition: background 0.3s; }
+        .quiasmo-item:hover { background: rgba(255, 255, 255, 0.04); }
+        .quiasmo-item .letra { font-size: 1.6rem; font-weight: 700; color: #e8b84b; min-width: 44px; }
+        .quiasmo-item .contenido { flex: 1; }
+        .quiasmo-item .contenido .label { color: #e8d5b0; font-weight: 600; }
+        .quiasmo-item .contenido .detalle { color: #8899b0; font-size: 0.85rem; }
+        .quiasmo-item.centro { background: rgba(232, 184, 75, 0.06); border-left-color: #e8b84b; box-shadow: 0 0 30px rgba(232, 184, 75, 0.02); }
+        .quiasmo-item.centro .letra { color: #f0d080; }
+        .quiasmo-item.centro .contenido .label { color: #f0d080; }
+        .quiasmo-flecha { text-align: center; color: #5a6a80; font-size: 0.8rem; letter-spacing: 4px; padding: 2px 0; }
+        .exegesis-stack { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .exegesis-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 16px 20px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+        .exegesis-card:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
+        .exegesis-card.activa { background: rgba(232, 184, 75, 0.06); border-color: #e8b84b; box-shadow: 0 0 20px rgba(232, 184, 75, 0.05); }
+        .exegesis-card .header-card { display: flex; align-items: center; gap: 12px; }
+        .exegesis-card .header-card .numero { font-size: 1.2rem; font-weight: 700; color: #e8b84b; min-width: 32px; }
+        .exegesis-card .header-card .titulo-card { color: #e8d5b0; font-weight: 600; font-size: 1rem; }
+        .exegesis-card .header-card .toggle-icon { margin-left: auto; color: #5a6a80; font-size: 0.8rem; transition: transform 0.3s; }
+        .exegesis-card.activa .header-card .toggle-icon { color: #c9a87c; transform: rotate(180deg); }
+        .exegesis-card .contenido-card { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
+        .exegesis-card.activa .contenido-card { max-height: 800px; opacity: 1; margin-top: 12px; }
+        .exegesis-card .contenido-card .inner { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; color: #b8c7e0; font-size: 0.95rem; line-height: 1.6; }
+        .exegesis-card .contenido-card .inner strong { color: #e8d5b0; }
+        .exegesis-card .contenido-card .inner .cita-card { background: rgba(255, 255, 255, 0.02); border-left: 3px solid #e8b84b; padding: 10px 16px; margin: 8px 0 12px 0; font-style: italic; color: #d0d7e8; }
+        .exegesis-card .contenido-card .inner .error-card { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 10px 16px; margin: 8px 0 12px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.9rem; }
+        .exegesis-card .contenido-card .inner .error-card strong { color: #d64f4f; }
+        .exegesis-card .contenido-card .inner .imagen-card { margin: 12px 0; }
+        .exegesis-card .contenido-card .inner .imagen-card img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .preguntas-stack { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 24px 0; }
+        .pregunta-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+        .pregunta-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.12); }
+        .pregunta-item.activa { background: rgba(232, 184, 75, 0.04); border-color: #e8b84b; }
+        .pregunta-item .header-pregunta { display: flex; align-items: center; gap: 10px; }
+        .pregunta-item .header-pregunta .num-pregunta { color: #e8b84b; font-weight: 700; font-size: 0.9rem; min-width: 28px; }
+        .pregunta-item .header-pregunta .texto-pregunta { color: #e8d5b0; font-weight: 500; font-size: 0.95rem; }
+        .pregunta-item .header-pregunta .toggle-pregunta { margin-left: auto; color: #5a6a80; font-size: 0.7rem; transition: transform 0.3s; }
+        .pregunta-item.activa .header-pregunta .toggle-pregunta { color: #c9a87c; transform: rotate(180deg); }
+        .pregunta-item .detalle-pregunta { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
+        .pregunta-item.activa .detalle-pregunta { max-height: 200px; opacity: 1; margin-top: 8px; }
+        .pregunta-item .detalle-pregunta .inner-pregunta { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 10px; color: #b8c7e0; font-size: 0.9rem; line-height: 1.5; }
+        .pregunta-item .detalle-pregunta .inner-pregunta strong { color: #e8d5b0; }
+        .anillos-container { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; }
+        .anillo-item { width: 100%; max-width: 620px; padding: 14px 18px; background: rgba(255, 255, 255, 0.02); border: 2px solid rgba(255, 255, 255, 0.04); border-radius: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; user-select: none; }
+        .anillo-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
+        .anillo-item.centro { background: rgba(232, 184, 75, 0.05); border-color: rgba(232, 184, 75, 0.12); }
+        .anillo-item.centro .label { color: #f0d080; }
+        .anillo-item .icono { font-size: 1.5rem; min-width: 40px; text-align: center; }
+        .anillo-item .info { flex: 1; }
+        .anillo-item .info .label { color: #e8d5b0; font-weight: 600; font-size: 0.95rem; }
+        .anillo-item .info .detalle { color: #8899b0; font-size: 0.8rem; opacity: 0.7; }
+        .anillo-item .toggle { color: #5a6a80; font-size: 0.7rem; transition: transform 0.3s; }
+        .anillo-item.activo .toggle { color: #c9a87c; transform: rotate(180deg); }
+        .anillo-preguntas { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease; opacity: 0; width: 100%; max-width: 600px; }
+        .anillo-item.activo + .anillo-preguntas { max-height: 300px; opacity: 1; margin-top: 4px; }
+        .anillo-preguntas .inner { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .anillo-preguntas .inner .q { color: #b8c7e0; font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
+        .anillo-preguntas .inner .q:last-child { border-bottom: none; }
+        .anillo-preguntas .inner .q .num { color: #e8b84b; font-weight: 700; margin-right: 8px; }
+        .anillo-preguntas .inner .q strong { color: #e8d5b0; }
+        .conector-linea { width: 2px; height: 12px; background: rgba(255, 255, 255, 0.04); }
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            h3 { font-size: 1.1rem; }
+            .exegesis-card { padding: 14px 16px; }
+            .pregunta-item { padding: 10px 14px; }
+            #map { height: 380px; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 16px 12px; }
+            h1 { font-size: 1.4rem; }
+            h2 { font-size: 1.2rem; }
+            .quiasmo-item { padding: 8px 12px; flex-wrap: wrap; }
+            .quiasmo-item .letra { min-width: 32px; font-size: 1.2rem; }
+            .anillo-item { padding: 10px 12px; flex-wrap: wrap; }
+            .anillo-item .icono { min-width: 30px; font-size: 1.2rem; }
+            .cita { padding: 12px 16px; font-size: 0.9rem; }
+            .mentor-box { padding: 14px 16px; }
+            .exegesis-card .header-card .titulo-card { font-size: 0.85rem; }
+            .pregunta-item .header-pregunta .texto-pregunta { font-size: 0.8rem; }
+            #map { height: 280px; }
+        }
+        </style>
+</head>
+<body>
+<div class="container">
+  <h1>📖 Estudio del Libro de Jonás</h1>
+  <p style="text-align:center;color:#8899b0;margin-bottom:24px;">La huida y la tormenta · Jonás 1:4-16</p>
+  <h2>🌍 PARTE 1: EL ESCENARIO (CONTEXTO)</h2>
+  <h3>📍 Sección A: Contextos y Conexiones</h3>
+  <p><strong>📍 Lugar:</strong> Mar Mediterráneo (entre Jope y Tarsis), barco fenicio.</p>
+  <p><strong>📅 Fecha:</strong> (aproximada): 760 a.C. (reinado de Jeroboam II en Israel).</p>
+  <hr style="border:0;height:1px;background:rgba(255,255,255,0.05);margin:20px 0;">
+  <h4>Contexto Histórico / Político</h4>
+  <p>Jonás ha huido de la presencia de Dios y ha embarcado en un barco con destino a Tarsis (posiblemente Tartessos, en España). Los barcos fenicios eran los más avanzados de la época, capaces de surcar el Mediterráneo. Sin embargo, Jonás no puede escapar de la soberanía de Dios. El Señor envía una gran tormenta que amenaza con romper la nave. Los marineros, probablemente fenicios o de otras naciones costeras, practican religiones politeístas. Cada uno clama a su dios, mostrando la desesperación humana ante el peligro inminente.
+
+Este pasaje contrasta la fe de los marineros paganos con la desobediencia del profeta. Mientras ellos claman a sus dioses y luchan por salvar la nave, Jonás duerme profundamente en la bodega. La ironía es palpable: el que debería ser luz para las naciones está sumido en la oscuridad espiritual.</p>
+  <div class="recurso-visual">
+    <div id="map"></div>
+    <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>
+  </div>
+  <h4>Contexto Cultural / Teológico</h4>
+  <p>En el antiguo Cercano Oriente, las tormentas eran vistas como manifestaciones del poder divino. Los marineros, al enfrentar una tempestad que no podían controlar, recurren a prácticas religiosas comunes: clamar a sus dioses, echar suertes para descubrir al culpable, y hacer votos. Estos elementos reflejan una cosmovisión donde el destino y la culpa se determinan por medios sobrenaturales.
+
+El autor sagrado utiliza estos elementos para mostrar la soberanía de Dios sobre toda la creación y sobre las prácticas religiosas humanas. Las suertes, aunque son un método pagano, son usadas por Dios para revelar la verdad: Jonás es el responsable de la tormenta.</p>
+  <h4>Conexiones Literarias (AT y NT)</h4>
+  <p><strong>AT:</strong> El salmo de Jonás (cap. 2) tiene ecos de los Salmos 18, 42 y 88, donde el salmista clama a Dios desde las profundidades. La tormenta y el mar como instrumentos de juicio divino aparecen en otros pasajes, como el diluvio (Génesis 6-9) y la apertura del Mar Rojo (Éxodo 14).</p>
+  <p><strong>NT:</strong> Jesús calma la tormenta en el Mar de Galilea (Mateo 8:23-27). Mientras Jonás duerme en medio de la tormenta, los marineros claman a sus dioses. Jesús, en cambio, duerme en la barca mientras sus discípulos claman a él. La diferencia es radical: Jonás es el causante de la tormenta; Jesús es el que la calma con autoridad divina.</p>
+  <div class="mentor-box">
+    <h3>💡 Dato del Mentor</h3>
+    <p><strong>1. Dato central:</strong> El arte de la navegación fenicia era muy avanzado. Sus barcos tenían quilla, proa y popa elevadas, y podían transportar grandes cargas. El barco en el que viajaba Jonás probablemente era un barco mercante que hacía la ruta hacia Tarsis, una colonia fenicia en España. Este viaje podía durar semanas, y la tormenta descrita en Jonás 1 sería una tempestad mediterránea de gran intensidad.</p>
+    <p><strong>2. Dato curioso:</strong> La práctica de "echar suertes" (Jonás 1:7) era común en el antiguo Cercano Oriente para descubrir la voluntad divina. En el Antiguo Testamento, también se usaba para discernir la voluntad de Dios en ciertas decisiones (Proverbios 16:33). Sin embargo, el autor de Jonás muestra que incluso este método pagano es usado por Dios para revelar su plan.</p>
+  </div>
+  <h2>📖 PARTE 2: EXÉGESIS (TÉRMINOS CLAVE EN HEBREO)</h2>
+
+            <div class="exegesis-stack">
+                
+                <div class="exegesis-card">
+                    <div class="header-card">
+                        <span class="numero">1</span>
+                        <span class="titulo-card">La tormenta: el instrumento de Dios para despertar</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="contenido-card">
+                        <div class="inner">
+                            <p><strong>Cita:</strong> Jonás 1:1-4</p>
+                            <div class="cita-card">"Pero Jehová hizo levantar un gran viento en el mar, y hubo una tempestad tan grande en el mar, que el barco se rompía."</div>
+                            
+                            <p><strong>Término hebreo:</strong> <em>ruach</em> (רוּחַ)</p>
+                            <p><strong>Análisis:</strong> Ruach significa "viento, aliento, espíritu". Aquí se usa para describir el viento que Dios envía. Es la misma palabra que se usa para el Espíritu de Dios en Génesis 1:2 ("el Espíritu de Dios se movía sobre la faz de las aguas"). Dios usa su ruach para crear y para juzgar. En Jonás, el viento es un instrumento de juicio que despierta al profeta de su sueño espiritual.</p>
+                            <p><strong>Verdad exegética:</strong> Dios es soberano sobre la naturaleza y usa los elementos para cumplir su voluntad. La tormenta no es un accidente; es un acto deliberado de Dios para confrontar a Jonás y revelar su poder a los marineros.</p>
+                            <div class="error-card"><strong>❌ Error común:</strong> Algunos lectores ven la tormenta como un castigo divino. En realidad, es un acto de misericordia: Dios usa la tormenta para despertar a Jonás de su huida y para revelar su gloria a los marineros paganos.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exegesis-card">
+                    <div class="header-card">
+                        <span class="numero">2</span>
+                        <span class="titulo-card">El sorteo: la verdad revelada por medios paganos</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="contenido-card">
+                        <div class="inner">
+                            <p><strong>Cita:</strong> Jonás 1:7</p>
+                            <div class="cita-card">"Y dijeron cada uno a su compañero: Venid, echemos suertes, para que sepamos por quién nos ha venido este mal. Y echaron suertes, y la suerte cayó sobre Jonás."</div>
+                            
+                            <p><strong>Término hebreo:</strong> <em>goral</em> (גּוֹרָל)</p>
+                            <p><strong>Análisis:</strong> Goral significa "suerte, lote". Era un método común en el antiguo Cercano Oriente para tomar decisiones o descubrir la voluntad divina. En la Biblia, se usaba para repartir tierras (Josué 18:6), para elegir sacerdotes (1 Crónicas 24:5), y para discernir la voluntad de Dios en situaciones difíciles. En Jonás, el sorteo revela la verdad de que Jonás es el responsable de la tormenta. Aunque los marineros son paganos, Dios usa su método para exponer la desobediencia del profeta.</p>
+                            <p><strong>Verdad exegética:</strong> Dios puede usar incluso medios paganos para revelar su verdad y llevar a cabo su plan. El sorteo no es un fin en sí mismo, sino un instrumento que Dios usa para confrontar a Jonás y para guiar a los marineros hacia el conocimiento del Dios verdadero.</p>
+                            <div class="error-card"><strong>❌ Error común:</strong> Algunos lectores ven el sorteo como una práctica supersticiosa que Dios aprueba. En realidad, el sorteo es un método humano que Dios usa soberanamente para revelar su voluntad. El foco no está en el sorteo, sino en la mano de Dios que guía el resultado.</div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+              <div class="mentor-box">
+    <h3>💡 Dato del Mentor</h3>
+    <p><strong>1. Dato central:</strong> Los marineros en Jonás 1 provienen de diferentes naciones y adoran a diferentes dioses. Esto refleja el contexto cosmopolita del Mediterráneo, donde convivían múltiples religiones. El autor sagrado los presenta como hombres temerosos de Dios y de buena voluntad, en contraste con Jonás, que es desobediente y rebelde.</p>
+    <p><strong>2. Dato curioso:</strong> Cuando los marineros arrojan a Jonás al mar, la tempestad se calma inmediatamente (Jonás 1:15). Este es un acto de juicio, pero también de salvación: Jonás es entregado al mar para que el pez lo rescate. La calma del mar es un acto de misericordia, tanto para Jonás como para los marineros, que reconocen el poder de Dios y ofrecen sacrificios.</p>
+  </div>
+  <h2>🛤️ PARTE 3: EL ATERRIZAJE (VIDA Y APLICACIÓN)</h2>
+  <h3>Verdad Teológica Central</h3>
+  <p><strong>Dios es soberano sobre toda la creación y no se rinde ante nuestra desobediencia. Él usa tormentas, circunstancias y personas (incluso paganas) para despertarnos, confrontarnos y guiarnos de vuelta a su voluntad. La desobediencia de Jonás no frustra el plan de Dios; al contrario, se convierte en el escenario para revelar su gloria a los marineros.</strong></p>
+  <h3>Punto de Tensión</h3>
+  <p>Jonás duerme mientras los marineros claman a sus dioses. ¿Cuántas veces estamos "dormidos" espiritualmente mientras otros a nuestro alrededor buscan desesperadamente respuestas? La tensión está entre nuestra indiferencia y la urgencia de las personas que nos rodean.</p>
+  <h3>Devocional</h3>
+  <p>Jonás duerme profundamente en la bodega del barco, mientras los marineros luchan por salvar sus vidas. Es una imagen poderosa de la indiferencia espiritual. Jonás, el profeta, está más dormido que los paganos. No se da cuenta de que su desobediencia afecta a otros, que el barco entero está en peligro por su culpa.
+
+¿Y nosotros? A veces estamos tan adormecidos por nuestra comodidad, por nuestras rutinas, por nuestras "Tarsis", que no vemos las tormentas que nos rodean. No vemos a los que claman a su dios, a los que buscan respuestas, a los que están en peligro porque nosotros hemos huido de Dios. La llamada de Dios es a despertar, a reconocer nuestra responsabilidad y a actuar. No podemos dormir mientras el mundo se hunde.</p>
+  <h3>Examen del Corazón (5 preguntas)</h3>
+
+            <div class="preguntas-stack">
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">🤔</span>
+                        <span class="texto-pregunta">¿Hay alguna "tormenta" en tu vida que Dios esté usando para despertarte de tu sueño espiritual?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">🧐</span>
+                        <span class="texto-pregunta">¿A qué "dioses" estás clamando en medio de tus dificultades (dinero, relaciones, trabajo) en lugar de buscar a Dios?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">😯</span>
+                        <span class="texto-pregunta">¿Cómo afecta tu desobediencia a las personas que te rodean? (Tu pecado no es privado).</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">😥</span>
+                        <span class="texto-pregunta">¿Estás "durmiendo" mientras otros a tu alrededor luchan por encontrar esperanza?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">💭</span>
+                        <span class="texto-pregunta">¿Qué "suerte" necesitas echar para reconocer tu responsabilidad y volverte a Dios?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+              <h3>Pasos Prácticos (5 acciones para la semana)</h3>
+  <div class="preguntas-stack">
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">📝</span>
+        <span class="texto-pregunta">Examina: Pregúntate: ¿Dónde estoy "durmiendo" espiritualmente? Identifica una rutina que te está adormeciendo.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">📖</span>
+        <span class="texto-pregunta">Escucha: Pregunta a un amigo o familiar si ha notado que estás distante o desanimado. La retroalimentación te ayuda a despertar.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">🤝</span>
+        <span class="texto-pregunta">Confiesa: Si hay un área de desobediencia que está afectando a otros, confiésala a Dios y a la persona afectada.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">🗣️</span>
+        <span class="texto-pregunta">Sé luz: Busca a alguien que esté pasando por una tormenta (dificultad) y ofrécele tu apoyo y oración.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">🌱</span>
+        <span class="texto-pregunta">Ora: Pide a Dios que te dé un corazón sensible a las tormentas de los demás, y que te ayude a no huir de su llamado.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3>Oración Final</h3>
+  <p>Señor de la tormenta y de la calma, perdóname por las veces que he dormido mientras otros clamaban. Perdona mi indiferencia y mi desobediencia que afecta a quienes me rodean. Despiértame del sueño espiritual y dame la valentía para responder a tu llamado. Ayúdame a ser luz en medio de la tormenta, y a llevar tu esperanza a los que claman. En el nombre de Jesús, que calma las tempestades, amén.</p>
+  <div class="mentor-box">
+    <h3>💡 Dato del Mentor</h3>
+    <p><strong>1. Dato central:</strong> El "gran viento" (Jonás 1:4) en hebreo es ruach gedolah. La palabra ruach no solo significa viento, sino también espíritu. La tormenta es un acto del Espíritu de Dios para confrontar a Jonás. Es una manifestación de la presencia divina en medio del caos.</p>
+    <p><strong>2. Dato curioso:</strong> Los marineros, al ver la tormenta y la liberación, "tuvieron gran temor de Jehová" (Jonás 1:16) y ofrecieron sacrificios. Este es el primer acto de adoración al Dios verdadero en el libro, realizado por paganos. La desobediencia de Jonás se convierte en un instrumento para la salvación de otros.</p>
+  </div>
+  <hr style="border:0;height:2px;background:rgba(232,184,75,0.2);margin:40px 0 20px 0;">
+  <p style="text-align:center;color:#5a6a80;font-size:0.8rem;">📖 <strong>Fin del estudio</strong> · Comparte este estudio con alguien que necesite escuchar que la misericordia de Dios es más grande que su pecado o que su rencor.</p>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapContainer = document.getElementById('map');
+            if (mapContainer) {
+                const map = L.map('map', { center: [35.0, 28.0], zoom: 5, zoomControl: true, fadeAnimation: true, attributionControl: true, scrollWheelZoom: true, touchZoom: true });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/">CARTO</a>', subdomains: 'abcd', maxZoom: 19, minZoom: 3 }).addTo(map);
+                const coords = { israel: [32.0, 35.0], jope: [32.05, 34.75], ninive: [36.36, 43.15], tarsis: [36.0, -5.5] };
+                const createIcon = (color, emoji) => L.divIcon({ className: 'custom-div-icon', html: '<div style="background-color:' + color + ';color:white;font-size:20px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:3px solid rgba(255,255,255,0.6);box-shadow:0 4px 12px rgba(0,0,0,0.6);font-weight:bold;text-shadow:0 1px 3px rgba(0,0,0,0.5);">' + emoji + '</div>', iconSize: [44, 44], iconAnchor: [22, 44], popupAnchor: [0, -44] });
+                L.marker(coords.israel, { icon: createIcon('#4caf7a', '✡️') }).addTo(map).bindPopup('<b>🇮🇱 Israel</b><br>Reino del Norte (760 a.C.)<br><small>Jeroboam II · Oseas y Amós profetizaban aquí</small>');
+                L.marker(coords.jope, { icon: createIcon('#4d8fc5', '⛵') }).addTo(map).bindPopup('<b>📍 Jope (Jaffa)</b><br>Puerto desde donde Jonás huyó<br><small>Mismo puerto que usó Salomón (2 Crónicas 2:16)</small>');
+                L.marker(coords.ninive, { icon: createIcon('#e8b84b', '🏛️') }).addTo(map).bindPopup('<b>🏛️ Nínive</b><br>Capital de Asiria · 120.000 hab.<br><small>Dios envió a Jonás a predicar aquí</small>');
+                L.marker(coords.tarsis, { icon: createIcon('#d64f4f', '🌊') }).addTo(map).bindPopup('<b>🌊 Tarsis</b><br>Extremo occidental (España)<br><small>Jonás huyó 3.500 km en dirección contraria</small>');
+                L.polyline([coords.israel, coords.jope, coords.ninive], { color: '#e8b84b', weight: 5, opacity: 0.9, smoothFactor: 1 }).addTo(map).bindPopup('🟡 Ruta de Dios: Israel → Jope → Nínive');
+                L.polyline([coords.israel, coords.jope, coords.tarsis], { color: '#d64f4f', weight: 4, opacity: 0.8, smoothFactor: 1, dashArray: '12, 12' }).addTo(map).bindPopup('🔴 Huida de Jonás: Israel → Jope → Tarsis');
+                map.fitBounds(L.latLngBounds([coords.tarsis, coords.ninive, coords.israel, coords.jope]), { padding: [50, 50], maxZoom: 6 });
+                L.control.zoom({ position: 'bottomright' }).addTo(map);
+                L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
+                window.addEventListener('resize', function() { map.invalidateSize(); });
+            }
+
+            // Línea de tiempo
+            var events = [
+                { year: '800 a.C.', label: 'Imperio Asirio', title: '🏛️ Apogeo del Imperio Asirio', desc: 'Asiria se convierte en la superpotencia del Cercano Oriente.' },
+                { year: '760 a.C.', label: '⭐ Jonás', title: '📖 Jonás es llamado por Dios', desc: 'Dios envía a Jonás a predicar a Nínive.' },
+                { year: '722 a.C.', label: 'Caída Samaria', title: '⚔️ Asiria conquista Israel', desc: 'El reino del Norte cae ante los asirios.' },
+                { year: '701 a.C.', label: 'Senaquerib', title: '🛡️ Senaquerib asedia Jerusalén', desc: 'El ángel del Señor salva a Jerusalén.' },
+                { year: '612 a.C.', label: 'Caída Nínive', title: '🔥 Nínive es destruida', desc: 'Una coalición destruye Nínive.' }
+            ];
+            var infoDiv = document.getElementById('timelineInfo');
+            var progress = document.getElementById('timelineProgress');
+            var eventsEls = document.querySelectorAll('.timeline-event');
+            function updateTimeline(index) {
+                var ev = events[index];
+                if (infoDiv) { infoDiv.innerHTML = '<div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">' + ev.title + '</div><div style="color:#b8c7e0;font-size:0.85rem;">' + ev.desc + '</div>'; }
+                if (progress) { progress.style.width = ((index / (events.length - 1)) * 100) + '%'; }
+                eventsEls.forEach(function(el, i) {
+                    var dot = el.querySelector('div');
+                    if (dot) {
+                        dot.style.background = (i <= index) ? '#e8b84b' : '#1a2538';
+                        dot.style.borderColor = (i <= index) ? '#e8b84b' : 'rgba(255,255,255,0.15)';
+                        dot.style.boxShadow = (i === index) ? '0 0 20px rgba(232,184,75,0.4)' : 'none';
+                    }
+                });
+            }
+            eventsEls.forEach(function(el, idx) {
+                el.addEventListener('click', function() { updateTimeline(idx); });
+                el.addEventListener('touchend', function(e) { e.preventDefault(); updateTimeline(idx); });
+            });
+            if (eventsEls.length > 0) updateTimeline(0);
+
+            // Tarjetas de exégesis
+            var cards = document.querySelectorAll('.exegesis-card');
+            cards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
+                    this.classList.toggle('activa');
+                }.bind(card));
+                card.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
+                    this.classList.toggle('activa');
+                }.bind(card));
+            });
+            if (cards.length > 0) cards[0].classList.add('activa');
+
+            // Preguntas en acordeón
+            var preguntas = document.querySelectorAll('.pregunta-item');
+            preguntas.forEach(function(item) {
+                item.addEventListener('click', function() { this.classList.toggle('activa'); }.bind(item));
+                item.addEventListener('touchend', function(e) { e.preventDefault(); this.classList.toggle('activa'); }.bind(item));
+            });
+            if (preguntas.length > 0) preguntas[0].classList.add('activa');
+
+            // Anillos
+            var anillos = document.querySelectorAll('.anillo-item');
+            anillos.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
+                    this.classList.toggle('activo');
+                }.bind(item));
+                item.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
+                    this.classList.toggle('activo');
+                }.bind(item));
+            });
+            if (anillos.length > 0) anillos[0].classList.add('activo');
+        });
+        </script>
+</body>
+</html>
