@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estudio del Libro de Jonás - El gran pez y la oración</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Roboto, system-ui, sans-serif; background: #0b0f1a; color: #e8d5b0; padding: 20px; line-height: 1.7; }
+        .container { max-width: 1000px; margin: 0 auto; background: #121a2a; padding: 40px 32px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 255, 255, 0.04); }
+        h1 { font-size: 2.4rem; font-weight: 700; color: #e8b84b; text-align: center; margin-bottom: 8px; }
+        h2 { font-size: 1.8rem; font-weight: 600; color: #e8d5b0; margin-top: 48px; margin-bottom: 16px; border-bottom: 2px solid rgba(232, 184, 75, 0.15); padding-bottom: 8px; }
+        h3 { font-size: 1.3rem; font-weight: 600; color: #d4c09a; margin-top: 32px; margin-bottom: 12px; }
+        h4 { font-size: 1.1rem; font-weight: 600; color: #c9a87c; margin-top: 24px; margin-bottom: 8px; }
+        p { margin-bottom: 16px; color: #d0d7e8; }
+        strong { color: #f0e8d8; }
+        em { color: #c9a87c; font-style: italic; }
+        .cita { background: rgba(255, 255, 255, 0.03); border-left: 4px solid #e8b84b; padding: 16px 22px; margin: 20px 0; border-radius: 0 12px 12px 0; font-style: italic; color: #d0d7e8; }
+        .cita strong { color: #e8b84b; }
+        ul, ol { margin: 12px 0 20px 24px; color: #d0d7e8; }
+        li { margin-bottom: 8px; }
+        .error-block { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 12px 18px; margin: 12px 0 20px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.95rem; }
+        .error-block strong { color: #d64f4f; }
+        .mentor-box { background: rgba(232, 184, 75, 0.05); border: 1px solid rgba(232, 184, 75, 0.12); border-radius: 16px; padding: 20px 24px; margin: 32px 0 16px 0; }
+        .mentor-box h3 { margin-top: 0; color: #e8b84b; font-size: 1.2rem; }
+        .mentor-box strong { color: #e8d5b0; }
+        .recurso-visual { margin: 32px 0; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.04); background: #0e1625; }
+        .recurso-visual img { width: 100%; height: auto; display: block; }
+        .recurso-visual .caption { padding: 12px 18px; background: rgba(0, 0, 0, 0.3); color: #8899b0; font-size: 0.9rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+        #map { width: 100%; height: 500px; background: #0e1625; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .quiasmo-grid { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; }
+        .quiasmo-item { display: flex; align-items: center; padding: 10px 16px; background: rgba(255, 255, 255, 0.02); border-radius: 10px; border-left: 3px solid rgba(232, 184, 75, 0.2); transition: background 0.3s; }
+        .quiasmo-item:hover { background: rgba(255, 255, 255, 0.04); }
+        .quiasmo-item .letra { font-size: 1.6rem; font-weight: 700; color: #e8b84b; min-width: 44px; }
+        .quiasmo-item .contenido { flex: 1; }
+        .quiasmo-item .contenido .label { color: #e8d5b0; font-weight: 600; }
+        .quiasmo-item .contenido .detalle { color: #8899b0; font-size: 0.85rem; }
+        .quiasmo-item.centro { background: rgba(232, 184, 75, 0.06); border-left-color: #e8b84b; box-shadow: 0 0 30px rgba(232, 184, 75, 0.02); }
+        .quiasmo-item.centro .letra { color: #f0d080; }
+        .quiasmo-item.centro .contenido .label { color: #f0d080; }
+        .quiasmo-flecha { text-align: center; color: #5a6a80; font-size: 0.8rem; letter-spacing: 4px; padding: 2px 0; }
+        .exegesis-stack { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+        .exegesis-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 16px 20px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+        .exegesis-card:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
+        .exegesis-card.activa { background: rgba(232, 184, 75, 0.06); border-color: #e8b84b; box-shadow: 0 0 20px rgba(232, 184, 75, 0.05); }
+        .exegesis-card .header-card { display: flex; align-items: center; gap: 12px; }
+        .exegesis-card .header-card .numero { font-size: 1.2rem; font-weight: 700; color: #e8b84b; min-width: 32px; }
+        .exegesis-card .header-card .titulo-card { color: #e8d5b0; font-weight: 600; font-size: 1rem; }
+        .exegesis-card .header-card .toggle-icon { margin-left: auto; color: #5a6a80; font-size: 0.8rem; transition: transform 0.3s; }
+        .exegesis-card.activa .header-card .toggle-icon { color: #c9a87c; transform: rotate(180deg); }
+        .exegesis-card .contenido-card { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
+        .exegesis-card.activa .contenido-card { max-height: 800px; opacity: 1; margin-top: 12px; }
+        .exegesis-card .contenido-card .inner { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; color: #b8c7e0; font-size: 0.95rem; line-height: 1.6; }
+        .exegesis-card .contenido-card .inner strong { color: #e8d5b0; }
+        .exegesis-card .contenido-card .inner .cita-card { background: rgba(255, 255, 255, 0.02); border-left: 3px solid #e8b84b; padding: 10px 16px; margin: 8px 0 12px 0; font-style: italic; color: #d0d7e8; }
+        .exegesis-card .contenido-card .inner .error-card { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 10px 16px; margin: 8px 0 12px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.9rem; }
+        .exegesis-card .contenido-card .inner .error-card strong { color: #d64f4f; }
+        .exegesis-card .contenido-card .inner .imagen-card { margin: 12px 0; }
+        .exegesis-card .contenido-card .inner .imagen-card img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .preguntas-stack { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 24px 0; }
+        .pregunta-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+        .pregunta-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.12); }
+        .pregunta-item.activa { background: rgba(232, 184, 75, 0.04); border-color: #e8b84b; }
+        .pregunta-item .header-pregunta { display: flex; align-items: center; gap: 10px; }
+        .pregunta-item .header-pregunta .num-pregunta { color: #e8b84b; font-weight: 700; font-size: 0.9rem; min-width: 28px; }
+        .pregunta-item .header-pregunta .texto-pregunta { color: #e8d5b0; font-weight: 500; font-size: 0.95rem; }
+        .pregunta-item .header-pregunta .toggle-pregunta { margin-left: auto; color: #5a6a80; font-size: 0.7rem; transition: transform 0.3s; }
+        .pregunta-item.activa .header-pregunta .toggle-pregunta { color: #c9a87c; transform: rotate(180deg); }
+        .pregunta-item .detalle-pregunta { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
+        .pregunta-item.activa .detalle-pregunta { max-height: 200px; opacity: 1; margin-top: 8px; }
+        .pregunta-item .detalle-pregunta .inner-pregunta { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 10px; color: #b8c7e0; font-size: 0.9rem; line-height: 1.5; }
+        .pregunta-item .detalle-pregunta .inner-pregunta strong { color: #e8d5b0; }
+        .anillos-container { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; }
+        .anillo-item { width: 100%; max-width: 620px; padding: 14px 18px; background: rgba(255, 255, 255, 0.02); border: 2px solid rgba(255, 255, 255, 0.04); border-radius: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; user-select: none; }
+        .anillo-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
+        .anillo-item.centro { background: rgba(232, 184, 75, 0.05); border-color: rgba(232, 184, 75, 0.12); }
+        .anillo-item.centro .label { color: #f0d080; }
+        .anillo-item .icono { font-size: 1.5rem; min-width: 40px; text-align: center; }
+        .anillo-item .info { flex: 1; }
+        .anillo-item .info .label { color: #e8d5b0; font-weight: 600; font-size: 0.95rem; }
+        .anillo-item .info .detalle { color: #8899b0; font-size: 0.8rem; opacity: 0.7; }
+        .anillo-item .toggle { color: #5a6a80; font-size: 0.7rem; transition: transform 0.3s; }
+        .anillo-item.activo .toggle { color: #c9a87c; transform: rotate(180deg); }
+        .anillo-preguntas { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease; opacity: 0; width: 100%; max-width: 600px; }
+        .anillo-item.activo + .anillo-preguntas { max-height: 300px; opacity: 1; margin-top: 4px; }
+        .anillo-preguntas .inner { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(255, 255, 255, 0.04); }
+        .anillo-preguntas .inner .q { color: #b8c7e0; font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
+        .anillo-preguntas .inner .q:last-child { border-bottom: none; }
+        .anillo-preguntas .inner .q .num { color: #e8b84b; font-weight: 700; margin-right: 8px; }
+        .anillo-preguntas .inner .q strong { color: #e8d5b0; }
+        .conector-linea { width: 2px; height: 12px; background: rgba(255, 255, 255, 0.04); }
+        @media (max-width: 768px) {
+            .container { padding: 24px 16px; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            h3 { font-size: 1.1rem; }
+            .exegesis-card { padding: 14px 16px; }
+            .pregunta-item { padding: 10px 14px; }
+            #map { height: 380px; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { padding: 16px 12px; }
+            h1 { font-size: 1.4rem; }
+            h2 { font-size: 1.2rem; }
+            .quiasmo-item { padding: 8px 12px; flex-wrap: wrap; }
+            .quiasmo-item .letra { min-width: 32px; font-size: 1.2rem; }
+            .anillo-item { padding: 10px 12px; flex-wrap: wrap; }
+            .anillo-item .icono { min-width: 30px; font-size: 1.2rem; }
+            .cita { padding: 12px 16px; font-size: 0.9rem; }
+            .mentor-box { padding: 14px 16px; }
+            .exegesis-card .header-card .titulo-card { font-size: 0.85rem; }
+            .pregunta-item .header-pregunta .texto-pregunta { font-size: 0.8rem; }
+            #map { height: 280px; }
+        }
+        </style>
+</head>
+<body>
+<div class="container">
+  <h1>📖 Estudio del Libro de Jonás</h1>
+  <p style="text-align:center;color:#8899b0;margin-bottom:24px;">El gran pez y la oración · Jonás 1:17 – 2:10</p>
+  <h2>🌍 PARTE 1: EL ESCENARIO (CONTEXTO)</h2>
+  <h3>📍 Sección A: Contextos y Conexiones</h3>
+  <p><strong>📍 Lugar:</strong> El Mar Mediterráneo (profundidades marinas) y el vientre del gran pez.</p>
+  <p><strong>📅 Fecha:</strong> 760 a.C. (reinado de Jeroboam II en Israel).</p>
+  <hr style="border:0;height:1px;background:rgba(255,255,255,0.05);margin:20px 0;">
+  <h4>Contexto Histórico / Político</h4>
+  <p>Jonás ha sido arrojado al mar por los marineros como consecuencia de su desobediencia. En lugar de ahogarse, Dios prepara "un gran pez" (no especifica ballena) que lo engulle. Este es un acto de juicio, pero también de misericordia: el pez se convierte en un medio de salvación. Jonás pasa tres días y tres noches en el vientre del pez, un tiempo de oscuridad, soledad y reflexión.
+
+En el antiguo Cercano Oriente, el mar era visto como un lugar de caos y muerte. Ser tragado por un monstruo marino (como el Leviatán) era una metáfora común para el juicio divino. Sin embargo, Jonás no es destruido; es preservado. Esto muestra que Dios tiene el control incluso sobre las fuerzas del caos.
+
+Desde el vientre del pez, Jonás eleva una oración. No es una oración de queja o desesperación, sino una oración de agradecimiento y confianza. Reconoce que Dios lo ha escuchado y que la salvación viene de Jehová. Aunque está en el lugar más oscuro y absurdo, el profeta alaba a Dios.</p>
+  <div class="recurso-visual">
+    <div id="map"></div>
+    <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>
+  </div>
+  <div class="recurso-visual">
+    <img src="assets/img/barco-pez.jpg" alt="Imagen de contexto" />
+    <div class="caption">🌅 <strong>Imagen ilustrativa</strong> del contexto histórico.</div>
+  </div>
+  <h4>Contexto Cultural / Teológico</h4>
+  <p>El salmo de Jonás (capítulo 2) está lleno de referencias a los Salmos del Antiguo Testamento (18, 42, 69, 88). Esto muestra que Jonás conocía la tradición poética de Israel y la usó para expresar su angustia y su fe. Aunque estaba en el vientre del pez, su oración es una teología profunda: reconoce que Dios es soberano incluso en las profundidades del mar.
+
+La oración de Jonás tiene una estructura clara: comienza con un clamor de angustia (vs. 2-3), luego describe su experiencia de hundimiento (vs. 4-6), y finalmente expresa su confianza en la salvación de Dios (vs. 7-9). Termina con un voto de acción de gracias. Esta estructura refleja los salmos de lamentación individual.</p>
+  <h4>Conexiones Literarias (AT y NT)</h4>
+  <p><strong>AT:</strong> El salmo de Jonás es un mosaico de citas de los Salmos: "Desde lo profundo clamé a ti" (Salmo 130), "Me rodeaban las olas" (Salmo 42:7), "Descendí a la tierra cuyos cerrojos son eternos" (Salmo 88:6). Esto muestra que Jonás no solo ora, sino que ora con las Escrituras.
+
+La imagen del pez que traga a Jonás y lo libera después de tres días también tiene conexiones con otros relatos del Antiguo Testamento, como la historia de José (que fue arrojado a un pozo) o Daniel (en el foso de los leones). En todos los casos, Dios actúa de manera sorprendente para salvar a sus siervos.</p>
+  <p><strong>NT:</strong> Jesús usa a Jonás como señal de su muerte y resurrección (Mateo 12:38-41, Lucas 11:29-32). Así como Jonás estuvo tres días y tres noches en el vientre del pez, el Hijo del Hombre estaría tres días y tres noches en el corazón de la tierra. Esta es la conexión más clara entre el Antiguo y el Nuevo Testamento en el libro de Jonás.
+
+La oración de Jonás también anticipa la oración de Jesús en Getsemaní, donde el Hijo de Dios clama desde la angustia profunda, pero se somete a la voluntad del Padre.</p>
+  <div class="mentor-box">
+    <h3>💡 Dato del Mentor</h3>
+    <p><strong>1. Dato central:</strong> El "gran pez" (Jonás 1:17) en hebreo es dag gadol. No se especifica que sea una ballena (eso es una interpretación de la traducción griega de la Septuaginta, que usó ketos - "monstruo marino"). La tradición judía rabínica debatía si era un leviatán o un pez creado específicamente para ese momento. Lo importante no es la especie, sino que Dios es soberano sobre la creación para salvar y juzgar.</p>
+    <p><strong>2. Dato curioso:</strong> La oración de Jonás (cap. 2) está escrita en hebreo poético casi perfecto, con un ritmo y una estructura que indican que fue compuesta para ser cantada o recitada en el culto. Es una de las piezas poéticas más bellas del Antiguo Testamento, y su ubicación dentro de la narrativa (en el vientre del pez) es una ironía deliberada: el profeta que huyó de Dios ahora alaba a Dios desde el abismo.</p>
+  </div>
+  <h2>📖 PARTE 2: EXÉGESIS (TÉRMINOS CLAVE EN HEBREO)</h2>
+
+            <div class="exegesis-stack">
+                
+                <div class="exegesis-card">
+                    <div class="header-card">
+                        <span class="numero">1</span>
+                        <span class="titulo-card">El gran pez: juicio y misericordia</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="contenido-card">
+                        <div class="inner">
+                            <p><strong>Cita:</strong> Jonás 1:17</p>
+                            <div class="cita-card">"Y preparó Jehová un gran pez que tragase a Jonás; y estuvo Jonás en el vientre del pez tres días y tres noches."</div>
+                            <div class="imagen-card"><img src="assets/img/barco-pez.jpg" alt="El gran pez: juicio y misericordia" /></div>
+                            <p><strong>Término hebreo:</strong> <em>manah</em> (מָנָה)</p>
+                            <p><strong>Análisis:</strong> El verbo manah significa "preparar, asignar, designar". Aparece tres veces en el libro (1:17; 4:6, 7, 8), siempre con Dios como sujeto. En cada ocasión, Dios "prepara" algo: un pez, una planta, un gusano, un viento. Esto subraya la soberanía absoluta de Dios sobre la creación. Él no solo permite los eventos, sino que los diseña activamente para cumplir su propósito. El pez no es un accidente; es una preparación divina para salvar a Jonás y llevarlo de vuelta a su misión.</p>
+                            <p><strong>Verdad exegética:</strong> Dios es soberano sobre toda la creación y prepara los recursos necesarios para cumplir su voluntad, incluso cuando nosotros hemos desobedecido. El pez es un instrumento de juicio y de misericordia a la vez.</p>
+                            <div class="error-card"><strong>❌ Error común:</strong> Algunos lectores ven el pez como un castigo divino. En realidad, es un acto de misericordia: Dios preserva a Jonás para darle una segunda oportunidad. Tampoco debemos enfocarnos en la naturaleza del pez (si era ballena, tiburón o un pez especial) sino en la soberanía de Dios que lo preparó.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exegesis-card">
+                    <div class="header-card">
+                        <span class="numero">2</span>
+                        <span class="titulo-card">La oración desde el abismo: fe en el caos</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="contenido-card">
+                        <div class="inner">
+                            <p><strong>Cita:</strong> Jonás 2:1-2</p>
+                            <div class="cita-card">"Entonces oró Jonás a Jehová su Dios desde el vientre del pez, y dijo: Clamé de mi angustia a Jehová, y él me oyó; desde el seno del Seol clamé, y mi voz oíste."</div>
+                            
+                            <p><strong>Término hebreo:</strong> <em>Sheol</em> (שְׁאוֹל)</p>
+                            <p><strong>Análisis:</strong> Sheol es el término hebreo para el lugar de los muertos, un lugar de oscuridad y olvido, donde los muertos esperan sin esperanza. No es el infierno del Nuevo Testamento, sino una región subterránea y sombría. Jonás dice que clamó "desde el seno del Seol", describiendo su experiencia en el vientre del pez como una muerte simbólica. Sin embargo, incluso desde ese lugar de desesperación, Dios escuchó su oración. Esto muestra que el poder de Dios no tiene límites y que su presencia alcanza incluso los lugares más profundos y oscuros.</p>
+                            <p><strong>Verdad exegética:</strong> No hay lugar donde la oración no pueda llegar. Incluso desde la profundidad del Seol, Dios escucha a los que claman a él. La oración de Jonás es un acto de fe en medio del caos absoluto.</p>
+                            <div class="error-card"><strong>❌ Error común:</strong> Algunos lectores piensan que el Seol es el infierno o un lugar de tormento eterno. En el Antiguo Testamento, el Seol es simplemente la morada de los muertos, no un lugar de castigo. Jonás no está siendo castigado en el Seol; está usando una imagen poética para expresar su angustia y la gravedad de su situación.</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exegesis-card">
+                    <div class="header-card">
+                        <span class="numero">3</span>
+                        <span class="titulo-card">La salvación viene de Jehová: la confesión final</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="contenido-card">
+                        <div class="inner">
+                            <p><strong>Cita:</strong> Jonás 2:9</p>
+                            <div class="cita-card">"Mas yo con voz de alabanza te ofreceré sacrificios; pagaré lo que prometí. La salvación es de Jehová."</div>
+                            
+                            <p><strong>Término hebreo:</strong> <em>yeshuah</em> (יְשׁוּעָה)</p>
+                            <p><strong>Análisis:</strong> Yeshu'ah significa "salvación, liberación". Es la misma raíz que el nombre de Jesús (Yeshua). Jonás confiesa que la salvación no viene de los esfuerzos humanos, de los sacrificios ni de los votos, sino exclusivamente de Jehová. Esta es la culminación teológica de su oración: el reconocimiento de que Dios es el único que puede salvar, y que la salvación es un acto de gracia, no de mérito. Es una declaración de fe en medio de la oscuridad.</p>
+                            <p><strong>Verdad exegética:</strong> La salvación es obra exclusiva de Dios. No podemos salvarnos a nosotros mismos ni ganarnos su favor. Jonás, que había huido de Dios, reconoce que solo él puede librar del abismo.</p>
+                            <div class="error-card"><strong>❌ Error común:</strong> Algunos lectores ven esta declaración como un mérito de Jonás que lo hace merecedor de la liberación. En realidad, es una confesión de dependencia total de Dios. Jonás no está diciendo "soy bueno", sino "Dios es el único que puede salvar".</div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+              <div class="mentor-box">
+    <h3>💡 Dato del Mentor</h3>
+    <p><strong>1. Dato central:</strong> La oración de Jonás (cap. 2) está escrita en hebreo poético de alta calidad, con un ritmo y una estructura que indican que fue compuesta para ser cantada en el culto. Es un mosaico de citas de los Salmos (18, 42, 69, 88). Jonás no solo ora, sino que ora con las Escrituras, demostrando que su fe se fundamenta en la tradición de Israel.</p>
+    <p><strong>2. Dato curioso:</strong> El "tres días y tres noches" (1:17) tiene un significado teológico profundo. En la cultura hebrea, tres días representaban un período completo y suficiente para demostrar la muerte. Jonás, al estar tres días en el vientre del pez, experimenta una muerte simbólica. Jesús usará esta misma señal para anunciar su resurrección (Mateo 12:40).</p>
+  </div>
+  <h2>🛤️ PARTE 3: EL ATERRIZAJE (VIDA Y APLICACIÓN)</h2>
+  <h3>Verdad Teológica Central</h3>
+  <p><strong>Dios es soberano sobre toda la creación y no se rinde ante nuestra desobediencia. Él prepara los recursos necesarios (incluso un pez, una planta, un gusano) para guiarnos de vuelta a su voluntad. La oración de Jonás desde el abismo nos enseña que nunca estamos tan lejos de Dios que nuestra voz no pueda alcanzarlo.</strong></p>
+  <h3>Punto de Tensión</h3>
+  <p>Jonás ora desde el vientre del pez, un lugar de oscuridad y muerte, y experimenta la salvación de Dios. Sin embargo, su oración es una mezcla de fe y gratitud. ¿Cuántas veces clamamos a Dios solo en la desesperación, pero olvidamos agradecerle cuando nos libera? ¿Confiamos en que Dios puede salvarnos incluso cuando estamos en el fondo del abismo?</p>
+  <h3>Devocional</h3>
+  <p>Jonás, el profeta que huyó de Dios, se encuentra ahora en el vientre de un pez. Es el lugar más oscuro y absurdo para alabar a Dios. Sin embargo, desde allí, su voz se eleva en una oración de fe y gratitud. No es una oración de queja, sino de reconocimiento de la soberanía de Dios. Jonás recuerda las Escrituras, las cita, y se aferra a la promesa de que "la salvación es de Jehová".
+
+¿Y nosotros? A veces también pasamos por "vientres de pez": momentos de oscuridad, de soledad, de angustia profunda, donde parece que no hay salida. Pero la oración de Jonás nos recuerda que incluso desde el abismo, Dios escucha. No hay lugar tan profundo que su gracia no pueda alcanzarnos. La pregunta no es si Dios puede salvarnos, sino si estamos dispuestos a clamar a él desde nuestras profundidades.</p>
+  <div class="recurso-visual">
+    <img src="assets/img/pez-oracion.jpg" alt="Imagen de aplicación" />
+    <div class="caption">🌿 <strong>Imagen ilustrativa</strong> de la aplicación.</div>
+  </div>
+  <h3>Examen del Corazón (5 preguntas)</h3>
+
+            <div class="preguntas-stack">
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">🤔</span>
+                        <span class="texto-pregunta">¿Hay algún "vientre de pez" en tu vida (una situación difícil) donde Dios te está mostrando su soberanía?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">🧐</span>
+                        <span class="texto-pregunta">¿Cómo respondes a las pruebas: te quejas, te desesperas, o clamas a Dios con fe?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">😯</span>
+                        <span class="texto-pregunta">¿Has experimentado la liberación de Dios y has olvidado agradecerle?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">😥</span>
+                        <span class="texto-pregunta">¿Qué "peces" ha preparado Dios en tu vida para guiarte de vuelta a su voluntad?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pregunta-item">
+                    <div class="header-pregunta">
+                        <span class="num-pregunta">💭</span>
+                        <span class="texto-pregunta">¿Confías en que la salvación viene solo de Jehová, o sigues buscando soluciones en tus propias fuerzas?</span>
+                        <span class="toggle-pregunta">▼</span>
+                    </div>
+                    <div class="detalle-pregunta">
+                        <div class="inner-pregunta">
+                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+              <h3>Pasos Prácticos (5 acciones para la semana)</h3>
+  <div class="preguntas-stack">
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">📝</span>
+        <span class="texto-pregunta">Recuerda: Reflexiona sobre un momento difícil en tu vida donde Dios te mostró su fidelidad. Escríbelo como un recordatorio de su gracia.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">📖</span>
+        <span class="texto-pregunta">Ora: Dedica un tiempo a orar desde tu "vientre de pez" (situación difícil). No te quejes, sino alaba a Dios incluso en medio de la prueba.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">🤝</span>
+        <span class="texto-pregunta">Lee: Lee el Salmo 40, donde el salmista espera pacientemente en el Señor y él lo saca del "pozo de la desesperación".</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">🗣️</span>
+        <span class="texto-pregunta">Agradece: Haz una lista de tres cosas por las que estás agradecido, incluso en medio de las dificultades. La gratitud es un acto de fe.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+    <div class="pregunta-item">
+      <div class="header-pregunta">
+        <span class="num-pregunta">🌱</span>
+        <span class="texto-pregunta">Confía: Hoy, declara sobre tu vida: "La salvación es de Jehová". Confía en que Dios tiene el control, aunque no entiendas su plan.</span>
+        <span class="toggle-pregunta">▼</span>
+      </div>
+      <div class="detalle-pregunta">
+        <div class="inner-pregunta">
+          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <h3>Oración Final</h3>
+  <p>Señor soberano, que preparas el pez y la planta, el viento y el gusano, reconozco que tú tienes el control de mi vida. Perdona las veces que he huido de tu voluntad y he buscado refugio en mis propios caminos. Aún desde las profundidades de mi angustia, clamo a ti, porque sé que me escuchas. Enséñame a orar desde el abismo, a alabarte en medio de la oscuridad, y a confiar en que tu salvación es mi única esperanza. En el nombre de Jesús, que descendió a la muerte y resucitó, amén.</p>
+  <div class="mentor-box">
+    <h3>💡 Dato del Mentor</h3>
+    <p><strong>1. Dato central:</strong> La oración de Jonás (cap. 2) está compuesta en hebreo poético de alta calidad, con un ritmo y estructura que indican que fue diseñada para ser cantada en el culto. Es un mosaico de citas de los Salmos, mostrando que Jonás oraba con las Escrituras.</p>
+    <p><strong>2. Dato curioso:</strong> El "tres días y tres noches" (1:17) tiene un significado teológico profundo. En la cultura hebrea, tres días representaban un período completo y suficiente para demostrar la muerte. Jesús usará esta misma señal para anunciar su resurrección (Mateo 12:40).</p>
+  </div>
+  <hr style="border:0;height:2px;background:rgba(232,184,75,0.2);margin:40px 0 20px 0;">
+  <p style="text-align:center;color:#5a6a80;font-size:0.8rem;">📖 <strong>Fin del estudio</strong> · Comparte este estudio con alguien que necesite escuchar que la misericordia de Dios es más grande que su pecado o que su rencor.</p>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapContainer = document.getElementById('map');
+            if (mapContainer) {
+                const map = L.map('map', { center: [35.0, 28.0], zoom: 5, zoomControl: true, fadeAnimation: true, attributionControl: true, scrollWheelZoom: true, touchZoom: true });
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/">CARTO</a>', subdomains: 'abcd', maxZoom: 19, minZoom: 3 }).addTo(map);
+                const coords = { israel: [32.0, 35.0], jope: [32.05, 34.75], ninive: [36.36, 43.15], tarsis: [36.0, -5.5] };
+                const createIcon = (color, emoji) => L.divIcon({ className: 'custom-div-icon', html: '<div style="background-color:' + color + ';color:white;font-size:20px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:3px solid rgba(255,255,255,0.6);box-shadow:0 4px 12px rgba(0,0,0,0.6);font-weight:bold;text-shadow:0 1px 3px rgba(0,0,0,0.5);">' + emoji + '</div>', iconSize: [44, 44], iconAnchor: [22, 44], popupAnchor: [0, -44] });
+                L.marker(coords.israel, { icon: createIcon('#4caf7a', '✡️') }).addTo(map).bindPopup('<b>🇮🇱 Israel</b><br>Reino del Norte (760 a.C.)<br><small>Jeroboam II · Oseas y Amós profetizaban aquí</small>');
+                L.marker(coords.jope, { icon: createIcon('#4d8fc5', '⛵') }).addTo(map).bindPopup('<b>📍 Jope (Jaffa)</b><br>Puerto desde donde Jonás huyó<br><small>Mismo puerto que usó Salomón (2 Crónicas 2:16)</small>');
+                L.marker(coords.ninive, { icon: createIcon('#e8b84b', '🏛️') }).addTo(map).bindPopup('<b>🏛️ Nínive</b><br>Capital de Asiria · 120.000 hab.<br><small>Dios envió a Jonás a predicar aquí</small>');
+                L.marker(coords.tarsis, { icon: createIcon('#d64f4f', '🌊') }).addTo(map).bindPopup('<b>🌊 Tarsis</b><br>Extremo occidental (España)<br><small>Jonás huyó 3.500 km en dirección contraria</small>');
+                L.polyline([coords.israel, coords.jope, coords.ninive], { color: '#e8b84b', weight: 5, opacity: 0.9, smoothFactor: 1 }).addTo(map).bindPopup('🟡 Ruta de Dios: Israel → Jope → Nínive');
+                L.polyline([coords.israel, coords.jope, coords.tarsis], { color: '#d64f4f', weight: 4, opacity: 0.8, smoothFactor: 1, dashArray: '12, 12' }).addTo(map).bindPopup('🔴 Huida de Jonás: Israel → Jope → Tarsis');
+                map.fitBounds(L.latLngBounds([coords.tarsis, coords.ninive, coords.israel, coords.jope]), { padding: [50, 50], maxZoom: 6 });
+                L.control.zoom({ position: 'bottomright' }).addTo(map);
+                L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
+                window.addEventListener('resize', function() { map.invalidateSize(); });
+            }
+
+            // Línea de tiempo
+            var events = [
+                { year: '800 a.C.', label: 'Imperio Asirio', title: '🏛️ Apogeo del Imperio Asirio', desc: 'Asiria se convierte en la superpotencia del Cercano Oriente.' },
+                { year: '760 a.C.', label: '⭐ Jonás', title: '📖 Jonás es llamado por Dios', desc: 'Dios envía a Jonás a predicar a Nínive.' },
+                { year: '722 a.C.', label: 'Caída Samaria', title: '⚔️ Asiria conquista Israel', desc: 'El reino del Norte cae ante los asirios.' },
+                { year: '701 a.C.', label: 'Senaquerib', title: '🛡️ Senaquerib asedia Jerusalén', desc: 'El ángel del Señor salva a Jerusalén.' },
+                { year: '612 a.C.', label: 'Caída Nínive', title: '🔥 Nínive es destruida', desc: 'Una coalición destruye Nínive.' }
+            ];
+            var infoDiv = document.getElementById('timelineInfo');
+            var progress = document.getElementById('timelineProgress');
+            var eventsEls = document.querySelectorAll('.timeline-event');
+            function updateTimeline(index) {
+                var ev = events[index];
+                if (infoDiv) { infoDiv.innerHTML = '<div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">' + ev.title + '</div><div style="color:#b8c7e0;font-size:0.85rem;">' + ev.desc + '</div>'; }
+                if (progress) { progress.style.width = ((index / (events.length - 1)) * 100) + '%'; }
+                eventsEls.forEach(function(el, i) {
+                    var dot = el.querySelector('div');
+                    if (dot) {
+                        dot.style.background = (i <= index) ? '#e8b84b' : '#1a2538';
+                        dot.style.borderColor = (i <= index) ? '#e8b84b' : 'rgba(255,255,255,0.15)';
+                        dot.style.boxShadow = (i === index) ? '0 0 20px rgba(232,184,75,0.4)' : 'none';
+                    }
+                });
+            }
+            eventsEls.forEach(function(el, idx) {
+                el.addEventListener('click', function() { updateTimeline(idx); });
+                el.addEventListener('touchend', function(e) { e.preventDefault(); updateTimeline(idx); });
+            });
+            if (eventsEls.length > 0) updateTimeline(0);
+
+            // Tarjetas de exégesis
+            var cards = document.querySelectorAll('.exegesis-card');
+            cards.forEach(function(card) {
+                card.addEventListener('click', function() {
+                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
+                    this.classList.toggle('activa');
+                }.bind(card));
+                card.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
+                    this.classList.toggle('activa');
+                }.bind(card));
+            });
+            if (cards.length > 0) cards[0].classList.add('activa');
+
+            // Preguntas en acordeón
+            var preguntas = document.querySelectorAll('.pregunta-item');
+            preguntas.forEach(function(item) {
+                item.addEventListener('click', function() { this.classList.toggle('activa'); }.bind(item));
+                item.addEventListener('touchend', function(e) { e.preventDefault(); this.classList.toggle('activa'); }.bind(item));
+            });
+            if (preguntas.length > 0) preguntas[0].classList.add('activa');
+
+            // Anillos
+            var anillos = document.querySelectorAll('.anillo-item');
+            anillos.forEach(function(item) {
+                item.addEventListener('click', function() {
+                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
+                    this.classList.toggle('activo');
+                }.bind(item));
+                item.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
+                    this.classList.toggle('activo');
+                }.bind(item));
+            });
+            if (anillos.length > 0) anillos[0].classList.add('activo');
+        });
+        </script>
+</body>
+</html>
