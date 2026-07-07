@@ -470,18 +470,36 @@ Este relato nos confronta con una pregunta incómoda: ¿quién está más dispue
 
             // Tarjetas de exégesis
             var cards = document.querySelectorAll('.exegesis-card');
-            cards.forEach(function(card) {
-                card.addEventListener('click', function() {
-                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
-                    this.classList.toggle('activa');
-                }.bind(card));
-                card.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
-                    this.classList.toggle('activa');
-                }.bind(card));
+            const cards = document.querySelectorAll('.exegesis-card');
+cards.forEach(function(card) {
+    const header = card.querySelector('.header-card');
+    if (header) {
+        // Evento para clic (escritorio)
+        header.addEventListener('click', function(e) {
+            e.stopPropagation(); // Evita que el clic se propague al contenido
+            cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+            card.classList.toggle('activa');
+        });
+        // Evento para toque (móvil)
+        header.addEventListener('touchend', function(e) {
+            e.preventDefault(); // Previene el comportamiento predeterminado
+            e.stopPropagation(); // Evita que el toque se propague al contenido
+            cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+            card.classList.toggle('activa');
+        });
+        // Desactivar eventos en el contenido de la tarjeta
+        const contenido = card.querySelector('.contenido-card');
+        if (contenido) {
+            contenido.addEventListener('click', function(e) {
+                e.stopPropagation(); // Evita que el clic en el contenido cierre la tarjeta
             });
-            if (cards.length > 0) cards[0].classList.add('activa');
+            contenido.addEventListener('touchend', function(e) {
+                e.stopPropagation(); // Evita que el toque en el contenido cierre la tarjeta
+            });
+        }
+    }
+});
+if (cards.length > 0) cards[0].classList.add('activa');
 
             // Preguntas en acordeón
             var preguntas = document.querySelectorAll('.pregunta-item');
