@@ -30,17 +30,6 @@
         .recurso-visual img { width: 100%; height: auto; display: block; }
         .recurso-visual .caption { padding: 12px 18px; background: rgba(0, 0, 0, 0.3); color: #8899b0; font-size: 0.9rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.04); }
         #map { width: 100%; height: 500px; background: #0e1625; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.04); }
-        .quiasmo-grid { display: flex; flex-direction: column; gap: 4px; padding: 10px 0; }
-        .quiasmo-item { display: flex; align-items: center; padding: 10px 16px; background: rgba(255, 255, 255, 0.02); border-radius: 10px; border-left: 3px solid rgba(232, 184, 75, 0.2); transition: background 0.3s; }
-        .quiasmo-item:hover { background: rgba(255, 255, 255, 0.04); }
-        .quiasmo-item .letra { font-size: 1.6rem; font-weight: 700; color: #e8b84b; min-width: 44px; }
-        .quiasmo-item .contenido { flex: 1; }
-        .quiasmo-item .contenido .label { color: #e8d5b0; font-weight: 600; }
-        .quiasmo-item .contenido .detalle { color: #8899b0; font-size: 0.85rem; }
-        .quiasmo-item.centro { background: rgba(232, 184, 75, 0.06); border-left-color: #e8b84b; box-shadow: 0 0 30px rgba(232, 184, 75, 0.02); }
-        .quiasmo-item.centro .letra { color: #f0d080; }
-        .quiasmo-item.centro .contenido .label { color: #f0d080; }
-        .quiasmo-flecha { text-align: center; color: #5a6a80; font-size: 0.8rem; letter-spacing: 4px; padding: 2px 0; }
         .exegesis-stack { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
         .exegesis-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 16px 20px; transition: all 0.3s ease; user-select: none; }
         .exegesis-card:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
@@ -57,8 +46,6 @@
         .exegesis-card .contenido-card .inner .cita-card { background: rgba(255, 255, 255, 0.02); border-left: 3px solid #e8b84b; padding: 10px 16px; margin: 8px 0 12px 0; font-style: italic; color: #d0d7e8; }
         .exegesis-card .contenido-card .inner .error-card { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 10px 16px; margin: 8px 0 12px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.9rem; }
         .exegesis-card .contenido-card .inner .error-card strong { color: #d64f4f; }
-        .exegesis-card .contenido-card .inner .imagen-card { margin: 12px 0; }
-        .exegesis-card .contenido-card .inner .imagen-card img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.04); }
         .preguntas-stack { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 24px 0; }
         .pregunta-item { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 12px 16px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
         .pregunta-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.12); }
@@ -72,25 +59,6 @@
         .pregunta-item.activa .detalle-pregunta { max-height: 200px; opacity: 1; margin-top: 8px; }
         .pregunta-item .detalle-pregunta .inner-pregunta { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 10px; color: #b8c7e0; font-size: 0.9rem; line-height: 1.5; }
         .pregunta-item .detalle-pregunta .inner-pregunta strong { color: #e8d5b0; }
-        .anillos-container { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; }
-        .anillo-item { width: 100%; max-width: 620px; padding: 14px 18px; background: rgba(255, 255, 255, 0.02); border: 2px solid rgba(255, 255, 255, 0.04); border-radius: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.3s; user-select: none; }
-        .anillo-item:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
-        .anillo-item.centro { background: rgba(232, 184, 75, 0.05); border-color: rgba(232, 184, 75, 0.12); }
-        .anillo-item.centro .label { color: #f0d080; }
-        .anillo-item .icono { font-size: 1.5rem; min-width: 40px; text-align: center; }
-        .anillo-item .info { flex: 1; }
-        .anillo-item .info .label { color: #e8d5b0; font-weight: 600; font-size: 0.95rem; }
-        .anillo-item .info .detalle { color: #8899b0; font-size: 0.8rem; opacity: 0.7; }
-        .anillo-item .toggle { color: #5a6a80; font-size: 0.7rem; transition: transform 0.3s; }
-        .anillo-item.activo .toggle { color: #c9a87c; transform: rotate(180deg); }
-        .anillo-preguntas { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease; opacity: 0; width: 100%; max-width: 600px; }
-        .anillo-item.activo + .anillo-preguntas { max-height: 300px; opacity: 1; margin-top: 4px; }
-        .anillo-preguntas .inner { background: rgba(255, 255, 255, 0.02); border-radius: 12px; padding: 14px 18px; border: 1px solid rgba(255, 255, 255, 0.04); }
-        .anillo-preguntas .inner .q { color: #b8c7e0; font-size: 0.85rem; padding: 4px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.03); }
-        .anillo-preguntas .inner .q:last-child { border-bottom: none; }
-        .anillo-preguntas .inner .q .num { color: #e8b84b; font-weight: 700; margin-right: 8px; }
-        .anillo-preguntas .inner .q strong { color: #e8d5b0; }
-        .conector-linea { width: 2px; height: 12px; background: rgba(255, 255, 255, 0.04); }
         @media (max-width: 768px) {
             .container { padding: 24px 16px; }
             h1 { font-size: 1.8rem; }
@@ -105,12 +73,6 @@
             .container { padding: 16px 12px; }
             h1 { font-size: 1.4rem; }
             h2 { font-size: 1.2rem; }
-            .quiasmo-item { padding: 8px 12px; flex-wrap: wrap; }
-            .quiasmo-item .letra { min-width: 32px; font-size: 1.2rem; }
-            .anillo-item { padding: 10px 12px; flex-wrap: wrap; }
-            .anillo-item .icono { min-width: 30px; font-size: 1.2rem; }
-            .cita { padding: 12px 16px; font-size: 0.9rem; }
-            .mentor-box { padding: 14px 16px; }
             .exegesis-card .header-card .titulo-card { font-size: 0.85rem; }
             .pregunta-item .header-pregunta .texto-pregunta { font-size: 0.8rem; }
             #map { height: 280px; }
@@ -118,7 +80,6 @@
     </style>
 </head>
 <body>
-    <!-- ===== CONTENIDO COMPLETO DEL ESTUDIO 1 ===== -->
     <div class="container">
         <h1>📖 Estudio del Libro de Jonás</h1>
         <p style="text-align:center;color:#8899b0;margin-bottom:24px;">La huida de Jonás · Jonás 1:1-3</p>
