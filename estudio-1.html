@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Estudio del Libro de Jonás - La huida de Jonás</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estudio del Libro de Jonás - La huida de Jonás</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* ===== ESTILOS ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Roboto, system-ui, sans-serif; background: #0b0f1a; color: #e8d5b0; padding: 20px; line-height: 1.7; }
         .container { max-width: 1000px; margin: 0 auto; background: #121a2a; padding: 40px 32px; border-radius: 28px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 255, 255, 0.04); }
@@ -41,10 +42,10 @@
         .quiasmo-item.centro .contenido .label { color: #f0d080; }
         .quiasmo-flecha { text-align: center; color: #5a6a80; font-size: 0.8rem; letter-spacing: 4px; padding: 2px 0; }
         .exegesis-stack { display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
-        .exegesis-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 16px 20px; cursor: pointer; transition: all 0.3s ease; user-select: none; }
+        .exegesis-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 16px; padding: 16px 20px; transition: all 0.3s ease; user-select: none; }
         .exegesis-card:hover { background: rgba(255, 255, 255, 0.04); border-color: rgba(232, 184, 75, 0.15); }
         .exegesis-card.activa { background: rgba(232, 184, 75, 0.06); border-color: #e8b84b; box-shadow: 0 0 20px rgba(232, 184, 75, 0.05); }
-        .exegesis-card .header-card { display: flex; align-items: center; gap: 12px; }
+        .exegesis-card .header-card { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 4px 0; }
         .exegesis-card .header-card .numero { font-size: 1.2rem; font-weight: 700; color: #e8b84b; min-width: 32px; }
         .exegesis-card .header-card .titulo-card { color: #e8d5b0; font-weight: 600; font-size: 1rem; }
         .exegesis-card .header-card .toggle-icon { margin-left: auto; color: #5a6a80; font-size: 0.8rem; transition: transform 0.3s; }
@@ -114,244 +115,239 @@
             .pregunta-item .header-pregunta .texto-pregunta { font-size: 0.8rem; }
             #map { height: 280px; }
         }
-        </style>
+    </style>
 </head>
 <body>
-<div class="container">
-  <h1>📖 Estudio del Libro de Jonás</h1>
-  <p style="text-align:center;color:#8899b0;margin-bottom:24px;">La huida de Jonás · Jonás 1:1-3</p>
-  <h2>🌍 PARTE 1: EL ESCENARIO (CONTEXTO)</h2>
-  <h3>📍 Sección A: Contextos y Conexiones</h3>
-  <p><strong>📍 Lugar:</strong> Jope (actual Jaffa, Israel), Mar Mediterráneo, Tarsis (posiblemente Tartessos, en España), y Nínive (actual Irak).</p>
-  <p><strong>📅 Fecha:</strong> 760 a.C. (reinado de Jeroboam II en Israel).</p>
-  <hr style="border:0;height:1px;background:rgba(255,255,255,0.05);margin:20px 0;">
-  <h4>Contexto Histórico / Político</h4>
-  <p>Asiria era el imperio más temido del antiguo Oriente Próximo. Su brutalidad era legendaria: desollaban vivos a sus enemigos, empalaban a los líderes rebeldes y deportaban poblaciones enteras para desmantelar identidades nacionales. Los relieves asirios encontrados por arqueólogos muestran escenas de ejecuciones masivas y ciudades arrasadas.
+    <!-- ===== CONTENIDO COMPLETO DEL ESTUDIO 1 ===== -->
+    <div class="container">
+        <h1>📖 Estudio del Libro de Jonás</h1>
+        <p style="text-align:center;color:#8899b0;margin-bottom:24px;">La huida de Jonás · Jonás 1:1-3</p>
 
-Israel, bajo Jeroboam II (reinado: 793-753 a.C.), vivía una época de paz y expansión territorial. Sin embargo, los profetas contemporáneos —Oseas y Amós— denunciaban la idolatría, la injusticia social y la hipocresía religiosa. El pueblo confiaba en su estatus de "elegido" mientras oprimía a los pobres y adoraba a Baal.
+        <!-- PARTE 1 -->
+        <h2>🌍 PARTE 1: EL ESCENARIO (CONTEXTO)</h2>
+        <h3>📍 Sección A: Contextos y Conexiones</h3>
+        <p><strong>📍 Lugar:</strong> Jope (actual Jaffa, Israel), Mar Mediterráneo, Tarsis (posiblemente Tartessos, en España), y Nínive (actual Irak).</p>
+        <p><strong>📅 Fecha:</strong> 760 a.C. (reinado de Jeroboam II en Israel).</p>
+        <hr style="border:0;height:1px;background:rgba(255,255,255,0.05);margin:20px 0;">
+        <h4>Contexto Histórico / Político</h4>
+        <p>Asiria era el imperio más temido del antiguo Oriente Próximo. Su brutalidad era legendaria: desollaban vivos a sus enemigos, empalaban a los líderes rebeldes y deportaban poblaciones enteras para desmantelar identidades nacionales. Los relieves asirios encontrados por arqueólogos muestran escenas de ejecuciones masivas y ciudades arrasadas.</p>
+        <p>Israel, bajo Jeroboam II (reinado: 793-753 a.C.), vivía una época de paz y expansión territorial. Sin embargo, los profetas contemporáneos —Oseas y Amós— denunciaban la idolatría, la injusticia social y la hipocresía religiosa. El pueblo confiaba en su estatus de "elegido" mientras oprimía a los pobres y adoraba a Baal.</p>
+        <p>En ese contexto, Dios envía a Jonás a predicar a <strong>Nínive</strong>, la capital de Asiria. Era como pedirle a un judío ortodoxo del siglo XX que fuera a predicar a Berlín en 1942. La misión era teológicamente ofensiva y políticamente suicida.</p>
 
-En ese contexto, Dios envía a Jonás a predicar a Nínive, la capital de Asiria. Era como pedirle a un judío ortodoxo del siglo XX que fuera a predicar a Berlín en 1942. La misión era teológicamente ofensiva y políticamente suicida.</p>
-  <div class="recurso-visual">
-    <div id="map"></div>
-    <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>
-  </div>
-  <div class="recurso-visual">
-    <img src="assets/img/ninive.jpg" alt="Imagen de contexto" />
-    <div class="caption">🌅 <strong>Imagen ilustrativa</strong> del contexto histórico.</div>
-  </div>
-  <h4>Contexto Cultural / Teológico</h4>
-  <p>Un profeta judío no debía contaminarse con gentiles. La teología popular de Israel era ferozmente nacionalista: creían que la misericordia de Dios era exclusiva para el pueblo de la Alianza. Jonás compartía esa visión, y por eso huye: no por miedo a los asirios, sino porque sabía que Dios era misericordioso (Jonás 4:2) y no quería que sus enemigos fueran perdonados.</p>
-  <h4>Conexiones Literarias (AT y NT)</h4>
-  <p><strong>AT:</strong> Jonás es mencionado en 2 Reyes 14:25 como un profeta que anunció la restauración territorial de Israel bajo Jeroboam II. La ciudad de Nínive es mencionada en Génesis 10:11-12 como fundada por Nimrod, el cazador poderoso. Era una ciudad con una larga historia de oposición a Dios.</p>
-  <p><strong>NT:</strong> Jesús usa a Jonás como señal de su muerte y resurrección (Mateo 12:38-41, Lucas 11:29-32). La generación incrédula de Jesús será juzgada por los ninivitas, porque ellos se arrepintieron con menos evidencia. Jonás no hizo milagros, solo predicó; Jesús hizo milagros y la gente no creyó.</p>
-  <div class="mentor-box">
-    <h3>💡 Dato del Mentor</h3>
-    <p><strong>1. Dato central:</strong> Nínive tenía más de 120.000 habitantes (Jonás 4:11) y era la ciudad más grande del mundo antiguo en esa época. Sus murallas medían 12 km de perímetro y tenían 15 puertas monumentales. Era tan extensa que se necesitaban 3 días para recorrerla a pie (Jonás 3:3).</p>
-    <p><strong>2. Dato curioso:</strong> El puerto de Jope (actual Jaffa, barrio de Tel Aviv) era el mismo puerto desde el que Salomón partió para traer madera de cedro del Líbano para el Templo (2 Crónicas 2:16). Jonás elige el mismo puerto para huir... pero en dirección opuesta a la voluntad de Dios. La ironía es poderosa: el mismo lugar que sirvió para construir la casa de Dios, ahora sirve para huir de él.</p>
-  </div>
-  <h2>📖 PARTE 2: EXÉGESIS (TÉRMINOS CLAVE EN HEBREO)</h2>
+        <!-- MAPA -->
+        <div class="recurso-visual">
+            <div id="map"></div>
+            <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>
+        </div>
 
-            <div class="exegesis-stack">
-                
-                <div class="exegesis-card">
-                    <div class="header-card">
-                        <span class="numero">1</span>
-                        <span class="titulo-card">La orden divina: un verbo que exige movimiento inmediato</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="contenido-card">
-                        <div class="inner">
-                            <p><strong>Cita:</strong> Jonás 1:1-2</p>
-                            <div class="cita-card">"Vino palabra de Jehová a Jonás, hijo de Amitai, diciendo: Levántate, ve a Nínive, aquella gran ciudad, y pregona contra ella; porque ha subido su maldad delante de mí."</div>
-                            
-                            <p><strong>Término hebreo:</strong> <em>qum</em> (קוּם)</p>
-                            <p><strong>Análisis:</strong> En hebreo, qum no significa solo "levántate" físicamente, sino "ponte en pie y actúa ahora". Es un imperativo que implica urgencia y movimiento decisivo. Dios no da opción a Jonás; es una orden militar. En el Antiguo Testamento, qum se usa frecuentemente cuando Dios llama a un profeta o juez a una misión específica (ej: Gedeón, Eliseo). No hay espacio para la deliberación.</p>
-                            <p><strong>Verdad exegética:</strong> La palabra de Dios no es una sugerencia, sino una comisión que exige obediencia inmediata, sin excusas. Cuando Dios llama, el "levantarse" implica dejar atrás la comodidad y la zona de confort.</p>
-                            <div class="error-card"><strong>❌ Error común:</strong> No significa que Dios siempre nos llame a misiones geográficas o a cambiar de país. En el NT, el llamado es a "id y haced discípulos" (Mateo 28), pero qum aquí subraya la urgencia de la obediencia, no la ubicación física. Muchos lectores reducen qum a "viajar", cuando en realidad es "obedecer ahora". Tampoco significa que Dios nos hable audiblemente de la misma manera; hoy su palabra nos llega por las Escrituras.</div>
-                        </div>
+        <!-- IMAGEN -->
+        <div class="recurso-visual">
+            <img src="assets/img/ninive.jpg" alt="Imagen de contexto" />
+            <div class="caption">🌅 <strong>Imagen ilustrativa</strong> del contexto histórico.</div>
+        </div>
+
+        <h4>Contexto Cultural / Teológico</h4>
+        <p>Un profeta judío no debía contaminarse con gentiles. La teología popular de Israel era ferozmente nacionalista: creían que la misericordia de Dios era exclusiva para el pueblo de la Alianza. Jonás compartía esa visión, y por eso huye: <strong>no por miedo a los asirios, sino porque sabía que Dios era misericordioso</strong> (Jonás 4:2) y no quería que sus enemigos fueran perdonados.</p>
+
+        <h4>Conexiones Literarias (AT y NT)</h4>
+        <p><strong>AT:</strong> Jonás es mencionado en <strong>2 Reyes 14:25</strong> como un profeta que anunció la restauración territorial de Israel bajo Jeroboam II. La ciudad de Nínive es mencionada en <strong>Génesis 10:11-12</strong> como fundada por Nimrod, el cazador poderoso. Era una ciudad con una larga historia de oposición a Dios.</p>
+        <p><strong>NT:</strong> Jesús usa a Jonás como <strong>señal de su muerte y resurrección</strong> (Mateo 12:38-41, Lucas 11:29-32). La generación incrédula de Jesús será juzgada por los ninivitas, porque ellos se arrepintieron con menos evidencia. Jonás no hizo milagros, solo predicó; Jesús hizo milagros y la gente no creyó.</p>
+
+        <div class="mentor-box">
+            <h3>💡 Dato del Mentor</h3>
+            <p><strong>1. Dato central:</strong> Nínive tenía más de <strong>120.000 habitantes</strong> (Jonás 4:11) y era la ciudad más grande del mundo antiguo en esa época. Sus murallas medían <strong>12 km de perímetro</strong> y tenían <strong>15 puertas monumentales</strong>. Era tan extensa que se necesitaban <strong>3 días</strong> para recorrerla a pie (Jonás 3:3).</p>
+            <p><strong>2. Dato curioso:</strong> El puerto de Jope (actual Jaffa, barrio de Tel Aviv) era el mismo puerto desde el que Salomón partió para traer madera de cedro del Líbano para el Templo (2 Crónicas 2:16). Jonás elige el mismo puerto para huir... pero en dirección opuesta a la voluntad de Dios. La ironía es poderosa: <strong>el mismo lugar que sirvió para construir la casa de Dios, ahora sirve para huir de él</strong>.</p>
+        </div>
+
+        <!-- PARTE 2 -->
+        <h2>📖 PARTE 2: EXÉGESIS (TÉRMINOS CLAVE EN HEBREO)</h2>
+
+        <div class="exegesis-stack">
+            <!-- Tarjeta 1 -->
+            <div class="exegesis-card">
+                <div class="header-card">
+                    <span class="numero">1</span>
+                    <span class="titulo-card">La orden divina: un verbo que exige movimiento inmediato</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="contenido-card">
+                    <div class="inner">
+                        <p><strong>Cita:</strong> Jonás 1:1-2</p>
+                        <div class="cita-card">"Vino palabra de Jehová a Jonás, hijo de Amitai, diciendo: Levántate, ve a Nínive, aquella gran ciudad, y pregona contra ella; porque ha subido su maldad delante de mí."</div>
+                        <p><strong>Término hebreo:</strong> <em>qum</em> (קוּם)</p>
+                        <p><strong>Análisis:</strong> En hebreo, <em>qum</em> no significa solo "levántate" físicamente, sino "ponte en pie y actúa ahora". Es un imperativo que implica urgencia y movimiento decisivo. Dios no da opción a Jonás; es una orden militar. En el Antiguo Testamento, <em>qum</em> se usa frecuentemente cuando Dios llama a un profeta o juez a una misión específica (ej: Gedeón, Eliseo). No hay espacio para la deliberación.</p>
+                        <p><strong>Verdad exegética:</strong> La palabra de Dios no es una sugerencia, sino una comisión que exige obediencia inmediata, sin excusas. Cuando Dios llama, el "levantarse" implica dejar atrás la comodidad y la zona de confort.</p>
+                        <div class="error-card"><strong>❌ Error común:</strong> No significa que Dios siempre nos llame a misiones geográficas o a cambiar de país. En el NT, el llamado es a "id y haced discípulos" (Mateo 28), pero <em>qum</em> aquí subraya la urgencia de la obediencia, no la ubicación física. Muchos lectores reducen <em>qum</em> a "viajar", cuando en realidad es "obedecer ahora".</div>
                     </div>
                 </div>
-                
-                <div class="exegesis-card">
-                    <div class="header-card">
-                        <span class="numero">2</span>
-                        <span class="titulo-card">El descenso: la geografía espiritual de la huida</span>
-                        <span class="toggle-icon">▼</span>
-                    </div>
-                    <div class="contenido-card">
-                        <div class="inner">
-                            <p><strong>Cita:</strong> Jonás 1:3</p>
-                            <div class="cita-card">"Y Jonás se levantó para huir de la presencia de Jehová a Tarsis, y descendió a Jope, y halló un barco que partía para Tarsis; y pagó su pasaje, y descendió a él, para irse con ellos a Tarsis, de delante de Jehová."</div>
-                            
-                            <p><strong>Término hebreo:</strong> <em>yarad</em> (יָרַד)</p>
-                            <p><strong>Análisis:</strong> Yarad significa "descender, bajar". Jonás desciende a Jope, desciende al barco, desciende a la bodega (cap. 1:5), y finalmente desciende al abismo (cap. 2). Es un movimiento físico que refleja un descenso espiritual: alejarse de Dios es bajar al caos. En la cosmovisión hebrea, "subir" se asocia con acercarse a Dios (el Templo estaba en una colina), y "bajar" con alejarse de él. Cada paso de huida es un paso hacia las profundidades del juicio.</p>
-                            <p><strong>Verdad exegética:</strong> Huir de Dios no es un movimiento horizontal (geográfico), sino vertical (espiritual). Cada paso de desobediencia nos hunde más en el caos y la oscuridad, aunque aparentemente estemos "avanzando" hacia nuestros propios planes.</p>
-                            <div class="error-card"><strong>❌ Error común:</strong> No es un simple viaje físico. Muchos lectores ven solo un mapa; el autor sagrado ve una caída moral. No es "Jonás fue a Tarsis", es "Jonás descendió a la muerte". Reducir yarad a geografía es perder la teología del texto. Tampoco significa que todo viaje o desplazamiento sea malo; el problema es la dirección de la huida, no el movimiento en sí.</div>
-                        </div>
-                    </div>
-                </div>
-                
             </div>
-              <div class="mentor-box">
-    <h3>💡 Dato del Mentor</h3>
-    <p><strong>1. Dato central:</strong> El pez que engulló a Jonás no se especifica como "ballena" en el texto hebreo. La palabra es dag gadol (pez grande). Los judíos rabínicos debatían si era un leviatán (criatura marina mítica) o un pez creado especialmente para ese momento. Lo importante no es la especie, sino que Dios es soberano sobre la creación para salvar y juzgar.</p>
-    <p><strong>2. Dato curioso:</strong> El salmo de Jonás (cap. 2) está escrito en hebreo poético casi perfecto, con referencias a los Salmos 18, 42, 69 y 88. Pero Jonás lo recita dentro del pez, es decir, en el lugar más oscuro y absurdo para alabar a Dios. Es una oración de fe en medio del caos absoluto.</p>
-  </div>
-  <h2>🛤️ PARTE 3: EL ATERRIZAJE (VIDA Y APLICACIÓN)</h2>
-  <h3>Verdad Teológica Central</h3>
-  <p><strong>La obediencia a Dios no es opcional ni negociable; es urgente y exige una respuesta inmediata. Cuando Dios llama, nuestro "levantarnos" debe ser un acto de fe que deja atrás nuestras excusas y comodidades.</strong></p>
-  <h3>Punto de Tensión</h3>
-  <p>Jonás era un profeta que conocía la voluntad de Dios, pero huyó porque la misión no encajaba con sus expectativas. ¿Cuántas veces hacemos lo mismo? ¿Huyes de Dios cuando te pide algo incómodo, arriesgado o que desafía tus prejuicios? La tensión está entre nuestra comodidad y la obediencia radical.</p>
-  <h3>Devocional</h3>
-  <p>Jonás no huyó por miedo a los asirios; huyó porque sabía que Dios es misericordioso y no quería que sus enemigos fueran perdonados. Su huida fue un acto de desobediencia calculada, disfrazada de "teología correcta". Esa es la ironía más profunda del libro: el profeta que conoce a Dios mejor que nadie, es el que menos confía en su carácter.
-
-¿Y nosotros? A veces también huimos, pero no necesariamente cambiando de país. Huimos cuando ignoramos una voz que nos incomoda, cuando postergamos una decisión que sabemos que debemos tomar, cuando preferimos nuestras propias "Tarsis" antes que la voluntad de Dios. La buena noticia es que Dios no se rinde. Como con Jonás, nos persigue, nos confronta y nos da segundas oportunidades. La pregunta no es si huimos, sino si estamos dispuestos a volver.</p>
-  <h3>Examen del Corazón (5 preguntas)</h3>
-
-            <div class="preguntas-stack">
-                
-                <div class="pregunta-item">
-                    <div class="header-pregunta">
-                        <span class="num-pregunta">🤔</span>
-                        <span class="texto-pregunta">¿Hay alguna "Nínive" en tu vida a la que Dios te está llamando a ir, pero te estás resistiendo?</span>
-                        <span class="toggle-pregunta">▼</span>
-                    </div>
-                    <div class="detalle-pregunta">
-                        <div class="inner-pregunta">
-                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
-                        </div>
+            <!-- Tarjeta 2 -->
+            <div class="exegesis-card">
+                <div class="header-card">
+                    <span class="numero">2</span>
+                    <span class="titulo-card">El descenso: la geografía espiritual de la huida</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="contenido-card">
+                    <div class="inner">
+                        <p><strong>Cita:</strong> Jonás 1:3</p>
+                        <div class="cita-card">"Y Jonás se levantó para huir de la presencia de Jehová a Tarsis, y descendió a Jope, y halló un barco que partía para Tarsis; y pagó su pasaje, y descendió a él, para irse con ellos a Tarsis, de delante de Jehová."</div>
+                        <p><strong>Término hebreo:</strong> <em>yarad</em> (יָרַד)</p>
+                        <p><strong>Análisis:</strong> <em>Yarad</em> significa "descender, bajar". Jonás <em>desciende</em> a Jope, <em>desciende</em> al barco, <em>desciende</em> a la bodega (cap. 1:5), y finalmente <em>desciende</em> al abismo (cap. 2). Es un movimiento físico que refleja un descenso espiritual: alejarse de Dios es bajar al caos. En la cosmovisión hebrea, "subir" se asocia con acercarse a Dios (el Templo estaba en una colina), y "bajar" con alejarse de él.</p>
+                        <p><strong>Verdad exegética:</strong> Huir de Dios no es un movimiento horizontal (geográfico), sino vertical (espiritual). Cada paso de desobediencia nos hunde más en el caos y la oscuridad.</p>
+                        <div class="error-card"><strong>❌ Error común:</strong> No es un simple viaje físico. Muchos lectores ven solo un mapa; el autor sagrado ve una caída moral. No es "Jonás fue a Tarsis", es "Jonás descendió a la muerte".</div>
                     </div>
                 </div>
-                
-                <div class="pregunta-item">
-                    <div class="header-pregunta">
-                        <span class="num-pregunta">🧐</span>
-                        <span class="texto-pregunta">¿Qué "Tarsis" (lugar de escape) usas para evitar la voluntad de Dios? (ej: el trabajo, la televisión, el exceso de actividades, las excusas).</span>
-                        <span class="toggle-pregunta">▼</span>
-                    </div>
-                    <div class="detalle-pregunta">
-                        <div class="inner-pregunta">
-                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pregunta-item">
-                    <div class="header-pregunta">
-                        <span class="num-pregunta">😯</span>
-                        <span class="texto-pregunta">¿Has usado la teología (como Jonás) para justificar tu desobediencia? (ej: "Dios no quiere que me meta en política", "No es mi don", "No estoy preparado").</span>
-                        <span class="toggle-pregunta">▼</span>
-                    </div>
-                    <div class="detalle-pregunta">
-                        <div class="inner-pregunta">
-                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pregunta-item">
-                    <div class="header-pregunta">
-                        <span class="num-pregunta">😥</span>
-                        <span class="texto-pregunta">¿Cómo respondes cuando Dios es bueno con alguien que consideras "indigno" de su gracia?</span>
-                        <span class="toggle-pregunta">▼</span>
-                    </div>
-                    <div class="detalle-pregunta">
-                        <div class="inner-pregunta">
-                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="pregunta-item">
-                    <div class="header-pregunta">
-                        <span class="num-pregunta">💭</span>
-                        <span class="texto-pregunta">¿Qué "plantas" (consuelos temporales) valoras más que el carácter eterno de Dios?</span>
-                        <span class="toggle-pregunta">▼</span>
-                    </div>
-                    <div class="detalle-pregunta">
-                        <div class="inner-pregunta">
-                            <!-- Aquí puedes poner un texto personalizado si quieres, o dejarlo vacío -->
-                        </div>
-                    </div>
-                </div>
-                
             </div>
-              <h3>Pasos Prácticos (5 acciones para la semana)</h3>
-  <div class="preguntas-stack">
-    <div class="pregunta-item">
-      <div class="header-pregunta">
-        <span class="num-pregunta">📝</span>
-        <span class="texto-pregunta">Identifica: Piensa en un área concreta donde estás "durmiendo" o postergando una obediencia que sabes que debes dar. Escríbela en un papel.</span>
-        <span class="toggle-pregunta">▼</span>
-      </div>
-      <div class="detalle-pregunta">
-        <div class="inner-pregunta">
-          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
         </div>
-      </div>
-    </div>
-    <div class="pregunta-item">
-      <div class="header-pregunta">
-        <span class="num-pregunta">📖</span>
-        <span class="texto-pregunta">Confiesa: Comparte con un amigo cristiano de confianza esa área de huida. La confesión rompe el poder del pecado.</span>
-        <span class="toggle-pregunta">▼</span>
-      </div>
-      <div class="detalle-pregunta">
-        <div class="inner-pregunta">
-          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+
+        <div class="mentor-box">
+            <h3>💡 Dato del Mentor</h3>
+            <p><strong>1. Dato central:</strong> El pez que engulló a Jonás no se especifica como "ballena" en el texto hebreo. La palabra es <em>dag gadol</em> (pez grande). Los judíos rabínicos debatían si era un leviatán o un pez creado especialmente para ese momento. Lo importante no es la especie, sino que <strong>Dios es soberano sobre la creación</strong> para salvar y juzgar.</p>
+            <p><strong>2. Dato curioso:</strong> El salmo de Jonás (cap. 2) está escrito en hebreo poético casi perfecto, con referencias a los Salmos 18, 42, 69 y 88. Pero Jonás lo recita <strong>dentro del pez</strong>, es decir, en el lugar más oscuro y absurdo para alabar a Dios.</p>
         </div>
-      </div>
-    </div>
-    <div class="pregunta-item">
-      <div class="header-pregunta">
-        <span class="num-pregunta">🤝</span>
-        <span class="texto-pregunta">Actúa: Da un paso pequeño pero concreto esta semana hacia esa obediencia (ej: enviar un correo, hablar con alguien, hacer una llamada).</span>
-        <span class="toggle-pregunta">▼</span>
-      </div>
-      <div class="detalle-pregunta">
-        <div class="inner-pregunta">
-          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+
+        <!-- PARTE 3 -->
+        <h2>🛤️ PARTE 3: EL ATERRIZAJE (VIDA Y APLICACIÓN)</h2>
+
+        <h3>Verdad Teológica Central</h3>
+        <p><strong>La obediencia a Dios no es opcional ni negociable; es urgente y exige una respuesta inmediata. Cuando Dios llama, nuestro "levantarnos" debe ser un acto de fe que deja atrás nuestras excusas y comodidades.</strong></p>
+
+        <h3>Punto de Tensión</h3>
+        <p>Jonás era un profeta que conocía la voluntad de Dios, pero huyó porque la misión no encajaba con sus expectativas. ¿Cuántas veces hacemos lo mismo? ¿Huyes de Dios cuando te pide algo incómodo, arriesgado o que desafía tus prejuicios?</p>
+
+        <h3>Devocional</h3>
+        <p>Jonás no huyó por miedo a los asirios; huyó porque <strong>sabía que Dios es misericordioso</strong> y no quería que sus enemigos fueran perdonados. Su huida fue un acto de desobediencia calculada, disfrazada de "teología correcta". Esa es la ironía más profunda del libro: el profeta que conoce a Dios mejor que nadie, es el que menos confía en su carácter.</p>
+        <p>¿Y nosotros? A veces también huimos, pero no necesariamente cambiando de país. Huimos cuando ignoramos una voz que nos incomoda, cuando postergamos una decisión que sabemos que debemos tomar, cuando preferimos nuestras propias "Tarsis" antes que la voluntad de Dios. La buena noticia es que Dios no se rinde. Como con Jonás, nos persigue, nos confronta y nos da segundas oportunidades.</p>
+
+        <!-- PREGUNTAS -->
+        <h3>Examen del Corazón (5 preguntas)</h3>
+        <div class="preguntas-stack">
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">🤔</span>
+                    <span class="texto-pregunta">¿Hay alguna "Nínive" en tu vida a la que Dios te está llamando a ir, pero te estás resistiendo?</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">🧐</span>
+                    <span class="texto-pregunta">¿Qué "Tarsis" (lugar de escape) usas para evitar la voluntad de Dios?</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">😯</span>
+                    <span class="texto-pregunta">¿Has usado la teología (como Jonás) para justificar tu desobediencia?</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">😥</span>
+                    <span class="texto-pregunta">¿Cómo respondes cuando Dios es bueno con alguien que consideras "indigno" de su gracia?</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">💭</span>
+                    <span class="texto-pregunta">¿Qué "plantas" (consuelos temporales) valoras más que el carácter eterno de Dios?</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="pregunta-item">
-      <div class="header-pregunta">
-        <span class="num-pregunta">🗣️</span>
-        <span class="texto-pregunta">Ora: Pide a Dios que te dé el corazón de Jesús, que "descendió" desde el cielo para obedecer hasta la muerte, y que no huyó de la cruz.</span>
-        <span class="toggle-pregunta">▼</span>
-      </div>
-      <div class="detalle-pregunta">
-        <div class="inner-pregunta">
-          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+
+        <!-- PASOS PRÁCTICOS -->
+        <h3>Pasos Prácticos (5 acciones para la semana)</h3>
+        <div class="preguntas-stack">
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">📝</span>
+                    <span class="texto-pregunta">Identifica: Piensa en un área concreta donde estás "durmiendo" o postergando una obediencia que sabes que debes dar. Escríbela en un papel.</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">📖</span>
+                    <span class="texto-pregunta">Confiesa: Comparte con un amigo cristiano de confianza esa área de huida. La confesión rompe el poder del pecado.</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">🤝</span>
+                    <span class="texto-pregunta">Actúa: Da un paso pequeño pero concreto esta semana hacia esa obediencia.</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">🗣️</span>
+                    <span class="texto-pregunta">Ora: Pide a Dios que te dé el corazón de Jesús, que no huyó de la cruz.</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
+            <div class="pregunta-item">
+                <div class="header-pregunta">
+                    <span class="num-pregunta">🌱</span>
+                    <span class="texto-pregunta">Recuerda: Reflexiona sobre el Salmo 139:7-10: "¿A dónde me iré de tu Espíritu?" Dios siempre te alcanza.</span>
+                    <span class="toggle-pregunta">▼</span>
+                </div>
+                <div class="detalle-pregunta">
+                    <div class="inner-pregunta"></div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="pregunta-item">
-      <div class="header-pregunta">
-        <span class="num-pregunta">🌱</span>
-        <span class="texto-pregunta">Recuerda: Reflexiona sobre el Salmo 139:7-10: "¿A dónde me iré de tu Espíritu? ¿Y a dónde huiré de tu presencia?" Dios siempre te alcanza.</span>
-        <span class="toggle-pregunta">▼</span>
-      </div>
-      <div class="detalle-pregunta">
-        <div class="inner-pregunta">
-          <!-- Puedes agregar una reflexión específica para cada paso si quieres -->
+
+        <h3>Oración Final</h3>
+        <p>Padre soberano, que gobiernas el viento, el mar y el corazón de los reyes, perdóname por las veces que he huido de tu voz. Perdona mis excusas y mis "Tarsis" de escape. Dame un corazón como el de Jesús, que no se aferró a su comodidad, sino que descendió para obedecerte hasta la muerte. Cuando me sienta tentado a huir, recuérdame que no hay lugar donde tu gracia no me alcance. En el nombre de Jesús, que dio su vida por sus enemigos, amén.</p>
+
+        <div class="mentor-box">
+            <h3>💡 Dato del Mentor</h3>
+            <p><strong>1. Dato central:</strong> La planta de Jonás (4:6) en hebreo es <em>qiqayon</em>, probablemente una planta de ricino, que crece hasta 3 metros en pocos días. Es la <strong>única vez en la Biblia</strong> que Dios usa una planta para dar una lección teológica.</p>
+            <p><strong>2. Dato curioso:</strong> El viento solano (4:8) es el <em>sharav</em>, un viento del desierto que puede elevar la temperatura hasta <strong>50°C</strong>. Dios no solo habla por profetas, sino por climas extremos.</p>
         </div>
-      </div>
+
+        <hr style="border:0;height:2px;background:rgba(232,184,75,0.2);margin:40px 0 20px 0;">
+        <p style="text-align:center;color:#5a6a80;font-size:0.8rem;">📖 <strong>Fin del estudio</strong> · Comparte este estudio con alguien que necesite escuchar que la misericordia de Dios es más grande que su pecado.</p>
     </div>
-  </div>
-  <h3>Oración Final</h3>
-  <p>Padre soberano, que gobiernas el viento, el mar y el corazón de los reyes, perdóname por las veces que he huido de tu voz. Perdona mis excusas y mis "Tarsis" de escape. Dame un corazón como el de Jesús, que no se aferró a su comodidad, sino que descendió para obedecerte hasta la muerte. Cuando me sienta tentado a huir, recuérdame que no hay lugar donde tu gracia no me alcance. En el nombre de Jesús, que dio su vida por sus enemigos, amén.</p>
-  <div class="mentor-box">
-    <h3>💡 Dato del Mentor</h3>
-    <p><strong>1. Dato central:</strong> La planta de Jonás (4:6) en hebreo es qiqayon, probablemente una planta de ricino (Ricinus communis), que crece hasta 3 metros en pocos días en climas cálidos. Es una de las plantas de crecimiento más rápido del mundo. Dios la hace crecer en una noche y la destruye en una noche. Es la única vez en la Biblia que Dios usa una planta para dar una lección teológica.</p>
-    <p><strong>2. Dato curioso:</strong> El viento solano (4:8) que quemó a Jonás es el sharav o khamsin, un viento del desierto que puede elevar la temperatura en el valle del Tigris hasta 50°C con una humedad inferior al 10%. Es un viento agotador que deshidrata y quema la piel en minutos. Dios no solo habla por profetas, sino por climas extremos.</p>
-  </div>
-  <hr style="border:0;height:2px;background:rgba(232,184,75,0.2);margin:40px 0 20px 0;">
-  <p style="text-align:center;color:#5a6a80;font-size:0.8rem;">📖 <strong>Fin del estudio</strong> · Comparte este estudio con alguien que necesite escuchar que la misericordia de Dios es más grande que su pecado o que su rencor.</p>
-</div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // ===== MAPA =====
             const mapContainer = document.getElementById('map');
             if (mapContainer) {
                 const map = L.map('map', { center: [35.0, 28.0], zoom: 5, zoomControl: true, fadeAnimation: true, attributionControl: true, scrollWheelZoom: true, touchZoom: true });
@@ -370,91 +366,49 @@ En ese contexto, Dios envía a Jonás a predicar a Nínive, la capital de Asiria
                 window.addEventListener('resize', function() { map.invalidateSize(); });
             }
 
-            // Línea de tiempo
-            var events = [
-                { year: '800 a.C.', label: 'Imperio Asirio', title: '🏛️ Apogeo del Imperio Asirio', desc: 'Asiria se convierte en la superpotencia del Cercano Oriente.' },
-                { year: '760 a.C.', label: '⭐ Jonás', title: '📖 Jonás es llamado por Dios', desc: 'Dios envía a Jonás a predicar a Nínive.' },
-                { year: '722 a.C.', label: 'Caída Samaria', title: '⚔️ Asiria conquista Israel', desc: 'El reino del Norte cae ante los asirios.' },
-                { year: '701 a.C.', label: 'Senaquerib', title: '🛡️ Senaquerib asedia Jerusalén', desc: 'El ángel del Señor salva a Jerusalén.' },
-                { year: '612 a.C.', label: 'Caída Nínive', title: '🔥 Nínive es destruida', desc: 'Una coalición destruye Nínive.' }
-            ];
-            var infoDiv = document.getElementById('timelineInfo');
-            var progress = document.getElementById('timelineProgress');
-            var eventsEls = document.querySelectorAll('.timeline-event');
-            function updateTimeline(index) {
-                var ev = events[index];
-                if (infoDiv) { infoDiv.innerHTML = '<div style="color:#e8d5b0;font-weight:600;font-size:0.95rem;">' + ev.title + '</div><div style="color:#b8c7e0;font-size:0.85rem;">' + ev.desc + '</div>'; }
-                if (progress) { progress.style.width = ((index / (events.length - 1)) * 100) + '%'; }
-                eventsEls.forEach(function(el, i) {
-                    var dot = el.querySelector('div');
-                    if (dot) {
-                        dot.style.background = (i <= index) ? '#e8b84b' : '#1a2538';
-                        dot.style.borderColor = (i <= index) ? '#e8b84b' : 'rgba(255,255,255,0.15)';
-                        dot.style.boxShadow = (i === index) ? '0 0 20px rgba(232,184,75,0.4)' : 'none';
+            // ===== TARJETAS DE EXÉGESIS (SOLO EN EL HEADER) =====
+            const cards = document.querySelectorAll('.exegesis-card');
+            cards.forEach(function(card) {
+                const header = card.querySelector('.header-card');
+                if (header) {
+                    header.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+                        card.classList.toggle('activa');
+                    });
+                    header.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+                        card.classList.toggle('activa');
+                    });
+                    // Desactivar eventos en el contenido para evitar cierres accidentales
+                    const contenido = card.querySelector('.contenido-card');
+                    if (contenido) {
+                        contenido.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                        });
+                        contenido.addEventListener('touchend', function(e) {
+                            e.stopPropagation();
+                        });
                     }
-                });
-            }
-            eventsEls.forEach(function(el, idx) {
-                el.addEventListener('click', function() { updateTimeline(idx); });
-                el.addEventListener('touchend', function(e) { e.preventDefault(); updateTimeline(idx); });
+                }
             });
-            if (eventsEls.length > 0) updateTimeline(0);
+            if (cards.length > 0) cards[0].classList.add('activa');
 
-            // Tarjetas de exégesis// ===== TARJETAS DE EXÉGESIS (toggle solo en el encabezado) =====
-const cards = document.querySelectorAll('.exegesis-card');
-cards.forEach(function(card) {
-    const header = card.querySelector('.header-card');
-    if (header) {
-        // Evento para clic (escritorio)
-        header.addEventListener('click', function(e) {
-            e.stopPropagation(); // Evita que el clic se propague al contenido
-            cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
-            card.classList.toggle('activa');
-        });
-        // Evento para toque (móvil)
-        header.addEventListener('touchend', function(e) {
-            e.preventDefault(); // Previene el comportamiento predeterminado
-            e.stopPropagation(); // Evita que el toque se propague al contenido
-            cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
-            card.classList.toggle('activa');
-        });
-        // Desactivar eventos en el contenido de la tarjeta
-        const contenido = card.querySelector('.contenido-card');
-        if (contenido) {
-            contenido.addEventListener('click', function(e) {
-                e.stopPropagation(); // Evita que el clic en el contenido cierre la tarjeta
-            });
-            contenido.addEventListener('touchend', function(e) {
-                e.stopPropagation(); // Evita que el toque en el contenido cierre la tarjeta
-            });
-        }
-    }
-});
-if (cards.length > 0) cards[0].classList.add('activa');
-          
-            // Preguntas en acordeón
-            var preguntas = document.querySelectorAll('.pregunta-item');
+            // ===== PREGUNTAS EN ACORDEÓN =====
+            const preguntas = document.querySelectorAll('.pregunta-item');
             preguntas.forEach(function(item) {
-                item.addEventListener('click', function() { this.classList.toggle('activa'); }.bind(item));
-                item.addEventListener('touchend', function(e) { e.preventDefault(); this.classList.toggle('activa'); }.bind(item));
-            });
-            if (preguntas.length > 0) preguntas[0].classList.add('activa');
-
-            // Anillos
-            var anillos = document.querySelectorAll('.anillo-item');
-            anillos.forEach(function(item) {
                 item.addEventListener('click', function() {
-                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
-                    this.classList.toggle('activo');
-                }.bind(item));
+                    this.classList.toggle('activa');
+                });
                 item.addEventListener('touchend', function(e) {
                     e.preventDefault();
-                    anillos.forEach(function(a) { if (a !== this) a.classList.remove('activo'); }.bind(this));
-                    this.classList.toggle('activo');
-                }.bind(item));
+                    this.classList.toggle('activa');
+                });
             });
-            if (anillos.length > 0) anillos[0].classList.add('activo');
+            if (preguntas.length > 0) preguntas[0].classList.add('activa');
         });
-        </script>
+    </script>
 </body>
 </html>
