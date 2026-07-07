@@ -400,25 +400,37 @@ En ese contexto, Dios envía a Jonás a predicar a Nínive, la capital de Asiria
             });
             if (eventsEls.length > 0) updateTimeline(0);
 
-            // Tarjetas de exégesis
-             const cards = document.querySelectorAll('.exegesis-card');
-    cards.forEach(function(card) {
-        const header = card.querySelector('.header-card');
-        if (header) {
-            header.addEventListener('click', function(e) {
-                e.stopPropagation();
-                cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
-                card.classList.toggle('activa');
+            // Tarjetas de exégesis// ===== TARJETAS DE EXÉGESIS (toggle solo en el encabezado) =====
+const cards = document.querySelectorAll('.exegesis-card');
+cards.forEach(function(card) {
+    const header = card.querySelector('.header-card');
+    if (header) {
+        // Evento para clic (escritorio)
+        header.addEventListener('click', function(e) {
+            e.stopPropagation(); // Evita que el clic se propague al contenido
+            cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+            card.classList.toggle('activa');
+        });
+        // Evento para toque (móvil)
+        header.addEventListener('touchend', function(e) {
+            e.preventDefault(); // Previene el comportamiento predeterminado
+            e.stopPropagation(); // Evita que el toque se propague al contenido
+            cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+            card.classList.toggle('activa');
+        });
+        // Desactivar eventos en el contenido de la tarjeta
+        const contenido = card.querySelector('.contenido-card');
+        if (contenido) {
+            contenido.addEventListener('click', function(e) {
+                e.stopPropagation(); // Evita que el clic en el contenido cierre la tarjeta
             });
-            header.addEventListener('touchend', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
-                card.classList.toggle('activa');
+            contenido.addEventListener('touchend', function(e) {
+                e.stopPropagation(); // Evita que el toque en el contenido cierre la tarjeta
             });
         }
-    });
-    if (cards.length > 0) cards[0].classList.add('activa');
+    }
+});
+if (cards.length > 0) cards[0].classList.add('activa');
           
             // Preguntas en acordeón
             var preguntas = document.querySelectorAll('.pregunta-item');
