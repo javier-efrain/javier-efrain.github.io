@@ -401,20 +401,25 @@ En ese contexto, Dios envía a Jonás a predicar a Nínive, la capital de Asiria
             if (eventsEls.length > 0) updateTimeline(0);
 
             // Tarjetas de exégesis
-            var cards = document.querySelectorAll('.exegesis-card');
-            cards.forEach(function(card) {
-                card.addEventListener('click', function() {
-                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
-                    this.classList.toggle('activa');
-                }.bind(card));
-                card.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    cards.forEach(function(c) { if (c !== this) c.classList.remove('activa'); }.bind(this));
-                    this.classList.toggle('activa');
-                }.bind(card));
+             const cards = document.querySelectorAll('.exegesis-card');
+    cards.forEach(function(card) {
+        const header = card.querySelector('.header-card');
+        if (header) {
+            header.addEventListener('click', function(e) {
+                e.stopPropagation();
+                cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+                card.classList.toggle('activa');
             });
-            if (cards.length > 0) cards[0].classList.add('activa');
-
+            header.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                cards.forEach(function(c) { if (c !== card) c.classList.remove('activa'); });
+                card.classList.toggle('activa');
+            });
+        }
+    });
+    if (cards.length > 0) cards[0].classList.add('activa');
+          
             // Preguntas en acordeón
             var preguntas = document.querySelectorAll('.pregunta-item');
             preguntas.forEach(function(item) {
