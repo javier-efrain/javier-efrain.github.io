@@ -51,8 +51,11 @@
         .exegesis-card .header-card .toggle-icon { margin-left: auto; color: #5a6a80; font-size: 0.8rem; transition: transform 0.3s; }
         .exegesis-card.activa .header-card .toggle-icon { color: #c9a87c; transform: rotate(180deg); }
         .exegesis-card .contenido-card { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.3s ease, margin 0.3s ease; opacity: 0; margin-top: 0; }
-        .exegesis-card.activa .contenido-card { max-height: 800px; opacity: 1; margin-top: 12px; }
-        .exegesis-card .contenido-card .inner { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; color: #b8c7e0; font-size: 0.95rem; line-height: 1.6; }
+.exegesis-card.activa .contenido-card {
+    max-height: 2000px; /* Aumentamos el espacio para que no se corte */
+    opacity: 1;
+    margin-top: 12px;
+}        .exegesis-card .contenido-card .inner { border-top: 1px solid rgba(255, 255, 255, 0.06); padding-top: 12px; color: #b8c7e0; font-size: 0.95rem; line-height: 1.6; }
         .exegesis-card .contenido-card .inner strong { color: #e8d5b0; }
         .exegesis-card .contenido-card .inner .cita-card { background: rgba(255, 255, 255, 0.02); border-left: 3px solid #e8b84b; padding: 10px 16px; margin: 8px 0 12px 0; font-style: italic; color: #d0d7e8; }
         .exegesis-card .contenido-card .inner .error-card { background: rgba(214, 79, 79, 0.06); border-left: 3px solid #d64f4f; padding: 10px 16px; margin: 8px 0 12px 0; border-radius: 0 8px 8px 0; color: #e8b8b8; font-size: 0.9rem; }
@@ -114,6 +117,14 @@
             .exegesis-card .header-card .titulo-card { font-size: 0.85rem; }
             .pregunta-item .header-pregunta .texto-pregunta { font-size: 0.8rem; }
             #map { height: 280px; }
+             .exegesis-card .contenido-card .inner {
+        font-size: 0.85rem; /* Asegura que la letra sea legible */
+        line-height: 1.6;
+    }
+    .exegesis-card .contenido-card .inner .error-card {
+        font-size: 0.8rem; /* Ajusta el tamaño del error para que quepa */
+        padding: 8px 12px; /* Reduce un poco el padding */
+    }
         }
         </style>
 </head>
