@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <base href="/">
+    <title>Introducción al Libro de Jonás</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        /* ===== ESTILOS GLOBALES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: #0b0f1a;
+            color: #e8d5b0;
+            padding: 20px;
+            line-height: 1.8;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #121a2a;
+            padding: 40px 32px;
+            border-radius: 28px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #e8b84b;
+            text-align: center;
+            margin-bottom: 8px;
+            text-shadow: 0 0 30px rgba(232, 184, 75, 0.08);
+        }
+
+        .subtitulo {
+            text-align: center;
+            color: #8899b0;
+            font-size: 1.1rem;
+            margin-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #e8d5b0;
+            margin-top: 48px;
+            margin-bottom: 16px;
+            border-bottom: 2px solid rgba(232, 184, 75, 0.15);
+            padding-bottom: 8px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #d4c09a;
+            margin-top: 32px;
+            margin-bottom: 12px;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #d0d7e8;
+        }
+
+        strong {
+            color: #f0e8d8;
+        }
+
+        .cita {
+            background: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid #e8b84b;
+            padding: 16px 22px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #d0d7e8;
+        }
+
+        .cita strong {
+            color: #e8b84b;
+        }
+
+        .recurso-visual {
+            margin: 32px 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: #0e1625;
+        }
+
+        .recurso-visual .caption {
+            padding: 12px 18px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #8899b0;
+            font-size: 0.9rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        #map {
+            width: 100%;
+            height: 500px;
+            background: #0e1625;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        /* ===== QUIASMO ===== */
+        .quiasmo-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 10px 0;
+        }
+
+        .quiasmo-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            border-left: 3px solid rgba(232, 184, 75, 0.2);
+            transition: background 0.3s;
+        }
+
+        .quiasmo-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .quiasmo-item .letra {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #e8b84b;
+            min-width: 44px;
+        }
+
+        .quiasmo-item .contenido {
+            flex: 1;
+        }
+
+        .quiasmo-item .contenido .label {
+            color: #e8d5b0;
+            font-weight: 600;
+        }
+
+        .quiasmo-item .contenido .detalle {
+            color: #8899b0;
+            font-size: 0.85rem;
+        }
+
+        .quiasmo-item.centro {
+            background: rgba(232, 184, 75, 0.06);
+            border-left-color: #e8b84b;
+            box-shadow: 0 0 30px rgba(232, 184, 75, 0.02);
+        }
+
+        .quiasmo-item.centro .letra {
+            color: #f0d080;
+        }
+
+        .quiasmo-item.centro .contenido .label {
+            color: #f0d080;
+        }
+
+        .quiasmo-flecha {
+            text-align: center;
+            color: #5a6a80;
+            font-size: 0.8rem;
+            letter-spacing: 4px;
+            padding: 2px 0;
+        }
+
+        /* ===== ÍNDICE DE ESTUDIOS ===== */
+        .indice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .indice-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px 24px;
+            text-decoration: none;
+            color: #e8d5b0;
+            transition: all 0.3s;
+            display: block;
+        }
+
+        .indice-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(232, 184, 75, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .indice-card .numero {
+            font-size: 0.8rem;
+            color: #e8b84b;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .indice-card .titulo-card {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 4px 0 6px 0;
+            color: #e8d5b0;
+        }
+
+        .indice-card .descripcion {
+            color: #8899b0;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .indice-card .estado {
+            display: inline-block;
+            background: rgba(76, 175, 80, 0.15);
+            color: #8bc34a;
+            font-size: 0.7rem;
+            padding: 2px 12px;
+            border-radius: 20px;
+            margin-top: 10px;
+        }
+
+        .indice-card .estado.proximo {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+
+        .indice-card .estado.publicado {
+            background: rgba(76, 175, 80, 0.15);
+            color: #8bc34a;
+        }
+
+        .footer {
+            text-align: center;
+            color: #5a6a80;
+            font-size: 0.8rem;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .footer a {
+            color: #e8b84b;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 24px 16px;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            h2 {
+                font-size: 1.4rem;
+            }
+            h3 {
+                font-size: 1.1rem;
+            }
+            #map {
+                height: 380px;
+            }
+            .indice-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 16px 12px;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            h2 {
+                font-size: 1.2rem;
+            }
+            #map {
+                height: 280px;
+            }
+            .quiasmo-item {
+                padding: 8px 12px;
+                flex-wrap: wrap;
+            }
+            .quiasmo-item .letra {
+                min-width: 32px;
+                font-size: 1.2rem;
+            }
+            .indice-card {
+                padding: 16px 18px;
+            }
+            .indice-card .titulo-card {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>📖 Introducción al Libro de Jonás</h1>
+    <p class="subtitulo">Un profeta que huyó, un pez que tragó, y un Dios que nunca se rinde</p>
+
+    <!-- ========================================================= -->
+    <!--  ¿POR QUÉ ESTUDIAR JONÁS?                                 -->
+    <!-- ========================================================= -->
+    <h2>🎯 ¿Por qué estudiar Jonás?</h2>
+    <p>
+        El libro de Jonás es uno de los más fascinantes y malentendidos del Antiguo Testamento. Muchos lo reducen a una historia infantil sobre un hombre y un pez, pero en realidad es una <strong>profunda reflexión teológica sobre el carácter de Dios, el arrepentimiento y la misericordia</strong>.
+    </p>
+    <p>
+        Jonás es un libro que confronta nuestras expectativas: un profeta que huye de Dios, unos marineros paganos que se arrepienten, una ciudad entera que se convierte, y un Dios que perdona a sus enemigos. Es una historia que nos desafía a examinar nuestro propio corazón y nuestras actitudes hacia aquellos que consideramos "indignos" de la gracia.
+    </p>
+
+    <div class="cita">
+        <strong>Propósito del libro:</strong> Mostrar que la misericordia de Dios no tiene fronteras. Él es soberano sobre todas las naciones y su compasión se extiende incluso a los que menos lo merecen.
+    </div>
+
+    <!-- ========================================================= -->
+    <!--  DATOS INTRODUCTORIOS                                     -->
+    <!-- ========================================================= -->
+    <h2>📌 Datos introductorios</h2>
+
+    <p><strong>Autor:</strong> Tradicionalmente se atribuye a Jonás, hijo de Amitai (2 Reyes 14:25). Algunos eruditos creen que fue escrito por un autor posterior que usó la historia de Jonás como ejemplo.</p>
+    <p><strong>Fecha:</strong> Aproximadamente <strong>760 a.C.</strong>, durante el reinado de Jeroboam II en Israel (793-753 a.C.).</p>
+    <p><strong>Destinatarios:</strong> El pueblo de Israel, que necesitaba recordar que la misión de Dios era para todas las naciones, no solo para ellos.</p>
+    <p><strong>Género literario:</strong> Narrativa profética con elementos de sátira e ironía. No es una profecía (como Isaías o Jeremías), sino una historia con un mensaje teológico.</p>
+
+    <!-- ========================================================= -->
+    <!--  CONTEXTO HISTÓRICO                                        -->
+    <!-- ========================================================= -->
+    <h2>🌍 Contexto histórico</h2>
+
+    <p><strong>Ubicación:</strong> El libro se desarrolla en el siglo VIII a.C., en el Reino del Norte (Israel). La capital de Asiria, Nínive, estaba al este, y Tarsis (la ciudad a la que Jonás huyó) estaba al oeste, probablemente en la actual España.</p>
+
+    <p><strong>Contexto político:</strong> Asiria era el imperio más temido del antiguo Cercano Oriente. Su brutalidad era legendaria: desollaban vivos a sus enemigos, empalaban a los líderes y deportaban poblaciones enteras. Israel, bajo Jeroboam II, vivía en paz y prosperidad, pero espiritualmente estaba en decadencia.</p>
+
+    <p><strong>Contexto teológico:</strong> Los profetas (Oseas, Amós) denunciaban la idolatría y la injusticia social. Jonás, sin embargo, era un profeta "nacionalista" que creía que la misericordia de Dios era solo para Israel. El libro lo confronta con la verdad: Dios ama a todas las naciones.</p>
+
+    <!-- ===== MAPA ===== -->
+    <div class="recurso-visual">
+        <div id="map"></div>
+        <div class="caption">🗺️ <strong>Rutas de Jonás:</strong> huida hacia Tarsis (rojo) y misión a Nínive (dorado). Haz clic en los marcadores para más información.</div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!--  ESTRUCTURA DEL LIBRO (QUIASMO)                          -->
+    <!-- ========================================================= -->
+    <h2>🏛️ Estructura del libro</h2>
+
+    <p>El libro de Jonás tiene una estructura <strong>quiástica</strong> (en forma de espejo), que resalta el mensaje central:</p>
+
+    <div class="recurso-visual" style="padding:20px 16px;background:#0e1625;">
+        <div class="quiasmo-grid">
+            <div class="quiasmo-item">
+                <span class="letra">A</span>
+                <div class="contenido">
+                    <div class="label">Huida y Tormenta</div>
+                    <div class="detalle">Jonás huye de Dios · Dios envía una tormenta (Cap. 1)</div>
+                </div>
+            </div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item">
+                <span class="letra">B</span>
+                <div class="contenido">
+                    <div class="label">Oración desde el abismo</div>
+                    <div class="detalle">Jonás ora desde el vientre del pez · Es liberado (Cap. 2)</div>
+                </div>
+            </div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item centro">
+                <span class="letra">C</span>
+                <div class="contenido">
+                    <div class="label">⭐ Nínive se arrepiente</div>
+                    <div class="detalle">El centro del libro · Dios perdona a los enemigos de Israel (Cap. 3)</div>
+                </div>
+            </div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item">
+                <span class="letra">B'</span>
+                <div class="contenido">
+                    <div class="label">Enojo y deseo de muerte</div>
+                    <div class="detalle">Jonás se enoja por el perdón · Dios lo confronta (Cap. 4:1-4)</div>
+                </div>
+            </div>
+            <div class="quiasmo-flecha">⬇</div>
+            <div class="quiasmo-item">
+                <span class="letra">A'</span>
+                <div class="contenido">
+                    <div class="label">Lección de la planta</div>
+                    <div class="detalle">Planta · Gusano · Viento · Dios revela su compasión (Cap. 4:5-11)</div>
+                </div>
+            </div>
+        </div>
+        <div class="caption">💡 <strong>El centro del libro no es el pez</strong>, sino el arrepentimiento de los enemigos de Israel.</div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!--  TEMAS PRINCIPALES                                        -->
+    <!-- ========================================================= -->
+    <h2>🔑 Temas principales</h2>
+
+    <p><strong>1. La soberanía de Dios:</strong> Dios gobierna sobre el viento, el mar, los animales y los corazones humanos (1:4, 1:17, 4:6-8).</p>
+    <p><strong>2. La misericordia de Dios:</strong> El Señor es "clemente y piadoso, lento para la ira y de gran misericordia" (4:2). Su gracia es para todos, incluso para los enemigos de Israel.</p>
+    <p><strong>3. El arrepentimiento genuino:</strong> Los ninivitas se arrepienten con ayuno y cilicio (3:5-9), mostrando que la fe verdadera produce cambio de vida.</p>
+    <p><strong>4. El corazón del profeta:</strong> Jonás es un espejo de nuestros propios prejuicios y resistencia a la gracia de Dios.</p>
+
+    <!-- ========================================================= -->
+    <!--  CONEXIONES CON EL RESTO DE LA BIBLIA                     -->
+    <!-- ========================================================= -->
+    <h2>📖 Jonás en el resto de la Biblia</h2>
+
+    <p><strong>Antiguo Testamento:</strong></p>
+    <ul>
+        <li>Jonás es mencionado en <strong>2 Reyes 14:25</strong> como un profeta que anunció la restauración de Israel bajo Jeroboam II.</li>
+        <li>La ciudad de Nínive es mencionada en <strong>Génesis 10:11-12</strong> como fundada por Nimrod.</li>
+        <li>El salmo de Jonás (cap. 2) tiene ecos de los Salmos 18, 42, 69 y 88.</li>
+    </ul>
+
+    <p><strong>Nuevo Testamento:</strong></p>
+    <ul>
+        <li>Jesús usa a Jonás como <strong>señal de su muerte y resurrección</strong> (Mateo 12:38-41, Lucas 11:29-32).</li>
+        <li>Los ninivitas se levantarán en el juicio contra la generación incrédula de Jesús.</li>
+    </ul>
+
+    <!-- ========================================================= -->
+    <!--  ÍNDICE DE ESTUDIOS                                      -->
+    <!-- ========================================================= -->
+    <h2>📚 Índice de estudios</h2>
+    <p>Explora el libro de Jonás en profundidad con estos estudios detallados:</p>
+
+    <div class="indice-grid">
+        <!-- Estudio 1 -->
+        <a href="estudio-1.html" class="indice-card">
+            <div class="numero">📌 Estudio 1</div>
+            <div class="titulo-card">La huida de Jonás</div>
+            <div class="descripcion">Jonás 1:1-3 · La orden de Dios y la huida a Tarsis</div>
+            <span class="estado publicado">✅ Publicado</span>
+        </a>
+
+        <!-- Estudio 2 -->
+        <a href="estudio-2.html" class="indice-card">
+            <div class="numero">🌊 Estudio 2</div>
+            <div class="titulo-card">La tormenta y los marineros</div>
+            <div class="descripcion">Jonás 1:4-16 · La tormenta, el sorteo y el arrepentimiento de los marineros</div>
+            <span class="estado publicado">✅ Publicado</span>
+        </a>
+
+        <!-- Estudio 3 -->
+        <a href="estudio-3.html" class="indice-card">
+            <div class="numero">🐟 Estudio 3</div>
+            <div class="titulo-card">El gran pez y la oración</div>
+            <div class="descripcion">Jonás 1:17 – 2:10 · El engullimiento y la oración de Jonás</div>
+            <span class="estado publicado">✅ Publicado</span>
+        </a>
+
+        <!-- Estudio 4 -->
+        <a href="estudio-4.html" class="indice-card">
+            <div class="numero">🏛️ Estudio 4</div>
+            <div class="titulo-card">La predicación y el arrepentimiento de Nínive</div>
+            <div class="descripcion">Jonás 3:1-10 · La segunda llamada y el arrepentimiento de la ciudad</div>
+            <span class="estado publicado">✅ Publicado</span>
+        </a>
+
+        <!-- Estudio 5 -->
+        <a href="estudio-5.html" class="indice-card">
+            <div class="numero">🌿 Estudio 5</div>
+            <div class="titulo-card">La lección de la planta</div>
+            <div class="descripcion">Jonás 4:1-11 · El enojo de Jonás y la compasión de Dios</div>
+            <span class="estado publicado">✅ Publicado</span>
+        </a>
+    </div>
+
+    <!-- ========================================================= -->
+    <!--  FOOTER                                                  -->
+    <!-- ========================================================= -->
+    <div class="footer">
+        📖 Estudios generados con el <a href="generador.html">Generador de Estudios Bíblicos</a> ·
+        <a href="https://github.com/javier-efrain/javier-efrain.github.io" target="_blank">GitHub</a>
+    </div>
+
+</div>
+
+<!-- ========================================================= -->
+<!--  LEAFLET (MAPA)                                           -->
+<!-- ========================================================= -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar mapa
+        const map = L.map('map', {
+            center: [35.0, 28.0],
+            zoom: 5,
+            zoomControl: true,
+            fadeAnimation: true,
+            attributionControl: true,
+            scrollWheelZoom: true,
+            touchZoom: true,
+        });
+
+        // Capa de mapa (estilo oscuro)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19,
+            minZoom: 3,
+        }).addTo(map);
+
+        // Coordenadas
+        const coords = {
+            israel: [32.0, 35.0],
+            jope: [32.05, 34.75],
+            ninive: [36.36, 43.15],
+            tarsis: [36.0, -5.5],
+        };
+
+        // Crear iconos con emojis
+        const createIcon = (color, emoji) => {
+            return L.divIcon({
+                className: 'custom-div-icon',
+                html: `<div style="background-color:${color};color:white;font-size:20px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;border:3px solid rgba(255,255,255,0.6);box-shadow:0 4px 12px rgba(0,0,0,0.6);font-weight:bold;text-shadow:0 1px 3px rgba(0,0,0,0.5);">${emoji}</div>`,
+                iconSize: [44, 44],
+                iconAnchor: [22, 44],
+                popupAnchor: [0, -44],
+            });
+        };
+
+        // Marcadores
+        L.marker(coords.israel, { icon: createIcon('#4caf7a', '✡️') })
+            .addTo(map)
+            .bindPopup('<b>🇮🇱 Israel</b><br>Reino del Norte (760 a.C.)');
+
+        L.marker(coords.jope, { icon: createIcon('#4d8fc5', '⛵') })
+            .addTo(map)
+            .bindPopup('<b>📍 Jope (Jaffa)</b><br>Puerto desde donde Jonás huyó');
+
+        L.marker(coords.ninive, { icon: createIcon('#e8b84b', '🏛️') })
+            .addTo(map)
+            .bindPopup('<b>🏛️ Nínive</b><br>Capital de Asiria · 120.000 hab.');
+
+        L.marker(coords.tarsis, { icon: createIcon('#d64f4f', '🌊') })
+            .addTo(map)
+            .bindPopup('<b>🌊 Tarsis</b><br>Extremo occidental (España)');
+
+        // Rutas
+        L.polyline([coords.israel, coords.jope, coords.ninive], {
+            color: '#e8b84b',
+            weight: 5,
+            opacity: 0.9,
+            smoothFactor: 1,
+        }).addTo(map).bindPopup('🟡 Ruta de Dios: Israel → Jope → Nínive');
+
+        L.polyline([coords.israel, coords.jope, coords.tarsis], {
+            color: '#d64f4f',
+            weight: 4,
+            opacity: 0.8,
+            smoothFactor: 1,
+            dashArray: '12, 12',
+        }).addTo(map).bindPopup('🔴 Huida de Jonás: Israel → Jope → Tarsis');
+
+        // Ajuste de vista
+        const bounds = L.latLngBounds([coords.tarsis, coords.ninive, coords.israel, coords.jope]);
+        map.fitBounds(bounds, { padding: [50, 50], maxZoom: 6 });
+
+        // Controles
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
+        L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
+
+        // Redimensionar
+        window.addEventListener('resize', () => { map.invalidateSize(); });
+    });
+</script>
+
+</body>
+</html>
