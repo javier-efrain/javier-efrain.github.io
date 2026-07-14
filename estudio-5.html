@@ -115,6 +115,17 @@
             .pregunta-item .header-pregunta .texto-pregunta { font-size: 0.8rem; }
             #map { height: 280px; }
         }
+        /* ===== IMÁGENES EXPANDIBLES ===== */
+        .imagen-card img {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .imagen-card img.ampliada {
+            transform: scale(1.8); /* Tamaño al que se agranda */
+            z-index: 1000;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+        }
         </style>
 </head>
 <body>
