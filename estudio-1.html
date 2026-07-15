@@ -88,16 +88,38 @@
         font-size: 0.8rem; /* Ajusta el tamaño del error para que quepa */
         padding: 8px 12px; /* Reduce un poco el padding */}
         }
-        /* ===== IMÁGENES EXPANDIBLES ===== */
-        .imagen-card img {
+       /* ===== IMÁGENES EXPANDIBLES (VERSIÓN MEJORADA) ===== */
+        .imagen-card img,
+        .recurso-visual img {
             cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .imagen-card img.ampliada {
-            transform: scale(1.8); /* Tamaño al que se agranda */
-            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border-radius: 8px;
             position: relative;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            z-index: 1;
+        }
+
+        .imagen-card img.ampliada,
+        .recurso-visual img.ampliada {
+            transform: scale(1.8);
+            z-index: 1000;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), 0 0 100px rgba(232, 184, 75, 0.1);
+            border: 2px solid rgba(232, 184, 75, 0.3);
+            position: relative;
+        }
+
+        /* Cuando la imagen se amplía, los demás elementos no se mueven */
+        .imagen-card {
+            position: relative;
+            overflow: visible !important;
+        }
+
+        /* Ajustes para móviles (si la imagen es muy grande) */
+        @media (max-width: 480px) {
+            .imagen-card img.ampliada,
+            .recurso-visual img.ampliada {
+                transform: scale(1.4);
+                border-radius: 12px;
+            }
         }
     </style>
 </head>
@@ -399,17 +421,39 @@
             if (preguntas.length > 0) preguntas[0].classList.add('activa');
         });
 
-            // ===== IMÁGENES EXPANDIBLES =====
+    // ===== IMÁGENES EXPANDIBLES (VERSIÓN ROBUSTA) =====
     document.addEventListener('DOMContentLoaded', function() {
-        const imagenes = document.querySelectorAll('.imagen-card img');
-        imagenes.forEach(function(img) {
-            img.addEventListener('click', function() {
+        console.log('🔍 Buscando imágenes expandibles...');
+        
+        // Busca cualquier imagen dentro de .imagen-card O cualquier imagen dentro de .recurso-visual
+        const imagenes = document.querySelectorAll('.imagen-card img, .recurso-visual img');
+        
+        console.log(`📸 Encontradas ${imagenes.length} imágenes`);
+        
+        if (imagenes.length === 0) {
+            console.log('⚠️ No se encontraron imágenes para expandir');
+            return;
+        }
+        
+        imagenes.forEach(function(img, index) {
+            console.log(`🖼️ Configurando imagen ${index + 1}: ${img.src || 'sin src'}`);
+            
+            // Añadir clase para el cursor
+            img.style.cursor = 'pointer';
+            
+            // Evento click (escritorio)
+            img.addEventListener('click', function(e) {
+                e.stopPropagation();
                 this.classList.toggle('ampliada');
+                console.log(`🔄 Imagen ${index + 1} ${this.classList.contains('ampliada') ? 'ampliada' : 'reducida'}`);
             });
-            // Soporte táctil
+            
+            // Evento toque (móvil)
             img.addEventListener('touchend', function(e) {
                 e.preventDefault();
+                e.stopPropagation();
                 this.classList.toggle('ampliada');
+                console.log(`🔄 Imagen ${index + 1} ${this.classList.contains('ampliada') ? 'ampliada' : 'reducida'}`);
             });
         });
     });
