@@ -398,6 +398,21 @@
             });
             if (preguntas.length > 0) preguntas[0].classList.add('activa');
         });
+
+            // ===== IMÁGENES EXPANDIBLES =====
+    document.addEventListener('DOMContentLoaded', function() {
+        const imagenes = document.querySelectorAll('.imagen-card img');
+        imagenes.forEach(function(img) {
+            img.addEventListener('click', function() {
+                this.classList.toggle('ampliada');
+            });
+            // Soporte táctil
+            img.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                this.classList.toggle('ampliada');
+            });
+        });
+    });
     </script>
 </body>
 </html>
